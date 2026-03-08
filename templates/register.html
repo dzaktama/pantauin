@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block title %}Pendaftaran Akun{% endblock %}
+
+{% block public_content %}
+<div class="row justify-content-center align-items-center" style="min-height: 75vh;">
+    <div class="col-md-6">
+        <div class="card summary-card p-4">
+            <div class="text-center mb-4">
+                <h1 class="h3 fw-bold text-dark">Mulai Perjalanan Bisnismu</h1>
+                <p class="text-muted">Buka akun gratis sekarang dan jadikan usahamu naik kelas.</p>
+            </div>
+
+            <form action="{{ url_for('register') }}" method="POST" novalidate>
+                {{ form.hidden_tag() }}
+
+                <div class="mb-3">
+                    {{ form.username.label(class="form-label") }}
+                    {{ form.username(class="form-control form-control-lg", placeholder="Minimal 4 huruf (contoh:
+                    warung_pakbudi)", aria_label="Nama pengguna") }}
+                    {% if form.username.errors %}
+                    {% for error in form.username.errors %}
+                    <div class="text-danger small mt-1">{{ error }}</div>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+
+                <div class="mb-3">
+                    {{ form.password.label(class="form-label") }}
+                    {{ form.password(class="form-control form-control-lg", placeholder="Minimal 6 karakter",
+                    aria_label="Kata sandi baru") }}
+                    {% if form.password.errors %}
+                    {% for error in form.password.errors %}
+                    <div class="text-danger small mt-1">{{ error }}</div>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+
+                <div class="mb-4">
+                    {{ form.confirm_password.label(class="form-label") }}
+                    {{ form.confirm_password(class="form-control form-control-lg", placeholder="Ketik kembali kata sandi
+                    di atas dengan persis", aria_label="Konfirmasi kata sandi") }}
+                    {% if form.confirm_password.errors %}
+                    {% for error in form.confirm_password.errors %}
+                    <div class="text-danger small mt-1">{{ error }}</div>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+
+                {{ form.submit(class="btn btn-primary-custom btn-lg w-100", aria_label="Tombol Daftar Akun") }}
+            </form>
+
+            <div class="text-center mt-4">
+                <p class="mb-0 text-muted">Sudah punya akun? <a href="{{ url_for('login') }}"
+                        class="text-decoration-none fw-bold" style="color: var(--primary-color);">Masuk di sini</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

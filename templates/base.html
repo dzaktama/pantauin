@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Aplikasi UMKM{% endblock %} | PANTAUIN</title>
+    <!-- Preconnect untuk Performa Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Plus Jakarta Sans Modern Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <!-- Bootstrap 5 CSS resmi dari jsDelivr CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body>
+    {% if session.get('user_id') %}
+    <!-- ============================================== -->
+    <!-- LAYOUT APLIKASI UTAMA (SIDEBAR & MAIN WRAPPER) -->
+    <!-- ============================================== -->
+
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <a class="brand" href="{{ url_for('dashboard') }}" aria-label="Beranda Utama PANTAUIN">
+                <i class="bi bi-graph-up-arrow fs-5 me-2"></i> PANTAUIN
+            </a>
+        </div>
+
+        <div class="sidebar-menu flex-grow-1 overflow-auto py-3">
+            <ul class="nav flex-column">
+                <li class="nav-item mb-1">
+                    <a class="nav-link {% if request.endpoint == 'dashboard' %}active{% endif %}"
+                        href="{{ url_for('dashboard') }}">
+                        <i class="bi bi-grid-1x2-fill fs-5 me-3"></i> Dashboard
+                    </a>
+                </li>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {% if request.endpoint in ['input_transaksi', 'upload_csv'] %}active{% endif %}"
+                        href="{{ url_for('input_transaksi') }}">
+                        <i class="bi bi-pencil-square fs-5 me-3"></i> Catat Transaksi
+                    </a>
+                </li>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {% if request.endpoint == 'riwayat' %}active{% endif %}"
+                        href="{{ url_for('riwayat') }}">
+                        <i class="bi bi-clock-history fs-5 me-3"></i> Riwayat Transaksi
+                    </a>
+                </li>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {% if request.endpoint == 'simulator' %}active{% endif %}"
+                        href="{{ url_for('simulator') }}">
+                        <i class="bi bi-speedometer fs-5 me-3"></i> Simulator Risiko
+                    </a>
+                </li>
+                <li class="nav-item mb-1 mt-4 px-3">
+                    <span class="text-white-50 small fw-bold text-uppercase ms-3">Sistem</span>
+                </li>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {% if request.endpoint == 'buku_kas_manager' %}active{% endif %}"
+                        href="{{ url_for('buku_kas_manager') }}">
+                        <i class="bi bi-folder-check fs-5 me-3"></i> Pilihan Buku Kas
+                    </a>
+                </li>
+                <li class="nav-item mb-1">
+                    <a class="nav-link" href="{{ url_for('download_report') }}">
+                        <i class="bi bi-file-earmark-arrow-down-fill fs-5 me-3"></i> Unduh Laporan
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="sidebar-footer p-3 border-top" style="border-color: rgba(255,255,255,0.08) !important;">
+            <div class="d-flex align-items-center mb-3 text-white px-2">
+                <div class="bg-warning text-dark rounded-circle d-flex align-items-center justify-content-center fw-bold me-3 shadow-sm"
+                    style="width: 40px; height: 40px; font-size: 1.1rem;">
+                    {{ session.username[0]|upper }}
+                </div>
+                <div>
+                    <div class="small fw-bold text-truncate" style="max-width: 140px;">{{ session.username }}</div>
+                    <div class="small text-white-50 text-truncate" style="font-size: 0.75rem; max-width: 140px;"
+                        title="{{ buku_kas_aktif.nama_buku if buku_kas_aktif else 'Belum Pilih Proyek' }}">
+                        {{ buku_kas_aktif.nama_buku if buku_kas_aktif else 'Belum Pilih Proyek' }}
+                    </div>
+                </div>
+            </div>
+
+            <form action="{{ url_for('logout') }}" method="POST" class="w-100">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <button type="submit" class="btn btn-danger w-100 fw-bold shadow-sm"
+                    style="background-color: rgba(239, 68, 68, 0.9); border:none;" aria-label="Keluar dari akun">Log Out
+                    Account</button>
+            </form>
+        </div>
+    </aside>
+
+    <div class="main-wrapper" id="mainWrapper">
+        <header class="topbar d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center">
+                <button class="btn btn-light d-lg-none me-3 border-0 shadow-sm" id="sidebarToggle"
+                    aria-label="Toggle Navigation">
+                    <span class="fw-bold fs-5 text-dark">☰</span>
+                </button>
+                <h5 class="mb-0 fw-bold text-dark d-none d-sm-block">{% block page_heading %}Ikhtisar Sistem{% endblock
+                    %}</h5>
+            </div>
+            <div class="d-flex align-items-center gap-3">
+                <span
+                    class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3 py-2 fw-bold shadow-sm d-flex align-items-center">
+                    <i class="bi bi-check-circle-fill me-2"></i> Koneksi Lancar
+                </span>
+            </div>
+        </header>
+
+        <main class="content-area p-4 flex-grow-1" id="main-content">
+            <!-- Flash Messages -->
+            <div id="flash-container">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                {% for category, message in messages %}
+                <div class="alert alert-{{ 'danger' if category == 'error' else category }} alert-dismissible fade show shadow-sm border-0 rounded-4 mb-4"
+                    role="alert">
+                    <strong>{{ '⚠️ Kesalahan:' if category == 'error' else '✅ Berhasil:' }}</strong> {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Tutup pesan"></button>
+                </div>
+                {% endfor %}
+                {% endif %}
+                {% endwith %}
+            </div>
+
+            {% block content %}{% endblock %}
+        </main>
+
+        <footer class="text-center py-4 mt-auto text-muted small bg-white border-top">
+            <span class="fw-bold text-dark">© 2026 PANTAUIN</span> - Merancang analitik UMKM Indonesia kelas dunia.
+        </footer>
+    </div>
+
+    {% else %}
+    <!-- ============================================== -->
+    <!-- LAYOUT PUBLIK (LOGIN / REGISTRASI)             -->
+    <!-- ============================================== -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary-custom py-3 shadow-sm">
+        <div class="container">
+            <a class="navbar-brand fw-bold fs-4" href="#"><i class="bi bi-graph-up-arrow me-2"></i> PANTAUIN</a>
+            <div class="d-flex gap-2">
+                <a class="btn btn-outline-light fw-bold px-4 rounded-pill {% if request.endpoint == 'login' %}active{% endif %}"
+                    href="{{ url_for('login') }}">Masuk</a>
+                <a class="btn btn-warning fw-bold px-4 rounded-pill text-dark shadow-sm {% if request.endpoint == 'register' %}active{% endif %}"
+                    href="{{ url_for('register') }}">Daftar Gratis</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container py-5 flex-grow-1 d-flex flex-column justify-content-center" id="main-content">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <!-- Flash Messages Publik -->
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                {% for category, message in messages %}
+                <div class="alert alert-{{ 'danger' if category == 'error' else category }} alert-dismissible fade show shadow-sm border-0 rounded-4 mb-4"
+                    role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Tutup pesan"></button>
+                </div>
+                {% endfor %}
+                {% endif %}
+                {% endwith %}
+            </div>
+        </div>
+
+        <!-- Content blok di-handle secara global di dalam parent masing-masing untuk registrasi -->
+        {% block public_content %}{% endblock %}
+    </main>
+    {% endif %}
+
+    <!-- Bootstrap 5 JS Bundle JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Script Global -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Sidebar Toggle Logic (Mobile)
+            const sidebarBtn = document.getElementById('sidebarToggle');
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+
+            if (sidebarBtn && sidebar && overlay) {
+                const toggleSidebar = () => {
+                    sidebar.classList.toggle('show');
+                    overlay.classList.toggle('show');
+                };
+
+                sidebarBtn.addEventListener('click', toggleSidebar);
+                overlay.addEventListener('click', toggleSidebar);
+            }
+
+            // Universal Rupiah Formatter
+            window.formatRupiah = (angka) => {
+                return new Intl.NumberFormat("id-ID", {
+                    style: "currency",
+                    currency: "IDR",
+                    minimumFractionDigits: 0
+                }).format(angka);
+            };
+
+            // Pasang Font ChartJS Global (Jika Halaman Mengandung Grafik)
+            if (window.Chart) {
+                Chart.defaults.font.family = "'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif";
+                Chart.defaults.color = '#64748B'; // Muted slate text
+            }
+
+            // Auto-hide success alerts smoothly
+            setTimeout(function () {
+                let alerts = document.querySelectorAll('.alert-success');
+                alerts.forEach(function (alert) {
+                    let bsAlert = new bootstrap.Alert(alert);
+                    bsAlert.close();
+                });
+            }, 6000); // 6 detik untuk layout publik lebih lapang
+        });
+    </script>
+    {% block extra_js %}{% endblock %}
+</body>
+
+</html>

@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block title %}Halaman Masuk{% endblock %}
+
+{% block public_content %}
+<div class="row justify-content-center align-items-center" style="min-height: 70vh;">
+    <div class="col-md-5">
+        <div class="card summary-card p-4">
+            <div class="text-center mb-4">
+                <h1 class="h3 fw-bold text-dark">Selamat Datang Kembali</h1>
+                <p class="text-muted">Masuk untuk memantau usaha UMKM kesayangan Anda hari ini.</p>
+            </div>
+
+            <form action="{{ url_for('login') }}" method="POST" novalidate>
+                {{ form.hidden_tag() }}
+
+                <div class="mb-3">
+                    {{ form.username.label(class="form-label") }}
+                    {{ form.username(class="form-control form-control-lg", placeholder="Masukkan nama pengguna",
+                    aria_label="Nama pengguna") }}
+                    {% if form.username.errors %}
+                    {% for error in form.username.errors %}
+                    <div class="text-danger small mt-1">{{ error }}</div>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+
+                <div class="mb-4">
+                    {{ form.password.label(class="form-label") }}
+                    {{ form.password(class="form-control form-control-lg", placeholder="Masukkan kata sandi rahasia",
+                    aria_label="Kata sandi") }}
+                    {% if form.password.errors %}
+                    {% for error in form.password.errors %}
+                    <div class="text-danger small mt-1">{{ error }}</div>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+
+                {{ form.submit(class="btn btn-primary-custom btn-lg w-100", aria_label="Tombol Masuk") }}
+            </form>
+
+            <div class="text-center mt-4">
+                <p class="mb-0 text-muted">Belum merintis di PANTAUIN? <a href="{{ url_for('register') }}"
+                        class="text-decoration-none fw-bold" style="color: var(--primary-color);">Daftar sekarang</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

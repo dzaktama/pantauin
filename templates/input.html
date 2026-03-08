@@ -1,0 +1,215 @@
+{% extends 'base.html' %}
+{% block title %}Catat Transaksi Manual{% endblock %}
+
+{% block content %}
+<div class="row g-4 justify-content-center">
+    <!-- Kolom Form Input -->
+    <div class="col-lg-8">
+        <h2 class="fw-bold mb-4 text-dark"><i class="bi bi-journal-plus me-2 text-primary"></i>Catat Penjualan Hari Ini
+        </h2>
+        <div class="card summary-card p-4">
+            <form action="{{ url_for('input_transaksi') }}" method="POST" id="formTransaksi" novalidate>
+                {{ form.hidden_tag() }}
+
+                <div class="mb-3">
+                    {{ form.tanggal.label(class="form-label") }}
+                    {{ form.tanggal(class="form-control form-control-lg", aria_label="Pilih tanggal penjualan") }}
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label">Kategori Usaha</label>
+                    <div class="d-flex flex-wrap gap-2" role="group" aria-label="Pilih kategori jualan">
+                        {% for value, label in form.kategori.choices %}
+                        <input type="radio" class="btn-check" name="{{ form.kategori.name }}"
+                            id="kategori_{{ loop.index }}" value="{{ value }}" {% if loop.first %}checked{% endif %}>
+                        <label class="btn btn-outline-primary" for="kategori_{{ loop.index }}">{{ label }}</label>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    {{ form.pemasukan.label(class="form-label") }}
+                    <div class="input-group input-group-lg">
+                        <span class="input-group-text rupiah-prefix">Rp</span>
+                        <input type="text" class="form-control js-format-rupiah" id="mask_pemasukan"
+                            aria-label="Pemasukan kotor" value="0">
+                        {{ form.pemasukan(class="d-none", id="real_pemasukan") }}
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    {{ form.pengeluaran.label(class="form-label") }}
+                    <div class="input-group input-group-lg">
+                        <span class="input-group-text rupiah-prefix">Rp</span>
+                        <input type="text" class="form-control js-format-rupiah" id="mask_pengeluaran"
+                            aria-label="Pengeluaran modal" value="0">
+                        {{ form.pengeluaran(class="d-none", id="real_pengeluaran") }}
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">{{ form.jenis_pengeluaran.label.text }}</label>
+                    <div class="row g-2" role="group" aria-label="Pilih jenis pengeluaran">
+                        {% for value, label in form.jenis_pengeluaran.choices %}
+                        <div class="col-6">
+                            <input type="radio" class="btn-check" name="{{ form.jenis_pengeluaran.name }}"
+                                id="JP_{{ loop.index }}" value="{{ value }}" {% if value==form.jenis_pengeluaran.default
+                                %}checked{% endif %}>
+                            <label class="btn btn-outline-primary w-100" for="JP_{{ loop.index }}">{{ label }}</label>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="form-text text-muted small mt-2">
+                        <i class="bi bi-info-circle"></i> Operasional = biaya rutin harian (bahan baku, listrik, gaji).
+                        Modal = pembelian aset atau stok besar.
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label">{{ form.jumlah_pelanggan.label.text }} <span
+                            class="text-muted fw-normal fs-6">(Opsional)</span></label>
+                    <div class="input-group input-group-lg border-opacity-50">
+                        <span class="input-group-text bg-light text-muted border-end-0"><i
+                                class="bi bi-people-fill"></i></span>
+                        {{ form.jumlah_pelanggan(class="form-control border-start-0 ps-1", placeholder="Estimasi jumlah
+                        orang/pembeli") }}
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label">{{ form.catatan.label.text }}</label>
+                    {{ form.catatan(class="form-control border-opacity-50", id="catatanInput",
+                    oninput="updateCounter()") }}
+                    <div class="d-flex justify-content-end mt-1">
+                        <small id="charCount" class="text-muted">200 karakter tersisa</small>
+                    </div>
+                </div>
+
+                <div class="d-flex gap-2">
+                    {{ form.submit(class="btn btn-primary-custom btn-lg w-100", id="btnSubmit", aria_label="Simpan
+                    catatan") }}
+                    <a href="{{ url_for('upload_csv') }}" class="btn btn-outline-secondary btn-lg"
+                        aria-label="Pindah ke mode unggah file CSV"><i class="bi bi-filetype-csv"></i> Unggah</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-5 justify-content-center">
+    <!-- Kolom Tabel Riwayat (Transparansi) kini berada di bawah -->
+    <div class="col-lg-10">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="fw-bold mb-0 text-dark"><i class="bi bi-clock-history me-2 text-warning"></i>Riwayat Terakhir
+            </h2>
+            <a href="{{ url_for('riwayat') }}" class="btn btn-outline-primary">Lihat Semua Riwayat <i
+                    class="bi bi-arrow-right ps-1"></i></a>
+        </div>
+        <div class="card summary-card p-0 border-0 overflow-hidden">
+            <div class="table-responsive">
+                <table class="table table-hover table-striped mb-0 text-center align-middle"
+                    style="font-size: 0.95rem;">
+                    <thead class="table-dark">
+                        <tr>
+                            <th class="py-3">Tanggal</th>
+                            <th class="py-3 text-start">Kategori</th>
+                            <th class="py-3 text-success">(+) Masuk</th>
+                            <th class="py-3 text-danger">(-) Keluar</th>
+                            <th class="py-3" title="Jumlah Pelanggan"><i class="bi bi-people-fill"></i></th>
+                            <th class="py-3 text-start">Catatan</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if riwayat %}
+                        {% for row in riwayat %}
+                        <tr>
+                            <td class="fw-bold text-muted">{{ row.tanggal.strftime('%d %b %Y') }}</td>
+                            <td class="text-start"><span class="badge bg-secondary opacity-75 fw-normal">{{ row.kategori
+                                    }}</span>
+                                {% if row.jenis_pengeluaran == 'modal' %}<br><span
+                                    class="badge bg-warning text-dark mt-1" style="font-size:0.65rem;">Modal</span>{%
+                                endif %}
+                            </td>
+                            <td class="fw-bold text-success js-rupiah" data-val="{{ row.pemasukan }}">0</td>
+                            <td class="fw-bold text-danger js-rupiah" data-val="{{ row.pengeluaran }}">0</td>
+                            <td class="text-muted">{{ row.jumlah_pelanggan if row.jumlah_pelanggan > 0 else '-' }}</td>
+                            <td class="text-start text-muted small" style="max-width: 150px; white-space: normal;">
+                                {{ row.catatan if row.catatan else '-' }}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        {% else %}
+                        <tr>
+                            <td colspan="6" class="py-5 text-muted">
+                                <i class="bi bi-folder-x fs-1 d-block mb-3 opacity-50"></i>
+                                Belum ada transaksi sama sekali. Silakan catat yang pertama kali!
+                            </td>
+                        </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <p class="text-muted small mt-3"><i class="bi bi-info-circle me-1"></i> Menampilkan hingga 15 entri data
+            historis paling baru. Untuk mencari data lama, klik tombol Lihat Semua Riwayat.</p>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const formatNumber = (val) => {
+            let clean = val.replace(/\D/g, "");
+            if (!clean) return "0";
+            return parseInt(clean, 10).toLocaleString("id-ID");
+        };
+
+        const attachRupiahMask = (maskId, realId) => {
+            const maskInput = document.getElementById(maskId);
+            const realInput = document.getElementById(realId);
+
+            maskInput.addEventListener("input", function (e) {
+                let numClean = this.value.replace(/\D/g, "");
+                this.value = formatNumber(numClean);
+                realInput.value = numClean ? numClean : 0;
+            });
+
+            // Render Awal jika failed validasi load form
+            if (realInput.value > 0) {
+                maskInput.value = formatNumber(realInput.value.toString());
+            }
+        };
+
+        attachRupiahMask("mask_pemasukan", "real_pemasukan");
+        attachRupiahMask("mask_pengeluaran", "real_pengeluaran");
+
+        window.updateCounter = function () {
+            const input = document.getElementById("catatanInput");
+            const counter = document.getElementById("charCount");
+            if (!input || !counter) return;
+            const remaining = 200 - input.value.length;
+            counter.innerText = remaining + " karakter tersisa";
+            if (remaining < 0) {
+                counter.classList.add('text-danger');
+                counter.classList.remove('text-muted');
+            } else {
+                counter.classList.remove('text-danger');
+                counter.classList.add('text-muted');
+            }
+        };
+
+        // Format angka riwayat pada tabel transaparansi
+        document.querySelectorAll('.js-rupiah').forEach(el => {
+            const num = parseFloat(el.getAttribute('data-val'));
+            el.innerText = window.formatRupiah(num);
+        });
+
+        // Toast notification via AJAX
+        const form = document.getElementById('formTransaksi');
+        form.addEventListener('submit', function (e) {
+            // Biarkan form disubmit standar, toast akan dihandle oleh Flash Messages Jinja
+        });
+    });
+</script>
+{% endblock %}

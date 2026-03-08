@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+{% block title %}Riwayat Transaksi{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12 d-flex justify-content-between align-items-center flex-wrap gap-3">
+        <div>
+            <h1 class="h3 fw-bold mb-1"><i class="bi bi-clock-history me-2 text-warning"></i>Semua Riwayat Transaksi
+            </h1>
+            <p class="text-muted mb-0">Cari dan kelola seluruh catatan kas finansial Anda di sini.</p>
+        </div>
+        <a href="{{ url_for('input_transaksi') }}" class="btn btn-outline-secondary"><i
+                class="bi bi-arrow-left me-1"></i> Kembali ke Form</a>
+    </div>
+</div>
+
+<div class="card summary-card p-4">
+    <!-- Form Pencarian (GET) -->
+    <form action="{{ url_for('riwayat') }}" method="GET" class="mb-4">
+        <div class="row g-2">
+            <div class="col-md-10">
+                <div class="input-group input-group-lg">
+                    <span class="input-group-text bg-light text-muted border-end-0"><i class="bi bi-search"></i></span>
+                    <input type="text" name="q" class="form-control border-start-0"
+                        placeholder="Cari berdasarkan kategori atau catatan..." value="{{ q }}">
+                </div>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary-custom btn-lg w-100">Cari Data</button>
+            </div>
+        </div>
+    </form>
+
+    <!-- Tabel Data Utama -->
+    <div class="table-responsive">
+        <table class="table table-hover table-striped mb-0 text-center align-middle" style="font-size: 0.95rem;">
+            <thead class="table-dark">
+                <tr>
+                    <th class="py-3">Tanggal</th>
+                    <th class="py-3 text-start">Kategori</th>
+                    <th class="py-3 text-success">(+) Masuk</th>
+                    <th class="py-3 text-danger">(-) Keluar</th>
+                    <th class="py-3" title="Jumlah Pelanggan"><i class="bi bi-people-fill"></i></th>
+                    <th class="py-3 text-start">Catatan</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if pagination.items %}
+                {% for row in pagination.items %}
+                <tr>
+                    <td class="fw-bold text-muted" style="white-space: nowrap;">{{ row.tanggal.strftime('%d %b %Y') }}
+                    </td>
+                    <td class="text-start">
+                        <span class="badge bg-secondary opacity-75 fw-normal">{{ row.kategori }}</span>
+                        {% if row.jenis_pengeluaran == 'modal' %}<br><span class="badge bg-warning text-dark mt-1"
+                            style="font-size:0.65rem;">Modal</span>{% endif %}
+                    </td>
+                    <td class="fw-bold text-success js-rupiah" data-val="{{ row.pemasukan }}">0</td>
+                    <td class="fw-bold text-danger js-rupiah" data-val="{{ row.pengeluaran }}">0</td>
+                    <td class="text-muted">{{ row.jumlah_pelanggan if row.jumlah_pelanggan > 0 else '-' }}</td>
+                    <td class="text-start text-muted small" style="min-width: 250px;">
+                        {{ row.catatan if row.catatan else '-' }}
+                    </td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr>
+                    <td colspan="6" class="py-5 text-muted">
+                        <i class="bi bi-search fs-1 d-block mb-3 opacity-50"></i>
+                        Tidak ada transaksi yang sesuai dengan kriteria pencariamu.
+                    </td>
+                </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Paginasi -->
+    {% if pagination.pages > 1 %}
+    <nav class="mt-4" aria-label="Page navigation riwayat">
+        <ul class="pagination justify-content-center mb-0">
+            <!-- Tombol Previous -->
+            <li class="page-item {% if not pagination.has_prev %}disabled{% endif %}">
+                <a class="page-link"
+                    href="{{ url_for('riwayat', page=pagination.prev_num, q=q) if pagination.has_prev else '#' }}">Sebelumnnya</a>
+            </li>
+
+            <!-- Nomor Halaman Pintar -->
+            {% for page_num in pagination.iter_pages(left_edge=1, right_edge=1, left_current=2, right_current=2) %}
+            {% if page_num %}
+            {% if pagination.page == page_num %}
+            <li class="page-item active"><span class="page-link"
+                    style="background-color: var(--primary-color); border-color: var(--primary-color);">{{ page_num
+                    }}</span></li>
+            {% else %}
+            <li class="page-item"><a class="page-link" style="color: var(--primary-color);"
+                    href="{{ url_for('riwayat', page=page_num, q=q) }}">{{ page_num }}</a></li>
+            {% endif %}
+            {% else %}
+            <li class="page-item disabled"><span class="page-link">...</span></li>
+            {% endif %}
+            {% endfor %}
+
+            <!-- Tombol Next -->
+            <li class="page-item {% if not pagination.has_next %}disabled{% endif %}">
+                <a class="page-link"
+                    href="{{ url_for('riwayat', page=pagination.next_num, q=q) if pagination.has_next else '#' }}">Berikutnya</a>
+            </li>
+        </ul>
+    </nav>
+    <div class="text-center mt-2 small text-muted">
+        Menampilkan halaman {{ pagination.page }} dari {{ pagination.pages }} (Total Data: {{ pagination.total }})
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Format uang JS
+        document.querySelectorAll('.js-rupiah').forEach(el => {
+            const num = parseFloat(el.getAttribute('data-val'));
+            el.innerText = window.formatRupiah(num);
+        });
+    });
+</script>
+{% endblock %}

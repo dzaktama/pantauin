@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% block title %}Pilih Buku Kas (Proyek) - PANTAUIN{% endblock %}
+
+{% block content %}
+<div class="row mb-5 justify-content-center">
+    <div class="col-lg-10 text-center">
+        <h1 class="display-5 fw-bold mb-3 text-dark">Manajemen Buku Kas</h1>
+        <p class="lead text-muted" style="max-width: 700px; margin: 0 auto;">Pisahkan pencatatan keuangan ke dalam
+            "Folder/Buku Kas" berbeda jika Anda punya beberapa cabang toko, jenis usaha sekunder, atau laporan rentang
+            tahun tertentu.</p>
+    </div>
+</div>
+
+<div class="row g-4 justify-content-center">
+    <!-- List Buku Kas yang Tersedia -->
+    <div class="col-lg-7">
+        <h4 class="fw-bold mb-3"><i class="bi bi-journals me-2 text-primary"></i>Daftar Buku Kas Anda</h4>
+        <div class="row g-3">
+            {% for buku in daftar_buku %}
+            <div class="col-md-6">
+                <!-- Gunakan border highlight jika ini buku kas yang sedang aktif -->
+                <div
+                    class="card h-100 shadow-sm transition-hover {% if session.get('buku_kas_id') == buku.id %}border-primary border-2{% else %}border-0{% endif %}">
+                    <div class="card-body p-4 text-center">
+                        <div class="mb-3">
+                            <i class="bi bi-journal-text {% if session.get('buku_kas_id') == buku.id %}text-primary{% else %}text-muted{% endif %}"
+                                style="font-size: 3rem;"></i>
+                        </div>
+                        <h5 class="fw-bold text-dark mb-1 text-truncate" title="{{ buku.nama_buku }}">{{ buku.nama_buku
+                            }}</h5>
+                        <p class="text-muted small mb-3">Dibuat: {{ buku.created_at.strftime('%d %b %Y') }}</p>
+
+                        <!-- Form Switch Buku Kas Aktif -->
+                        <form action="{{ url_for('switch_buku_kas', buku_id=buku.id) }}" method="POST">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            {% if session.get('buku_kas_id') == buku.id %}
+                            <button type="button" class="btn btn-primary-custom w-100 disabled"><i
+                                    class="bi bi-check2-circle me-1"></i> Sedang Dibuka</button>
+                            {% else %}
+                            <button type="submit" class="btn btn-outline-primary w-100">Buka Project Ini</button>
+                            {% endif %}
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+
+            {% if not daftar_buku %}
+            <div class="col-12">
+                <div class="alert alert-warning text-center p-4">
+                    Belum ada Buku Kas yang dibuat. Silakan buat satu di kolom sebelah kanan.
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Buat Buku Kas Baru -->
+    <div class="col-lg-4">
+        <div class="card summary-card p-4 sticky-top" style="top: 2rem;">
+            <h4 class="fw-bold mb-3 text-dark"><i class="bi bi-folder-plus me-2 text-success"></i>Buku Kas Baru</h4>
+            <p class="text-muted small mb-4">Buat tempat terpisah untuk mencatat laporan cabang baru atau arsip laporan
+                terpisah Anda.</p>
+
+            <form action="{{ url_for('buku_kas_manager') }}" method="POST">
+                {{ form.hidden_tag() }}
+                <div class="mb-4">
+                    {{ form.nama_buku.label(class="form-label fw-bold") }}
+                    {{ form.nama_buku(class="form-control form-control-lg", placeholder="Misal: Indomaret Cabang A") }}
+                    {% if form.nama_buku.errors %}
+                    <div class="text-danger small mt-1">{{ form.nama_buku.errors[0] }}</div>
+                    {% endif %}
+                </div>
+                {{ form.submit(class="btn btn-success btn-lg w-100 shadow-sm", style="background-color:
+                var(--success-color); border:none;") }}
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

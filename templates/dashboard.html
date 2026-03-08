@@ -1,0 +1,278 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard Bisnis{% endblock %}
+
+{% block content %}
+<div class="row mb-4 align-items-center">
+    <div class="col-md-8">
+        <h1 class="h3 fw-bold mb-1">Halo, {{ session.username }}</h1>
+        <p class="text-muted">Inilah ringkasan kesehatan usahamu minggu ini.</p>
+    </div>
+    <div class="col-md-4 text-md-end">
+        <a href="{{ url_for('input_transaksi') }}" class="btn btn-primary-custom"
+            aria-label="Tombol cepat catat penjualan">➕ Catat Penjualan Hari Ini</a>
+    </div>
+</div>
+
+{% if not data.is_cukup %}
+<!-- Empty State (Kekurangan Data) -->
+<div class="card summary-card justify-content-center text-center p-5 mb-4">
+    <div class="empty-icon text-muted mb-3"><i class="bi bi-file-earmark-bar-graph"></i></div>
+    <h3 class="fw-bold mb-2">Data Belum Cukup</h3>
+    <p class="text-muted mb-4">{{ data.peringatan[0] }}</p>
+    <a href="{{ url_for('input_transaksi') }}" class="btn btn-primary-custom btn-lg w-auto mx-auto px-5">Mulai Mencatat
+        Laporan</a>
+</div>
+{% else %}
+
+<!-- Peringatan Dini Banners -->
+{% if data.peringatan %}
+<div class="warning-banner" role="alert" aria-live="assertive">
+    <div>
+        <h4 class="h5 fw-bold mb-1"><i class="bi bi-exclamation-triangle-fill text-danger me-2"></i> Peringatan Dini
+            Risiko Bisnis</h4>
+        <span class="mb-0">{{ data.peringatan[0] }}</span>
+    </div>
+    <a href="{{ url_for('simulator') }}" class="btn btn-sm btn-outline-danger shadow-sm border-2 fw-bold"
+        style="background:#fff;">Coba Simulator Risiko</a>
+</div>
+{% endif %}
+
+<!-- GEMINI AI Suggestion -->
+<div class="gemini-suggestion mb-4 shadow-sm border-0 bg-white">
+    <div class="d-flex align-items-center mb-2">
+        <i class="bi bi-lightbulb-fill text-warning h4 mb-0 me-2"></i>
+        <h5 class="fw-bold mb-0 text-dark">Saran AI Hari Ini</h5>
+    </div>
+    <p class="mb-0 text-muted" style="font-size: 1.05rem;" id="saranText">{{ saran_gemini }}</p>
+</div>
+
+<!-- Ringkasan Mingguan & Skoring -->
+<div class="row g-4 mb-4">
+    <!-- Skor Kesehatan -->
+    <div class="col-lg-3 text-center d-flex flex-column align-items-center justify-content-center">
+        <h5 class="fw-bold text-muted mb-3">Score Kesehatan</h5>
+        <div class="score-circle score-{{ data.warna }}">
+            <h1 class="display-3 fw-bold mb-0 lh-1">{{ data.skor }}</h1>
+        </div>
+        {% if data.warna == 'hijau' %}
+        <h4 class="h5 fw-bold mt-3 mb-0 pointer-event" style="color: var(--success-color);">
+            {{ data.label }}
+        </h4>
+        {% elif data.warna == 'kuning' %}
+        <h4 class="h5 fw-bold mt-3 mb-0 pointer-event" style="color: var(--warning-color);">
+            {{ data.label }}
+        </h4>
+        {% else %}
+        <h4 class="h5 fw-bold mt-3 mb-0 pointer-event" style="color: var(--danger-color);">
+            {{ data.label }}
+        </h4>
+        {% endif %}
+    </div>
+
+    <!-- 4 Kartu Ringkasan Mingguan -->
+    <div class="col-lg-9">
+        <div class="row g-3 h-100">
+            <div class="col-md-3">
+                <div class="card summary-card p-4 h-100 text-center">
+                    <div class="summary-icon text-primary"><i class="bi bi-graph-up"></i></div>
+                    <h6 class="text-muted mb-2">Pemasukan Minggu Ini</h6>
+                    <h3 class="fw-bold text-dark mb-0 js-rupiah" data-val="{{ data.total_pemasukan_minggu_ini }}">0</h3>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card summary-card p-4 h-100 text-center">
+                    <div class="summary-icon text-danger"><i class="bi bi-graph-down"></i></div>
+                    <h6 class="text-muted mb-2">Biaya Operasional</h6>
+                    <h3 class="fw-bold text-dark mb-0 js-rupiah" data-val="{{ data.total_pengeluaran_op_minggu_ini }}">0
+                    </h3>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card summary-card p-4 h-100 text-center">
+                    <div class="summary-icon text-warning"><i class="bi bi-buildings"></i></div>
+                    <h6 class="text-muted mb-2">Modal Dikeluarkan</h6>
+                    <h3 class="fw-bold text-dark mb-0 js-rupiah" data-val="{{ data.total_pengeluaran_md_minggu_ini }}">0
+                    </h3>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card summary-card p-4 h-100 text-center">
+                    <div class="summary-icon text-success"><i class="bi bi-wallet2"></i></div>
+                    <h6 class="text-muted mb-2">Saldo Bersih (Profit)</h6>
+                    {% if data.saldo_minggu_ini >= 0 %}
+                    <h3 class="fw-bold mb-0 js-rupiah" data-val="{{ data.saldo_minggu_ini }}" style="color: #27AE60;">0
+                    </h3>
+                    {% else %}
+                    <h3 class="fw-bold mb-0 js-rupiah" data-val="{{ data.saldo_minggu_ini }}" style="color: #E74C3C;">0
+                    </h3>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Visualisasi Grafik -->
+<div class="card summary-card p-4 mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h5 class="fw-bold text-dark mb-0">Tren Bisnis (Rupiah)</h5>
+        <div class="btn-group" role="group" aria-label="Pilih range data">
+            <!-- Toggle fiktif client-side only (sederhana) -->
+            <button type="button" class="btn btn-sm btn-outline-primary active">30 Hari</button>
+        </div>
+    </div>
+    <div style="height: 300px;">
+        <canvas id="mainChart" aria-label="Grafik Tren Pemasukan UMKM" role="img"></canvas>
+    </div>
+</div>
+
+{% endif %}
+
+<!-- Chatbot AI -->
+<div class="chatbot-bubble shadow" id="btnChatToggle" title="Tanya AI PANTAUIN"><i class="bi bi-chat-dots-fill"></i>
+</div>
+<div class="chatbot-widget d-none flex-column" id="chatbotWidget">
+    <div class="chatbot-header">
+        <span class="fw-bold">AI PANTAUIN (Beta)</span>
+        <button type="button" class="btn-close btn-close-white" id="btnCloseChat"></button>
+    </div>
+    <div class="chatbot-body flex-grow-1" id="chatThread">
+        <div class="p-2 mb-2 bg-light rounded text-dark small" style="width: 85%;">
+            Halo! Saya asisten pintar darimu. Kamu bisa bertanya soal strategi menghindari rugi bulan ini.
+        </div>
+    </div>
+    <div class="chat-input-area border-top p-2" style="background:#fff;">
+        <input type="text" id="chatInput" placeholder="Tanyakan saran..."
+            class="form-control form-control-sm me-2 border-primary">
+        <button id="btnSendChat" class="btn btn-sm btn-primary-custom px-3">Kirim</button>
+    </div>
+</div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% if data and data.is_cukup %}
+<!-- Chart Data JSON -->
+<script id="chartDataJSON" type="application/json">
+{{ {
+    "grafik_aktual": data.grafik_aktual,
+    "grafik_op_aktual": data.grafik_op_aktual,
+    "grafik_md_aktual": data.grafik_md_aktual,
+    "grafik_proyeksi": data.grafik_proyeksi
+} | tojson | safe }}
+</script>
+{% endif %}
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // 1. Format semua uang DOM statis
+        document.querySelectorAll('.js-rupiah').forEach(el => {
+            const num = parseFloat(el.getAttribute('data-val'));
+            el.innerText = formatRupiah(num);
+        });
+
+        // 2. Render Chart (Data didapat dari atribut JSON tag DOM)
+        const chartDataNode = document.getElementById('chartDataJSON');
+        const ctx = document.getElementById('mainChart');
+        if (chartDataNode && ctx) {
+            const chartData = JSON.parse(chartDataNode.textContent);
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: Array.from({ length: chartData.grafik_aktual.length }, (_, i) => "H-" + (chartData.grafik_aktual.length - 1 - i)),
+                    datasets: [
+                        {
+                            label: 'Pemasukan Nyata',
+                            data: chartData.grafik_aktual,
+                            borderColor: '#1B2A6B',
+                            backgroundColor: 'rgba(27, 42, 107, 0.1)',
+                            fill: true,
+                            tension: 0.3,
+                            pointRadius: 3
+                        },
+                        {
+                            label: 'Pengeluaran Operasional',
+                            data: chartData.grafik_op_aktual,
+                            borderColor: '#E74C3C',
+                            backgroundColor: 'transparent',
+                            fill: false,
+                            tension: 0.3,
+                            pointRadius: 3
+                        },
+                        {
+                            label: 'Pengeluaran Modal',
+                            data: chartData.grafik_md_aktual,
+                            borderColor: '#F39C12',
+                            borderDash: [5, 5],
+                            backgroundColor: 'transparent',
+                            fill: false,
+                            tension: 0.3,
+                            pointRadius: 3
+                        },
+                        {
+                            label: 'Proyeksi Mendatang (AI Trend)',
+                            data: chartData.grafik_proyeksi,
+                            borderColor: '#F39C12',
+                            borderDash: [5, 5],
+                            fill: false,
+                            tension: 0,
+                            pointRadius: 0
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    },
+                    scales: {
+                        y: { beginAtZero: true, ticks: { callback: function (valLocale) { return "Rp " + (valLocale / 1000) + "k"; } } }
+                    }
+                }
+            });
+        }
+
+        // 3. Logic Sederhana Chatbot (Frontend Simulasi)
+        const btnToggle = document.getElementById('btnChatToggle');
+        const widget = document.getElementById('chatbotWidget');
+        const btnClose = document.getElementById('btnCloseChat');
+        const btnSend = document.getElementById('btnSendChat');
+        const chatInput = document.getElementById('chatInput');
+        const chatThread = document.getElementById('chatThread');
+
+        btnToggle.addEventListener('click', () => {
+            widget.classList.remove('d-none');
+            widget.classList.add('d-flex');
+        });
+        btnClose.addEventListener('click', () => {
+            widget.classList.remove('d-flex');
+            widget.classList.add('d-none');
+        });
+
+        btnSend.addEventListener('click', async () => {
+            const text = chatInput.value.trim();
+            if (!text) return;
+
+            chatThread.innerHTML += `<div class="p-2 mb-2 rounded bg-primary text-white small ms-auto text-end" style="width:85%;">${text}</div>`;
+            chatInput.value = '';
+            chatThread.scrollTop = chatThread.scrollHeight;
+
+            try {
+                // Simulasi request via CSRF AJAX 
+                const csrfToken = "{{ csrf_token() }}";
+                const response = await fetch('/api/chatbot', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'X-CSRFToken': csrfToken },
+                    body: JSON.stringify({ message: text })
+                });
+                const resData = await response.json();
+                chatThread.innerHTML += `<div class="p-2 mb-2 rounded bg-light text-dark small me-auto" style="width:85%;">${resData.reply}</div>`;
+            } catch {
+                chatThread.innerHTML += `<div class="p-2 mb-2 rounded bg-danger text-white small me-auto" style="width:85%;">Maaf, sambungan terganggu.</div>`;
+            }
+            chatThread.scrollTop = chatThread.scrollHeight;
+        });
+    });
+</script>
+{% endblock %}

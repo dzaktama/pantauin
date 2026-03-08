@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+{% block title %}Unggah Catatan Penjualan CSV{% endblock %}
+
+{% block extra_css %}
+<style>
+    .drop-zone {
+        border: 2px dashed var(--primary-color);
+        border-radius: 12px;
+        padding: 3rem;
+        text-align: center;
+        background-color: #f1f5f9;
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+
+    .drop-zone:hover,
+    .drop-zone.dragover {
+        background-color: #e2e8f0;
+    }
+
+    .drop-zone-text {
+        color: var(--text-dark);
+        font-weight: bold;
+        font-size: 1.2rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="fw-bold text-dark mb-0">Unggah Buku Kas (CSV)</h2>
+            <a href="{{ url_for('input_transaksi') }}" class="btn btn-outline-secondary">← Kembali Input Manual</a>
+        </div>
+
+        <div class="card summary-card p-4">
+            <p class="text-muted mb-4">Pastikan file CSV Anda memiliki judul kolom di baris pertama: <strong>tanggal,
+                    kategori, pemasukan, pengeluaran, jenis_pengeluaran, jumlah_pelanggan, catatan</strong>.</p>
+
+            <a href="{{ url_for('download_template') }}"
+                class="btn btn-sm btn-outline-primary mb-4 w-auto d-inline-block">📥 Unduh Contoh Template CSV</a>
+
+            <form action="{{ url_for('upload_csv') }}" method="POST" enctype="multipart/form-data" id="uploadForm">
+                {{ form.hidden_tag() }}
+
+                <div class="drop-zone" id="dropZone" aria-label="Area seret dan lepas file bertumpuk">
+                    <div class="mb-3" style="font-size: 3rem;">📁📄📁</div>
+                    <p class="drop-zone-text mb-1">Pilih Satu/Banyak File CSV untuk Digabungkan</p>
+                    <p class="text-muted small">Taruh banyak file sekaligus untuk <i>Merge Data</i> otomatis. Maks 2 MB
+                        per file.</p>
+                    {{ form.file_csv(class="d-none", id="fileInput", accept=".csv", multiple="multiple") }}
+                </div>
+                {% if form.file_csv.errors %}
+                <div class="text-danger mt-2 text-center">{{ form.file_csv.errors[0] }}</div>
+                {% endif %}
+
+                <!-- Tempat Preview 5 baris -->
+                <div id="previewContainer" class="mt-4 d-none">
+                    <h5 class="fw-bold fs-6">Pratinjau File:</h5>
+                    <div class="table-responsive">
+                        <table class="table table-sm table-bordered" id="previewTable">
+                            <thead class="table-light"></thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                {{ form.submit(class="btn btn-primary-custom btn-lg w-100 mt-4", id="btnUpload", aria_label="Tombol
+                konfirmasi upload data") }}
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const dropZone = document.getElementById("dropZone");
+        const fileInput = document.getElementById("fileInput");
+        const previewContainer = document.getElementById("previewContainer");
+        const previewTableHead = document.querySelector("#previewTable thead");
+        const previewTableBody = document.querySelector("#previewTable tbody");
+        const uploadForm = document.getElementById("uploadForm");
+
+        // Buka dialog saat zone diklik
+        dropZone.addEventListener("click", () => fileInput.click());
+
+        // Drag events
+        ["dragover", "dragenter"].forEach(ev => {
+            dropZone.addEventListener(ev, (e) => { e.preventDefault(); dropZone.classList.add("dragover"); });
+        });
+        ["dragleave", "dragend", "drop"].forEach(ev => {
+            dropZone.addEventListener(ev, (e) => { e.preventDefault(); dropZone.classList.remove("dragover"); });
+        });
+
+        dropZone.addEventListener("drop", (e) => {
+            if (e.dataTransfer.files.length) {
+                fileInput.files = e.dataTransfer.files;
+                handleFileChange();
+            }
+        });
+
+        fileInput.addEventListener("change", handleFileChange);
+
+        function handleFileChange() {
+            if (fileInput.files.length === 0) return;
+
+            // Loop validasi ekstensi untuk semua file yang dipilih
+            for (let i = 0; i < fileInput.files.length; i++) {
+                if (!fileInput.files[i].name.endsWith('.csv')) {
+                    alert('Kesalahan: Terdapat file yang bukan berformat .csv! Harap periksa tumpukan file Anda.');
+                    fileInput.value = '';
+                    previewContainer.classList.add('d-none');
+                    return;
+                }
+            }
+
+            // Preview hanya ditampilkan untuk file pertama sebagai sampel
+            const file = fileInput.files[0];
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const lines = e.target.result.split('\n').map(l => l.trim()).filter(l => l);
+                if (lines.length === 0) return;
+
+                previewContainer.classList.remove('d-none');
+                previewTableHead.innerHTML = '';
+                previewTableBody.innerHTML = '';
+
+                const headers = lines[0].split(',');
+                let theadRow = '<tr>';
+                headers.forEach(h => theadRow += `<th>${h}</th>`);
+                theadRow += '</tr>';
+                previewTableHead.innerHTML = theadRow;
+
+                const rowCount = Math.min(lines.length, 6); // Max 5 baris data + 1 header
+                for (let i = 1; i < rowCount; i++) {
+                    const cols = lines[i].split(',');
+                    let tr = '<tr>';
+                    cols.forEach(c => tr += `<td>${c}</td>`);
+                    tr += '</tr>';
+                    previewTableBody.innerHTML += tr;
+                }
+            };
+            reader.readAsText(file);
+        }
+    });
+</script>
+{% endblock %}

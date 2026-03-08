@@ -1,0 +1,201 @@
+tanggal,kategori,pemasukan,pengeluaran,jenis_pengeluaran,jumlah_pelanggan,catatan
+2025-08-20,Makanan & Minuman,582344,381613,operasional,24,Cukup sibuk siang hari
+2025-08-21,Makanan & Minuman,993246,576526,operasional,40,Sepi karena hujan
+2025-08-22,Lainnya,927985,4005003,modal,33,Beli stok bahan sebulan
+2025-08-23,Retail,716442,308101,operasional,27,Event lari minggu pagi
+2025-08-24,Retail,956302,394075,operasional,44,Event lari minggu pagi
+2025-08-25,Makanan & Minuman,737210,319082,operasional,26,
+2025-08-26,Retail,907287,4459834,modal,34,Modal iklan Instagram
+2025-08-27,Retail,778474,359871,operasional,32,Banyak anak sekolah beli
+2025-08-28,Retail,977698,345407,operasional,36,Ramai sekali
+2025-08-29,Jasa,611731,386665,operasional,22,Cukup sibuk siang hari
+2025-08-30,Retail,1029812,610353,operasional,45,Ramai sekali
+2025-08-31,Retail,837757,4120731,modal,33,Modal iklan Instagram
+2025-09-01,Makanan & Minuman,667047,322559,operasional,25,Ramai sekali
+2025-09-02,Makanan & Minuman,944930,2740303,modal,42,Modal iklan Instagram
+2025-09-03,Jasa,770946,261536,operasional,33,
+2025-09-04,Retail,950399,3770184,modal,43,Perpanjang sewa lapak
+2025-09-05,Jasa,935770,2808276,modal,30,Perpanjang sewa lapak
+2025-09-06,Retail,833919,377600,operasional,31,
+2025-09-07,Makanan & Minuman,859491,2626512,modal,33,Beli etalase baru
+2025-09-08,Makanan & Minuman,802210,495334,operasional,27,
+2025-09-09,Jasa,957229,545235,operasional,43,Diskon 10% laku keras
+2025-09-10,Jasa,808531,301649,operasional,36,Banyak anak sekolah beli
+2025-09-11,Makanan & Minuman,930950,334528,operasional,38,Diskon 10% laku keras
+2025-09-12,Makanan & Minuman,684587,4206516,modal,30,Beli etalase baru
+2025-09-13,Retail,769426,504525,operasional,30,
+2025-09-14,Jasa,849191,471072,operasional,33,Banyak anak sekolah beli
+2025-09-15,Retail,960710,654066,operasional,40,
+2025-09-16,Lainnya,1050530,422481,operasional,43,
+2025-09-17,Jasa,706388,317012,operasional,27,Normal
+2025-09-18,Lainnya,760822,311293,operasional,27,Event lari minggu pagi
+2025-09-19,Retail,602730,265595,operasional,23,Ramai sekali
+2025-09-20,Makanan & Minuman,706164,237948,operasional,23,
+2025-09-21,Lainnya,791725,435288,operasional,35,Event lari minggu pagi
+2025-09-22,Lainnya,784830,359810,operasional,30,
+2025-09-23,Lainnya,1055539,613173,operasional,35,
+2025-09-24,Jasa,1017571,2296801,modal,47,Modal iklan Instagram
+2025-09-25,Lainnya,909457,397752,operasional,41,Cukup sibuk siang hari
+2025-09-26,Retail,699943,311227,operasional,26,Banyak anak sekolah beli
+2025-09-27,Makanan & Minuman,720590,420890,operasional,26,Event lari minggu pagi
+2025-09-28,Jasa,1035852,523991,operasional,48,
+2025-09-29,Lainnya,1131888,372568,operasional,44,
+2025-09-30,Retail,831509,565322,operasional,33,Cukup sibuk siang hari
+2025-10-01,Retail,806911,298287,operasional,28,Banyak anak sekolah beli
+2025-10-02,Jasa,786960,526606,operasional,33,
+2025-10-03,Makanan & Minuman,882951,420238,operasional,28,Cukup sibuk siang hari
+2025-10-04,Makanan & Minuman,1141325,739905,operasional,44,
+2025-10-05,Retail,769057,389259,operasional,25,Event lari minggu pagi
+2025-10-06,Lainnya,948968,525183,operasional,39,
+2025-10-07,Jasa,650346,330643,operasional,27,Normal
+2025-10-08,Lainnya,1128324,517661,operasional,50,Sepi karena hujan
+2025-10-09,Lainnya,938727,557016,operasional,36,Cukup sibuk siang hari
+2025-10-10,Retail,955510,287498,operasional,32,Sepi karena hujan
+2025-10-11,Retail,638555,418173,operasional,27,
+2025-10-12,Jasa,699302,3301865,modal,31,Beli stok bahan sebulan
+2025-10-13,Lainnya,705339,435348,operasional,26,Diskon 10% laku keras
+2025-10-14,Lainnya,700181,256766,operasional,25,Normal
+2025-10-15,Makanan & Minuman,700141,265543,operasional,25,Normal
+2025-10-16,Retail,1142220,550501,operasional,49,Cukup sibuk siang hari
+2025-10-17,Lainnya,854637,497370,operasional,30,Event lari minggu pagi
+2025-10-18,Retail,844053,384499,operasional,35,
+2025-10-19,Jasa,927657,556191,operasional,37,Banyak anak sekolah beli
+2025-10-20,Jasa,675804,457011,operasional,27,Normal
+2025-10-21,Lainnya,1157693,718665,operasional,52,
+2025-10-22,Jasa,706849,231607,operasional,29,
+2025-10-23,Retail,1033895,562295,operasional,44,
+2025-10-24,Makanan & Minuman,1189668,782667,operasional,39,Diskon 10% laku keras
+2025-10-25,Jasa,852699,3789206,modal,39,Perpanjang sewa lapak
+2025-10-26,Lainnya,871468,4381865,modal,35,Beli etalase baru
+2025-10-27,Lainnya,936230,338271,operasional,34,
+2025-10-28,Makanan & Minuman,889174,389568,operasional,42,Cukup sibuk siang hari
+2025-10-29,Retail,903584,488617,operasional,36,Cukup sibuk siang hari
+2025-10-30,Retail,1037609,683332,operasional,38,Cukup sibuk siang hari
+2025-10-31,Lainnya,930664,544129,operasional,30,Normal
+2025-11-01,Makanan & Minuman,1145807,458296,operasional,54,Normal
+2025-11-02,Lainnya,1206911,590239,operasional,43,
+2025-11-03,Jasa,889894,504896,operasional,34,Cukup sibuk siang hari
+2025-11-04,Lainnya,1138840,342958,operasional,44,Normal
+2025-11-05,Jasa,1099508,2196427,modal,35,Beli seragam karyawan
+2025-11-06,Jasa,1027309,525189,operasional,37,
+2025-11-07,Lainnya,865888,291473,operasional,38,Normal
+2025-11-08,Makanan & Minuman,748727,376430,operasional,32,
+2025-11-09,Lainnya,937218,552082,operasional,30,Normal
+2025-11-10,Makanan & Minuman,1147386,350187,operasional,46,Normal
+2025-11-11,Retail,1119673,491287,operasional,50,Diskon 10% laku keras
+2025-11-12,Lainnya,928944,464227,operasional,36,Sepi karena hujan
+2025-11-13,Lainnya,834820,432845,operasional,30,Event lari minggu pagi
+2025-11-14,Lainnya,1170935,385804,operasional,42,Orderan gofood banyak
+2025-11-15,Lainnya,1089271,686258,operasional,45,
+2025-11-16,Jasa,1191366,460042,operasional,48,Diskon 10% laku keras
+2025-11-17,Lainnya,881598,349145,operasional,41,Orderan gofood banyak
+2025-11-18,Lainnya,1176368,518466,operasional,47,Sepi karena hujan
+2025-11-19,Jasa,873478,435218,operasional,40,Orderan gofood banyak
+2025-11-20,Retail,1053726,357568,operasional,35,
+2025-11-21,Lainnya,1153956,413214,operasional,42,Sepi karena hujan
+2025-11-22,Lainnya,1162259,455646,operasional,39,
+2025-11-23,Lainnya,1001822,3153020,modal,36,Beli stok bahan sebulan
+2025-11-24,Jasa,1223446,648712,operasional,39,
+2025-11-25,Jasa,1001643,424639,operasional,32,Cukup sibuk siang hari
+2025-11-26,Jasa,1108087,645271,operasional,40,Cukup sibuk siang hari
+2025-11-27,Retail,1072779,605782,operasional,38,Normal
+2025-11-28,Lainnya,1096373,333202,operasional,49,
+2025-11-29,Lainnya,1069864,409040,operasional,38,
+2025-11-30,Jasa,1143758,505308,operasional,50,Normal
+2025-12-01,Retail,886210,467059,operasional,32,Event lari minggu pagi
+2025-12-02,Makanan & Minuman,897406,377258,operasional,36,
+2025-12-03,Lainnya,958493,384701,operasional,40,Event lari minggu pagi
+2025-12-04,Retail,894268,434054,operasional,38,
+2025-12-05,Retail,840613,498379,operasional,30,Event lari minggu pagi
+2025-12-06,Lainnya,771227,2870362,modal,26,Service mesin kopi
+2025-12-07,Jasa,896999,490057,operasional,35,
+2025-12-08,Makanan & Minuman,1030925,3264720,modal,46,Beli stok bahan sebulan
+2025-12-09,Lainnya,1033524,637610,operasional,44,
+2025-12-10,Jasa,1288779,587255,operasional,47,
+2025-12-11,Retail,1152330,749198,operasional,44,Orderan gofood banyak
+2025-12-12,Retail,898310,369122,operasional,36,Cukup sibuk siang hari
+2025-12-13,Lainnya,1211840,686367,operasional,55,Cukup sibuk siang hari
+2025-12-14,Jasa,1136463,784786,operasional,48,Orderan gofood banyak
+2025-12-15,Lainnya,1182957,753547,operasional,52,Event lari minggu pagi
+2025-12-16,Lainnya,1051876,458277,operasional,43,Orderan gofood banyak
+2025-12-17,Makanan & Minuman,917106,1627492,modal,36,Beli etalase baru
+2025-12-18,Retail,967589,437866,operasional,44,Diskon 10% laku keras
+2025-12-19,Jasa,992383,589265,operasional,41,Orderan gofood banyak
+2025-12-20,Lainnya,744022,489840,operasional,33,Orderan gofood banyak
+2025-12-21,Lainnya,781841,2821758,modal,31,Beli seragam karyawan
+2025-12-22,Retail,749631,3654312,modal,30,Modal iklan Instagram
+2025-12-23,Makanan & Minuman,875229,536830,operasional,29,Event lari minggu pagi
+2025-12-24,Lainnya,1130284,414217,operasional,53,Normal
+2025-12-25,Retail,1240381,428692,operasional,42,Normal
+2025-12-26,Lainnya,943033,563584,operasional,39,Cukup sibuk siang hari
+2025-12-27,Lainnya,945040,618597,operasional,35,
+2025-12-28,Jasa,813665,359656,operasional,29,Normal
+2025-12-29,Retail,1192542,440609,operasional,45,Ramai sekali
+2025-12-30,Makanan & Minuman,975335,642902,operasional,32,
+2025-12-31,Retail,813251,532663,operasional,28,
+2026-01-01,Retail,807330,561709,operasional,29,
+2026-01-02,Retail,1321694,465089,operasional,51,
+2026-01-03,Lainnya,1084474,548948,operasional,43,
+2026-01-04,Retail,778599,271507,operasional,35,
+2026-01-05,Makanan & Minuman,853987,323139,operasional,28,Diskon 10% laku keras
+2026-01-06,Jasa,1270709,563990,operasional,54,Diskon 10% laku keras
+2026-01-07,Makanan & Minuman,1214008,368284,operasional,53,
+2026-01-08,Jasa,1251811,1702270,modal,41,Perpanjang sewa lapak
+2026-01-09,Retail,1284285,529050,operasional,45,Diskon 10% laku keras
+2026-01-10,Lainnya,810748,556536,operasional,28,Cukup sibuk siang hari
+2026-01-11,Lainnya,1092233,1579812,modal,42,Beli etalase baru
+2026-01-12,Lainnya,900712,2314751,modal,38,Beli seragam karyawan
+2026-01-13,Lainnya,1372539,846111,operasional,44,Cukup sibuk siang hari
+2026-01-14,Makanan & Minuman,1335043,607643,operasional,46,
+2026-01-15,Retail,1292444,833806,operasional,53,
+2026-01-16,Lainnya,1381592,950721,operasional,60,
+2026-01-17,Lainnya,1178098,626314,operasional,52,Diskon 10% laku keras
+2026-01-18,Makanan & Minuman,1232067,604929,operasional,52,Banyak anak sekolah beli
+2026-01-19,Retail,1143880,488284,operasional,46,Banyak anak sekolah beli
+2026-01-20,Makanan & Minuman,1088817,575652,operasional,35,Sepi karena hujan
+2026-01-21,Retail,1287362,660759,operasional,42,Diskon 10% laku keras
+2026-01-22,Jasa,990764,359221,operasional,37,
+2026-01-23,Makanan & Minuman,1114521,494133,operasional,42,
+2026-01-24,Lainnya,975525,299953,operasional,34,
+2026-01-25,Makanan & Minuman,1137346,582006,operasional,37,Normal
+2026-01-26,Retail,1194434,496587,operasional,53,
+2026-01-27,Makanan & Minuman,882596,527835,operasional,33,
+2026-01-28,Jasa,1355226,832633,operasional,47,Cukup sibuk siang hari
+2026-01-29,Jasa,1385447,2872107,modal,45,Perpanjang sewa lapak
+2026-01-30,Makanan & Minuman,976955,464269,operasional,38,Orderan gofood banyak
+2026-01-31,Retail,915343,292274,operasional,43,
+2026-02-01,Jasa,857483,315282,operasional,41,
+2026-02-02,Jasa,1106196,4668891,modal,42,Modal iklan Instagram
+2026-02-03,Jasa,905483,564590,operasional,32,Sepi karena hujan
+2026-02-04,Lainnya,1091523,692574,operasional,44,
+2026-02-05,Jasa,1328742,651563,operasional,47,Cukup sibuk siang hari
+2026-02-06,Makanan & Minuman,920445,338358,operasional,41,Cukup sibuk siang hari
+2026-02-07,Jasa,1049536,702407,operasional,38,
+2026-02-08,Makanan & Minuman,1162805,606608,operasional,46,
+2026-02-09,Makanan & Minuman,949120,479244,operasional,43,
+2026-02-10,Jasa,830055,453112,operasional,35,Cukup sibuk siang hari
+2026-02-11,Jasa,1418716,963981,operasional,60,
+2026-02-12,Makanan & Minuman,996336,314773,operasional,42,Ramai sekali
+2026-02-13,Jasa,918150,359561,operasional,38,Event lari minggu pagi
+2026-02-14,Lainnya,943751,390960,operasional,36,Normal
+2026-02-15,Makanan & Minuman,918077,534840,operasional,32,
+2026-02-16,Lainnya,1372705,824541,operasional,58,Sepi karena hujan
+2026-02-17,Jasa,949493,444992,operasional,34,Ramai sekali
+2026-02-18,Retail,1201351,681608,operasional,49,
+2026-02-19,Retail,1339573,877331,operasional,47,Cukup sibuk siang hari
+2026-02-20,Makanan & Minuman,1163767,1774953,modal,39,Service mesin kopi
+2026-02-21,Retail,1089107,579497,operasional,37,
+2026-02-22,Jasa,1275467,418496,operasional,44,Cukup sibuk siang hari
+2026-02-23,Retail,1481576,2034040,modal,65,Beli etalase baru
+2026-02-24,Jasa,1356811,527724,operasional,63,
+2026-02-25,Jasa,928933,456476,operasional,38,
+2026-02-26,Retail,834008,303013,operasional,28,
+2026-02-27,Lainnya,1309827,437094,operasional,62,Event lari minggu pagi
+2026-02-28,Makanan & Minuman,1272379,757961,operasional,58,Event lari minggu pagi
+2026-03-01,Makanan & Minuman,1261319,392476,operasional,41,Event lari minggu pagi
+2026-03-02,Jasa,1512013,1003123,operasional,53,Orderan gofood banyak
+2026-03-03,Lainnya,1182213,411774,operasional,45,Orderan gofood banyak
+2026-03-04,Lainnya,1345888,761202,operasional,61,Ramai sekali
+2026-03-05,Lainnya,914922,497834,operasional,38,
+2026-03-06,Makanan & Minuman,1485482,681387,operasional,57,Event lari minggu pagi
+2026-03-07,Retail,1378910,786970,operasional,59,

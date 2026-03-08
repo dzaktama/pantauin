@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+{% block title %}Simulator Bisnis{% endblock %}
+
+{% block content %}
+<div class="row align-items-center mb-4">
+    <div class="col-md-8">
+        <h1 class="h3 fw-bold mb-1 text-dark">Business Stress Simulator</h1>
+        <p class="text-muted">Simulasikan dampak risiko ekonomi terhadap dompet usahamu.</p>
+    </div>
+    <div class="col-md-4 text-md-end">
+        <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary">← Kembali ke Dashboard</a>
+    </div>
+</div>
+
+<div class="row g-4">
+    <!-- Kolom Kiri: Kontrol (Sesuai UI/UX requirement 2 kolom) -->
+    <div class="col-md-5">
+        <div class="card summary-card p-4 h-100">
+            <h5 class="fw-bold text-dark mb-4">Kendali Skenario Risiko</h5>
+            <div class="mb-5 text-center">
+                <label for="sliderTurun" class="form-label text-muted fw-bold d-block" style="font-size:1.2rem;">Kalau
+                    penjualan turun sebesar:</label>
+                <!-- Angka persentase besar di tengah -->
+                <div class="display-3 fw-bold mb-4" id="labelPersen" style="color: var(--primary-color);">0%</div>
+                <input type="range" class="form-range" id="sliderTurun" min="0" max="100" step="5" value="0"
+                    aria-label="Geser untuk mengatur persentase penurunan">
+            </div>
+            <button class="btn btn-outline-danger w-100 btn-lg" id="btnReset"
+                aria-label="Kembali ke kondisi normal pabrik">Reset ke Kondisi Normal</button>
+        </div>
+    </div>
+
+    <!-- Kolom Kanan: Hasil Real-time -->
+    <div class="col-md-7">
+        <div class="card summary-card p-4 h-100" style="background-color: var(--primary-color); color: white;">
+            <h5 class="fw-bold mb-4">Proyeksi Hasil Mingguan</h5>
+
+            <div class="row text-center mb-4">
+                <div class="col-sm-4 mb-3 mb-sm-0">
+                    <p class="mb-1 opacity-75 small fw-bold">Pemasukan Baru</p>
+                    <h3 class="fw-bold" id="simPemasukan">Rp 0</h3>
+                </div>
+                <div class="col-sm-4 mb-3 mb-sm-0">
+                    <p class="mb-1 opacity-75 small fw-bold">Pengeluaran Baru</p>
+                    <h3 class="fw-bold" id="simPengeluaran">Rp 0</h3>
+                </div>
+                <div class="col-sm-4">
+                    <p class="mb-1 opacity-75 small fw-bold border-bottom border-light pb-1">Saldo Bersih (Untung/Rugi)
+                    </p>
+                    <h3 class="fw-bold" id="simSaldo" style="color:var(--success-color);">Rp 0</h3>
+                </div>
+            </div>
+
+            <div class="mt-auto pt-3 border-top border-light border-opacity-25">
+                <div class="d-flex align-items-center p-3 rounded" id="saranBox"
+                    style="background: rgba(255,255,255,0.1);">
+                    <span class="fs-3 me-3">💡</span>
+                    <p class="mb-0" id="simSaran" style="font-size: 1.05rem; font-weight: 500;">
+                        Pilih persentase penurunan pada penggeser di sebelah kiri.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Token CSRF Meta Untuk Rate-Limited AJAX -->
+<meta name="csrf-token" content="{{ csrf_token() }}">
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const slider = document.getElementById("sliderTurun");
+        const lblPersen = document.getElementById("labelPersen");
+        const btnReset = document.getElementById("btnReset");
+        const simPemasukan = document.getElementById("simPemasukan");
+        const simPengeluaran = document.getElementById("simPengeluaran");
+        const simSaldo = document.getElementById("simSaldo");
+        const simSaran = document.getElementById("simSaran");
+        const saranBox = document.getElementById("saranBox");
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+        let debounceTimer;
+
+        const hitungSimulasi = async (persen) => {
+            try {
+                const resp = await fetch("/api/simulator", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json", "X-CSRFToken": csrfToken },
+                    body: JSON.stringify({ penurunan_persen: persen })
+                });
+                if (resp.status === 429) {
+                    simSaran.innerText = "Wow, pelan-pelan. Anda menggeser terlalu cepat (Rate Limit Penuh).";
+                    return;
+                }
+                if (!resp.ok) throw new Error("Gagal komputasi");
+
+                const data = await resp.json();
+
+                // Render Rupiah Hasil
+                simPemasukan.innerText = formatRupiah(data.pemasukan_baru);
+                simPengeluaran.innerText = formatRupiah(data.pengeluaran_baru);
+                simSaldo.innerText = formatRupiah(data.saldo_baru);
+
+                // Logika Warna
+                if (data.saldo_baru >= 0) {
+                    simSaldo.style.color = "#2ef080"; // Cerah untuk dark bg
+                    saranBox.style.backgroundColor = "rgba(46, 240, 128, 0.15)";
+                } else {
+                    simSaldo.style.color = "#ff6b6b";
+                    saranBox.style.backgroundColor = "rgba(255, 107, 107, 0.15)";
+                }
+
+                simSaran.innerText = data.saran;
+            } catch (err) {
+                console.error(err);
+            }
+        };
+
+        slider.addEventListener("input", function () {
+            const val = parseInt(this.value, 10);
+            lblPersen.innerText = val + "%";
+
+            // Ubah warna label persen sebagai indikator keparahan
+            lblPersen.style.color = val > 50 ? "var(--danger-color)" : (val > 25 ? "var(--warning-color)" : "var(--primary-color)");
+
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => { hitungSimulasi(val); }, 300); // 300ms delay agar tidak membanjiri Rate Limiter Flask
+        });
+
+        btnReset.addEventListener("click", () => {
+            slider.value = 0;
+            slider.dispatchEvent(new Event('input'));
+        });
+
+        // Inisialisasi panggilan pertama
+        hitungSimulasi(0);
+    });
+</script>
+{% endblock %}

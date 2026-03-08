@@ -1,0 +1,426 @@
+/* 
+   static/css/style.css
+   Modern, Clean UI/UX overhaul using Plus Jakarta Sans
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+:root {
+    --primary-color: #1B2A6B;
+    --primary-dark: #121C4A;
+    --success-color: #10B981;
+    --warning-color: #F59E0B;
+    --danger-color: #EF4444;
+    --bg-color: #F8FAFC;
+    --text-dark: #0F172A;
+    --text-muted: #64748B;
+    --sidebar-width: 260px;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-dark);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+}
+
+.bg-primary-custom {
+    background-color: var(--primary-color) !important;
+}
+
+.text-primary-custom {
+    color: var(--primary-color) !important;
+}
+
+/* Tipografi Kontras Tinggi */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: var(--text-dark);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+label.form-label {
+    font-weight: 600;
+    color: var(--text-dark);
+    font-size: 0.95rem;
+}
+
+.form-control,
+.form-select,
+.form-range {
+    border-radius: 10px;
+    border: 1px solid #CBD5E1;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    transition: box-shadow 0.2s, border-color 0.2s;
+}
+
+.form-control:focus,
+.form-select:focus {
+    box-shadow: 0 0 0 4px rgba(27, 42, 107, 0.1);
+    border-color: var(--primary-color);
+}
+
+/* Tombol Aksi Utama */
+.btn {
+    border-radius: 10px;
+    font-weight: 600;
+    padding: 0.6rem 1.25rem;
+    transition: all 0.2s;
+}
+
+.btn-primary-custom {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: #ffffff;
+}
+
+.btn-primary-custom:hover {
+    background-color: var(--primary-dark);
+    border-color: var(--primary-dark);
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(27, 42, 107, 0.2);
+}
+
+/* Sidebar Styles */
+.sidebar {
+    width: var(--sidebar-width);
+    background-color: var(--primary-color);
+    min-height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1040;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 4px 0 15px rgba(0, 0, 0, 0.05);
+}
+
+.sidebar .brand {
+    padding: 1.25rem 1.5rem;
+    color: #ffffff;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.sidebar .nav-link {
+    color: rgba(255, 255, 255, 0.7);
+    padding: 0.85rem 1.5rem;
+    font-weight: 600;
+    transition: all 0.2s;
+    border-left: 4px solid transparent;
+    display: flex;
+    align-items: center;
+}
+
+.sidebar .nav-link:hover {
+    color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.06);
+}
+
+.sidebar .nav-link.active {
+    color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-left-color: var(--warning-color);
+}
+
+.main-wrapper {
+    margin-left: var(--sidebar-width);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.topbar {
+    background: #ffffff;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid #E2E8F0;
+    z-index: 1030;
+    position: sticky;
+    top: 0;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+@media (max-width: 991.98px) {
+    .sidebar {
+        transform: translateX(-100%);
+    }
+
+    .sidebar.show {
+        transform: translateX(0);
+    }
+
+    .main-wrapper {
+        margin-left: 0;
+    }
+
+    /* Kurangi padding utama di mobile agar mepet nyaman */
+    .content-area {
+        padding: 1rem !important;
+    }
+
+    .sidebar-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(15, 23, 42, 0.5);
+        backdrop-filter: blur(2px);
+        z-index: 1035;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s;
+    }
+
+    .sidebar-overlay.show {
+        opacity: 1;
+        pointer-events: all;
+    }
+}
+
+/* Kartu & Container */
+.summary-card {
+    border-radius: 16px;
+    border: 1px solid #E2E8F0;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.03), 0 2px 4px -2px rgba(0, 0, 0, 0.03);
+    background: #ffffff;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.summary-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.06), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
+}
+
+.summary-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.75rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 65px;
+    height: 65px;
+    background: #F1F5F9;
+    border-radius: 16px;
+}
+
+/* Bantuan Tabel Responsif Mobile Mulus */
+.table-responsive {
+    -webkit-overflow-scrolling: touch;
+}
+
+.table-responsive table {
+    white-space: nowrap;
+    /* Teks tabel tidak jatuh/stack ke bawah */
+}
+
+/* Peringatan Dini Banners */
+.warning-banner {
+    background-color: #FEF2F2;
+    border: 1px solid #FECACA;
+    border-left: 5px solid var(--danger-color);
+    color: #991B1B;
+    padding: 1.25rem 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+/* Skor Kesehatan */
+.score-circle {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    color: white;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(0, 0, 0, 0.05));
+}
+
+.score-hijau {
+    background-color: var(--success-color);
+}
+
+.score-kuning {
+    background-color: var(--warning-color);
+    color: #0F172A;
+    text-shadow: none;
+    box-shadow: 0 4px 15px rgba(245, 158, 11, 0.2);
+}
+
+.score-merah {
+    background-color: var(--danger-color);
+    box-shadow: 0 4px 15px rgba(239, 68, 68, 0.2);
+}
+
+/* Saran Gemini */
+.gemini-suggestion {
+    background: linear-gradient(to right, #F8FAFC, #FFFFFF);
+    border-radius: 16px;
+    padding: 1.5rem;
+    border: 1px solid #E2E8F0;
+    border-left: 4px solid var(--primary-color);
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    color: var(--text-muted);
+    padding: 4rem 2rem;
+}
+
+.empty-icon {
+    font-size: 4.5rem;
+    margin-bottom: 1.5rem;
+    opacity: 0.9;
+}
+
+/* Styling Chatbot Widget */
+.chatbot-widget {
+    position: fixed;
+    bottom: 100px;
+    right: 25px;
+    width: 360px;
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    z-index: 1050;
+    overflow: hidden;
+    background: #ffffff;
+    display: none;
+    border: 1px solid #E2E8F0;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.chatbot-header {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 15px 20px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 700;
+}
+
+.chatbot-body {
+    height: 320px;
+    overflow-y: auto;
+    padding: 20px;
+    background: #F8FAFC;
+    scroll-behavior: smooth;
+}
+
+.chat-input-area {
+    padding: 15px;
+    background: #fff;
+    border-top: 1px solid #E2E8F0;
+    display: flex;
+    gap: 8px;
+}
+
+.chatbot-bubble {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    width: 65px;
+    height: 65px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.6rem;
+    box-shadow: 0 4px 15px rgba(27, 42, 107, 0.3);
+    cursor: pointer;
+    z-index: 1040;
+    transition: transform 0.2s;
+}
+
+.chatbot-bubble:hover {
+    transform: scale(1.08);
+}
+
+/* Input Group Text Custom */
+.input-group-text.rupiah-prefix {
+    background-color: #F1F5F9;
+    font-weight: 700;
+    color: var(--text-muted);
+    border: 1px solid #CBD5E1;
+    border-right: none;
+}
+
+.js-format-rupiah {
+    border-left: none;
+}
+
+.js-format-rupiah:focus {
+    border-left: 1px solid var(--primary-color);
+    /* Overridden by box-shadow smoothly */
+}
+
+/* Radio button categories - Modern UI */
+.btn-check:checked+.btn-outline-primary {
+    background-color: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+    box-shadow: 0 2px 6px rgba(27, 42, 107, 0.2);
+}
+
+.btn-outline-primary {
+    border-color: #CBD5E1;
+    color: var(--text-dark);
+    background: #ffffff;
+    font-weight: 600;
+    padding: 0.6rem 1.25rem;
+    border-radius: 10px;
+}
+
+.btn-outline-primary:hover {
+    background-color: #F1F5F9;
+    border-color: #CBD5E1;
+    color: var(--text-dark);
+}
+
+/* Link customization */
+a {
+    color: var(--primary-color);
+    transition: color 0.2s;
+}
+
+a:hover {
+    color: var(--primary-dark);
+}

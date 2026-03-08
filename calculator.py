@@ -1,0 +1,195 @@
+import numpy as np
+from datetime import timedelta, date
+from collections import defaultdict
+
+# KONSTANTA BOBOT BUSINESS HEALTH SCORE
+BOBOT_STABILITAS = 0.25
+BOBOT_TREN = 0.25
+BOBOT_RASIO_OP = 0.20
+BOBOT_GROSS_MARGIN = 0.20
+BOBOT_KONSISTENSI = 0.10
+
+# AMBANG BATAS PESAN
+THRESHOLD_WARNING_RASIO_PENGELUARAN = 0.8  # Jika pengeluaran operasional >= 80% pemasukan
+
+def get_operational_expense(user_id, days):
+    """Mendapatkan total pengeluaran operasional n hari terakhir."""
+    from models import Transaksi
+    sekarang = date.today()
+    start_date = sekarang - timedelta(days=days)
+    transaksi_list = Transaksi.query.filter(Transaksi.user_id == user_id, Transaksi.tanggal >= start_date).all()
+    return sum(t.pengeluaran for t in transaksi_list if getattr(t, 'jenis_pengeluaran', 'operasional') == 'operasional')
+
+def get_capital_expense(user_id, days):
+    """Mendapatkan total pengeluaran modal n hari terakhir."""
+    from models import Transaksi
+    sekarang = date.today()
+    start_date = sekarang - timedelta(days=days)
+    transaksi_list = Transaksi.query.filter(Transaksi.user_id == user_id, Transaksi.tanggal >= start_date).all()
+    return sum(t.pengeluaran for t in transaksi_list if getattr(t, 'jenis_pengeluaran', 'operasional') == 'modal')
+
+def periksa_kecukupan_data(transaksi_list):
+    """Mengecek minimal data 14 hari transaksi unik tersedia (Reliability)."""
+    if not transaksi_list:
+        return False
+    tanggal_unik = {t.tanggal for t in transaksi_list}
+    return len(tanggal_unik) >= 14
+
+def _agregasi_per_hari(transaksi_list):
+    """Mengelompokkan transaksi menjadi harian."""
+    harian = defaultdict(lambda: {'pemasukan': 0.0, 'pengeluaran_op': 0.0, 'pengeluaran_md': 0.0})
+    for t in transaksi_list:
+        harian[t.tanggal]['pemasukan'] += t.pemasukan
+        if getattr(t, 'jenis_pengeluaran', 'operasional') == 'modal':
+            harian[t.tanggal]['pengeluaran_md'] += t.pengeluaran
+        else:
+            harian[t.tanggal]['pengeluaran_op'] += t.pengeluaran
+    
+    # Sorting berdasarkan tanggal ascending
+    sorted_dates = sorted(harian.keys())
+    return {d: harian[d] for d in sorted_dates}
+
+def hitung_health_score(transaksi_list):
+    """
+    Fungsi utama perhitungan Business Health Score dan proyeksi linear.
+    Semua logika diisolasi di sini. Dibungkus try-except di pemanggil `app.py`.
+    """
+    if not periksa_kecukupan_data(transaksi_list):
+        return _fallback_empty_data()
+
+    # Hitung data mingguan terakhir (7 hari) vs minggu sebelumnya
+    sekarang = date.today()
+    minggu_ini = [t for t in transaksi_list if (sekarang - t.tanggal).days <= 7]
+    minggu_lalu = [t for t in transaksi_list if 7 < (sekarang - t.tanggal).days <= 14]
+
+    in_minggu_ini = sum((t.pemasukan for t in minggu_ini), 0)
+    out_op_minggu_ini = sum((t.pengeluaran for t in minggu_ini if getattr(t, 'jenis_pengeluaran', 'operasional') == 'operasional'), 0)
+    out_md_minggu_ini = sum((t.pengeluaran for t in minggu_ini if getattr(t, 'jenis_pengeluaran', 'operasional') == 'modal'), 0)
+    
+    out_minggu_ini = out_op_minggu_ini + out_md_minggu_ini
+    in_minggu_lalu = sum((t.pemasukan for t in minggu_lalu), 0)
+    
+    saldo_minggu_ini = in_minggu_ini - out_minggu_ini
+    saldo_operasional_minggu_ini = in_minggu_ini - out_op_minggu_ini
+
+    # 1. Stabilitas Cashflow (0 - 100) Menggunakan Margin Operasional
+    margin = 0 if in_minggu_ini == 0 else (saldo_operasional_minggu_ini / in_minggu_ini)
+    skor_stabilitas = 100 if margin >= 0.2 else (max(0, margin) / 0.2 * 100)
+
+    # 2. Tren Penjualan (0 - 100)
+    if in_minggu_lalu == 0:
+        tren_growth = 0
+    else:
+        tren_growth = (in_minggu_ini - in_minggu_lalu) / in_minggu_lalu
+    skor_tren = min(100, max(0, (tren_growth + 0.5) * 100)) # Netral jika -0.5, 100 jika >= 0.5
+
+    # 3. Rasio Pengeluaran Operasional (0 - 100)
+    if in_minggu_ini == 0:
+        skor_pengeluaran = 0
+    else:
+        rasio_out = out_op_minggu_ini / in_minggu_ini
+        skor_pengeluaran = min(100, max(0, (1 - rasio_out) * 100))
+
+    # 4. Gross Margin Harian (0 - 100)
+    data_harian = list(_agregasi_per_hari(transaksi_list).values())
+    pemasukan_harian = [d['pemasukan'] for d in data_harian]
+    margin_harian = [max(0, d['pemasukan'] - d['pengeluaran_op']) for d in data_harian]
+    rata_margin = np.mean(margin_harian) if margin_harian else 0
+    rata_pemasukan_harian = np.mean(pemasukan_harian) if pemasukan_harian else 0
+    
+    if rata_pemasukan_harian == 0:
+        skor_gross_margin = 0
+    else:
+        gross_margin_pct = rata_margin / rata_pemasukan_harian
+        skor_gross_margin = min(100, max(0, gross_margin_pct * 100 / 0.3)) # asumsi margin idaman 30%
+
+    # 5. Konsistensi Pemasukan (Standard Deviasi) (0 - 100)
+    rata_harian = rata_pemasukan_harian
+    std_harian = np.std(pemasukan_harian) if len(pemasukan_harian) > 1 else 0
+    cv = (std_harian / rata_harian) if rata_harian > 0 else 1
+    skor_konsistensi = max(0, (1 - cv) * 100)
+
+    # TOTAL SCORE 0-100
+    skor_total = (
+        (skor_stabilitas * BOBOT_STABILITAS) +
+        (skor_tren * BOBOT_TREN) +
+        (skor_pengeluaran * BOBOT_RASIO_OP) +
+        (skor_gross_margin * BOBOT_GROSS_MARGIN) +
+        (skor_konsistensi * BOBOT_KONSISTENSI)
+    )
+    skor_total = round(skor_total)
+
+    # Labeling & Warning
+    peringatan = []
+    if skor_total >= 80:
+        label = "Bisnis Sehat"
+        warna = "hijau" # Hijau  #27AE60 (CSS)
+    elif skor_total >= 60:
+        label = "Perlu Perhatian"
+        warna = "kuning" # Kuning #F39C12
+    else:
+        label = "Kondisi Kritis"
+        warna = "merah" # Merah #E74C3C
+    
+    if out_op_minggu_ini > in_minggu_ini:
+        peringatan.append("Pengeluaran operasional minggu ini melebihi pemasukan. Tekan biaya operasional segera.")
+    elif tren_growth < -0.2:
+        peringatan.append(f"Penjualan kamu turun {abs(round(tren_growth * 100))}% dibanding minggu lalu. Cek tab Simulator untuk lihat dampaknya.")
+
+    catatan_mingguan = [f"{t.tanggal.strftime('%d %b')}: {t.catatan}" for t in minggu_ini if getattr(t, 'catatan', None)]
+
+    # Proyeksi Linear Numpy API Polyfit 4 Minggu Mendatang
+    # Buat ringkasan per minggu (max 12 minggu ke belakang)
+    # Sangat disederhanakan untuk contoh
+    Y_trend = [p['pemasukan'] for p in data_harian][-30:] # Ambil 30 hari terakhir
+    X_trend = np.arange(len(Y_trend))
+    proyeksi_list = []
+    if len(Y_trend) > 5:
+        z = np.polyfit(X_trend, Y_trend, 1)
+        p = np.poly1d(z)
+        hari_depan = np.arange(len(X_trend), len(X_trend) + 28) # 4 minggu
+        proyeksi_list_mentah = p(hari_depan)
+        proyeksi_list = [max(0, float(val)) for val in proyeksi_list_mentah] # Tidak boleh minus
+
+    return {
+        "is_cukup": True,
+        "skor": skor_total,
+        "label": label,
+        "warna": warna,
+        "peringatan": peringatan,
+        "total_pemasukan_minggu_ini": in_minggu_ini,
+        "total_pengeluaran_op_minggu_ini": out_op_minggu_ini,
+        "total_pengeluaran_md_minggu_ini": out_md_minggu_ini,
+        "total_pengeluaran_minggu_ini": out_minggu_ini,
+        "saldo_minggu_ini": saldo_minggu_ini,
+        "rata_pemasukan": round(rata_harian),
+        "rata_pengeluaran": round(np.mean([d['pengeluaran_op'] for d in data_harian]) if data_harian else 0),
+        "tren_status": "naik" if tren_growth >= 0 else "turun",
+        "grafik_aktual": Y_trend, # Array 1D pemasukan harian terakhir
+        "grafik_op_aktual": [d['pengeluaran_op'] for d in data_harian][-30:],
+        "grafik_md_aktual": [d['pengeluaran_md'] for d in data_harian][-30:],
+        "grafik_proyeksi": proyeksi_list, # Array 1D proyeksi harian ke depan
+        "catatan_mingguan": catatan_mingguan
+    }
+
+def _fallback_empty_data():
+    return {
+        "is_cukup": False,
+        "skor": 0,
+        "label": "Data Belum Cukup",
+        "warna": "kuning",
+        "peringatan": ["Sistem butuh minimal data 14 hari aktivitas untuk dianalisa. Mulai dengan mencatat transaksi pertamamu!"],
+        "total_pemasukan_minggu_ini": 0,
+        "total_pengeluaran_op_minggu_ini": 0,
+        "total_pengeluaran_md_minggu_ini": 0,
+        "total_pengeluaran_minggu_ini": 0,
+        "saldo_minggu_ini": 0,
+        "rata_pemasukan": 0,
+        "rata_pengeluaran": 0,
+        "tren_status": "stabil",
+        "grafik_aktual": [],
+        "grafik_op_aktual": [],
+        "grafik_md_aktual": [],
+        "grafik_proyeksi": [],
+        "catatan_mingguan": []
+    }
