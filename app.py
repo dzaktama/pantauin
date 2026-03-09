@@ -152,14 +152,19 @@ def create_app(config_class=Config):
             buku_kas_id = session.get('buku_kas_id')
             if not buku_kas_id: 
                 return redirect(url_for('buku_kas_manager'))
+            
+            # Filter Parameter Periode Dashboard
+            periode = request.args.get('periode', 30, type=int)
+            if periode not in [30, 60, 90]:
+                periode = 30
                 
-            cache_key = f"dashboard_bk_{buku_kas_id}_{datetime.now().strftime('%Y%m%d')}_v2"
+            cache_key = f"dashboard_bk_{buku_kas_id}_{periode}_{datetime.now().strftime('%Y%m%d')}_v3"
             data = cache.get(cache_key)
             saran_gemini = cache.get(f"saran_bk_{buku_kas_id}")
 
             if data is None or saran_gemini is None:
                 transaksi_list = Transaksi.query.filter_by(buku_kas_id=buku_kas_id).order_by(Transaksi.tanggal.asc()).all()
-                data = hitung_health_score(transaksi_list)
+                data = hitung_health_score(transaksi_list, periode_grafik=periode)
                 
                 # Panggil Gemini jika data valid
                 if data['is_cukup']:
@@ -203,7 +208,9 @@ def create_app(config_class=Config):
                 db.session.add(t)
                 db.session.commit()
                 # Invalidate cache
-                cache.delete(f"dashboard_bk_{buku_kas_id}_{datetime.now().strftime('%Y%m%d')}_v2")
+                cache.delete(f"dashboard_bk_{buku_kas_id}_30_{datetime.now().strftime('%Y%m%d')}_v3")
+                cache.delete(f"dashboard_bk_{buku_kas_id}_60_{datetime.now().strftime('%Y%m%d')}_v3")
+                cache.delete(f"dashboard_bk_{buku_kas_id}_90_{datetime.now().strftime('%Y%m%d')}_v3")
                 cache.delete(f"saran_bk_{buku_kas_id}")
                 flash("Sip, Transaksi berhasil dicatat!", "success")
                 return redirect(url_for('input_transaksi'))
@@ -287,7 +294,9 @@ def create_app(config_class=Config):
                             pass # Skip baris malformed
                         
                 db.session.commit()
-                cache.delete(f"dashboard_bk_{buku_kas_id}_{datetime.now().strftime('%Y%m%d')}_v2")
+                cache.delete(f"dashboard_bk_{buku_kas_id}_30_{datetime.now().strftime('%Y%m%d')}_v3")
+                cache.delete(f"dashboard_bk_{buku_kas_id}_60_{datetime.now().strftime('%Y%m%d')}_v3")
+                cache.delete(f"dashboard_bk_{buku_kas_id}_90_{datetime.now().strftime('%Y%m%d')}_v3")
                 cache.delete(f"saran_bk_{buku_kas_id}")
                 flash(f"Berhasil menggabungkan {sukses} baris transaksi ke Buku Kas ini.", "success")
                 return redirect(url_for('dashboard'))
@@ -323,10 +332,10 @@ def create_app(config_class=Config):
             req = request.get_json()
             persen = float(req.get('penurunan_persen', 0)) / 100
             
-            baseline = cache.get(f"dashboard_bk_{buku_kas_id}_{datetime.now().strftime('%Y%m%d')}_v2")
+            baseline = cache.get(f"dashboard_bk_{buku_kas_id}_30_{datetime.now().strftime('%Y%m%d')}_v3")
             if not baseline:
                 t_list = Transaksi.query.filter_by(buku_kas_id=buku_kas_id).order_by(Transaksi.tanggal.asc()).all()
-                baseline = hitung_health_score(t_list)
+                baseline = hitung_health_score(t_list, periode_grafik=30)
 
             # Kalkulasi manual cepat
             in_baru = baseline['total_pemasukan_minggu_ini'] * (1 - persen)
@@ -356,13 +365,19 @@ def create_app(config_class=Config):
             buku_kas_id = session.get('buku_kas_id')
             if not buku_kas_id: return jsonify({"reply": "Anda belum memilih Proyek/Buku Kas."})
             
-            cache_key = f"dashboard_bk_{buku_kas_id}_{datetime.now().strftime('%Y%m%d')}_v2"
-            konteks = cache.get(cache_key) or {}
+            cache_key = f"dashboard_bk_{buku_kas_id}_30_{datetime.now().strftime('%Y%m%d')}_v3"
+            konteks = cache.get(cache_key)
+            if not konteks:
+                t_list = Transaksi.query.filter_by(buku_kas_id=buku_kas_id).order_by(Transaksi.tanggal.asc()).all()
+                konteks = hitung_health_score(t_list, periode_grafik=30)
+                cache.set(cache_key, konteks)
             
             reply = gemini_helper.get_chatbot_response(pesan_user, konteks)
             return jsonify({"reply": reply})
-        except Exception:
-            return jsonify({"reply": "AI Kelebihan beban. Coba lagi 1 menit kedepan!"}), 500
+        except Exception as e:
+            import traceback
+            traceback.print_exc()
+            return jsonify({"reply": f"AI Kelebihan beban detail: {str(e)}"}), 500
 
     @app.route('/unduh-laporan', methods=['GET'])
     @login_required
@@ -371,22 +386,30 @@ def create_app(config_class=Config):
             buku_kas_id = session.get('buku_kas_id')
             if not buku_kas_id: return redirect(url_for('buku_kas_manager'))
             
-            cache_key = f"dashboard_bk_{buku_kas_id}_{datetime.now().strftime('%Y%m%d')}_v2"
+            cache_key = f"dashboard_bk_{buku_kas_id}_30_{datetime.now().strftime('%Y%m%d')}_v3"
             data = cache.get(cache_key)
-            if not data or not data.get('is_cukup'):
+            if not data:
+                t_list = Transaksi.query.filter_by(buku_kas_id=buku_kas_id).order_by(Transaksi.tanggal.asc()).all()
+                data = hitung_health_score(t_list, periode_grafik=30)
+                cache.set(cache_key, data)
+
+            if not data.get('is_cukup'):
                 flash("Anda belum memiliki cukup data transaksi untuk dicetak pada Buku Kas ini (minimal 14 hari).", "warning")
                 return redirect(url_for('dashboard'))
             
             buku_aktif = BukuKas.query.get(buku_kas_id)
             nama_proyek = buku_aktif.nama_buku if buku_aktif else session['username']
-            output_file = os.path.join(Config.BASE_DIR, 'Laporan_PANTAUIN.pdf')
+            base_dir = os.path.abspath(os.path.dirname(__file__))
+            output_file = os.path.join(base_dir, f'Laporan_PANTAUIN_{int(datetime.now().timestamp())}.pdf')
             
             # Panggil fungsi report lab
             generate_pdf_report(nama_proyek, data['skor'], data['rata_pemasukan'], data['rata_pengeluaran'], data['peringatan'], data.get('catatan_mingguan', []), output_file)
             
             return send_file(output_file, as_attachment=True, download_name=f"PANTAUIN_Laporan_{date.today()}_{nama_proyek.replace(' ', '_')}.pdf")
-        except Exception:
-            return render_template('error.html', pesan="Gagal membuat PDF Laporan."), 500
+        except Exception as e:
+            import traceback
+            traceback.print_exc()
+            return render_template('error.html', pesan=f"Gagal membuat PDF Laporan. Error: {str(e)}"), 500
 
     return app
 

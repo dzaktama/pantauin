@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 from datetime import timedelta, date
 from collections import defaultdict
 
@@ -49,13 +50,13 @@ def _agregasi_per_hari(transaksi_list):
     sorted_dates = sorted(harian.keys())
     return {d: harian[d] for d in sorted_dates}
 
-def hitung_health_score(transaksi_list):
+def hitung_health_score(transaksi_list, periode_grafik=30):
     """
     Fungsi utama perhitungan Business Health Score dan proyeksi linear.
     Semua logika diisolasi di sini. Dibungkus try-except di pemanggil `app.py`.
     """
     if not periksa_kecukupan_data(transaksi_list):
-        return _fallback_empty_data()
+        return _fallback_empty_data(periode_grafik)
 
     # Hitung data mingguan terakhir (7 hari) vs minggu sebelumnya
     sekarang = date.today()
@@ -69,6 +70,10 @@ def hitung_health_score(transaksi_list):
     out_minggu_ini = out_op_minggu_ini + out_md_minggu_ini
     in_minggu_lalu = sum((t.pemasukan for t in minggu_lalu), 0)
     
+    # Kebutuhan Rule Penurunan Beruntun (Minggu ke-3 / minggu_lalu_2)
+    minggu_lalu_2 = [t for t in transaksi_list if 14 < (sekarang - t.tanggal).days <= 21]
+    in_minggu_lalu_2 = sum((t.pemasukan for t in minggu_lalu_2), 0)
+    
     saldo_minggu_ini = in_minggu_ini - out_minggu_ini
     saldo_operasional_minggu_ini = in_minggu_ini - out_op_minggu_ini
 
@@ -77,10 +82,11 @@ def hitung_health_score(transaksi_list):
     skor_stabilitas = 100 if margin >= 0.2 else (max(0, margin) / 0.2 * 100)
 
     # 2. Tren Penjualan (0 - 100)
-    if in_minggu_lalu == 0:
-        tren_growth = 0
-    else:
-        tren_growth = (in_minggu_ini - in_minggu_lalu) / in_minggu_lalu
+    tren_growth_1 = (in_minggu_ini - in_minggu_lalu) / in_minggu_lalu if in_minggu_lalu > 0 else 0
+    tren_growth_2 = (in_minggu_lalu - in_minggu_lalu_2) / in_minggu_lalu_2 if in_minggu_lalu_2 > 0 else 0
+    
+    # Tren yang dipakai untuk pembobotan skor adalah tren_growth langsung (minggu ini vs minggu lalu)
+    tren_growth = tren_growth_1
     skor_tren = min(100, max(0, (tren_growth + 0.5) * 100)) # Netral jika -0.5, 100 jika >= 0.5
 
     # 3. Rasio Pengeluaran Operasional (0 - 100)
@@ -119,7 +125,7 @@ def hitung_health_score(transaksi_list):
     )
     skor_total = round(skor_total)
 
-    # Labeling & Warning
+    # Labeling & Warning (Sesuai Sinkronisasi Proposal: Rule Peringatan Dini)
     peringatan = []
     if skor_total >= 80:
         label = "Bisnis Sehat"
@@ -131,28 +137,35 @@ def hitung_health_score(transaksi_list):
         label = "Kondisi Kritis"
         warna = "merah" # Merah #E74C3C
     
-    if out_op_minggu_ini > in_minggu_ini:
-        peringatan.append("Pengeluaran operasional minggu ini melebihi pemasukan. Tekan biaya operasional segera.")
-    elif tren_growth < -0.2:
-        peringatan.append(f"Penjualan kamu turun {abs(round(tren_growth * 100))}% dibanding minggu lalu. Cek tab Simulator untuk lihat dampaknya.")
+    if out_op_minggu_ini > (in_minggu_ini * 0.85):
+        peringatan.append("Biaya operasional melampaui 85% dari pemasukan. Pangkas biaya overhead yang tidak esensial segera.")
+    elif tren_growth_1 < -0.2 and tren_growth_2 < -0.2:
+        peringatan.append(f"Penjualan kamu turun drastis terus-menerus selama dua minggu beruntun (>-20%). Evaluasi strategi promosi atau produk!")
 
     catatan_mingguan = [f"{t.tanggal.strftime('%d %b')}: {t.catatan}" for t in minggu_ini if getattr(t, 'catatan', None)]
 
     # Proyeksi Linear Numpy API Polyfit 4 Minggu Mendatang
-    # Buat ringkasan per minggu (max 12 minggu ke belakang)
-    # Sangat disederhanakan untuk contoh
-    Y_trend = [p['pemasukan'] for p in data_harian][-30:] # Ambil 30 hari terakhir
-    X_trend = np.arange(len(Y_trend))
+    # Implementasi Pandas Moving Average untuk visualisasi kurva (Sync Proposal)
+    df_chart = pd.DataFrame({'pemasukan': [d['pemasukan'] for d in data_harian]})
+    ma_7 = df_chart['pemasukan'].rolling(window=7, min_periods=1).mean().tolist()
+    ma_30 = df_chart['pemasukan'].rolling(window=30, min_periods=1).mean().tolist()
+    
+    Y_trend = df_chart['pemasukan'].tolist()[-periode_grafik:]
+    Y_ma7 = ma_7[-periode_grafik:]
+    Y_ma30 = ma_30[-periode_grafik:]
+    
+    X_trend_full = np.arange(len(df_chart))
     proyeksi_list = []
-    if len(Y_trend) > 5:
-        z = np.polyfit(X_trend, Y_trend, 1)
+    if len(df_chart) > 5:
+        z = np.polyfit(X_trend_full[-30:], df_chart['pemasukan'].tolist()[-30:], 1) # Proyeksi linear best-fit line based on 30 last days
         p = np.poly1d(z)
-        hari_depan = np.arange(len(X_trend), len(X_trend) + 28) # 4 minggu
+        hari_depan = np.arange(len(X_trend_full), len(X_trend_full) + 28) # 4 minggu
         proyeksi_list_mentah = p(hari_depan)
         proyeksi_list = [max(0, float(val)) for val in proyeksi_list_mentah] # Tidak boleh minus
 
     return {
         "is_cukup": True,
+        "periode_grafik": periode_grafik,
         "skor": skor_total,
         "label": label,
         "warna": warna,
@@ -165,16 +178,19 @@ def hitung_health_score(transaksi_list):
         "rata_pemasukan": round(rata_harian),
         "rata_pengeluaran": round(np.mean([d['pengeluaran_op'] for d in data_harian]) if data_harian else 0),
         "tren_status": "naik" if tren_growth >= 0 else "turun",
-        "grafik_aktual": Y_trend, # Array 1D pemasukan harian terakhir
-        "grafik_op_aktual": [d['pengeluaran_op'] for d in data_harian][-30:],
-        "grafik_md_aktual": [d['pengeluaran_md'] for d in data_harian][-30:],
+        "grafik_aktual": Y_trend, # Array 1D pemasukan harian
+        "grafik_ma7": Y_ma7,
+        "grafik_ma30": Y_ma30,
+        "grafik_op_aktual": [d['pengeluaran_op'] for d in data_harian][-periode_grafik:],
+        "grafik_md_aktual": [d['pengeluaran_md'] for d in data_harian][-periode_grafik:],
         "grafik_proyeksi": proyeksi_list, # Array 1D proyeksi harian ke depan
         "catatan_mingguan": catatan_mingguan
     }
 
-def _fallback_empty_data():
+def _fallback_empty_data(periode_grafik=30):
     return {
         "is_cukup": False,
+        "periode_grafik": periode_grafik,
         "skor": 0,
         "label": "Data Belum Cukup",
         "warna": "kuning",
@@ -188,6 +204,8 @@ def _fallback_empty_data():
         "rata_pengeluaran": 0,
         "tren_status": "stabil",
         "grafik_aktual": [],
+        "grafik_ma7": [],
+        "grafik_ma30": [],
         "grafik_op_aktual": [],
         "grafik_md_aktual": [],
         "grafik_proyeksi": [],

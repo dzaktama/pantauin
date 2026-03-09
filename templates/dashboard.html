@@ -117,8 +117,17 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h5 class="fw-bold text-dark mb-0">Tren Bisnis (Rupiah)</h5>
         <div class="btn-group" role="group" aria-label="Pilih range data">
-            <!-- Toggle fiktif client-side only (sederhana) -->
-            <button type="button" class="btn btn-sm btn-outline-primary active">30 Hari</button>
+            <div class="btn-group" role="group" aria-label="Pilih Periode Analisis">
+                <a href="{{ url_for('dashboard', periode=30) }}"
+                    class="btn btn-sm btn-outline-primary shadow-sm {% if request.args.get('periode', 30)|int == 30 %}active{% endif %}">30
+                    Hari</a>
+                <a href="{{ url_for('dashboard', periode=60) }}"
+                    class="btn btn-sm btn-outline-primary shadow-sm {% if request.args.get('periode', 30)|int == 60 %}active{% endif %}">60
+                    Hari</a>
+                <a href="{{ url_for('dashboard', periode=90) }}"
+                    class="btn btn-sm btn-outline-primary shadow-sm {% if request.args.get('periode', 30)|int == 90 %}active{% endif %}">90
+                    Hari</a>
+            </div>
         </div>
     </div>
     <div style="height: 300px;">
@@ -157,6 +166,8 @@
 <script id="chartDataJSON" type="application/json">
 {{ {
     "grafik_aktual": data.grafik_aktual,
+    "grafik_ma7": data.grafik_ma7,
+    "grafik_ma30": data.grafik_ma30,
     "grafik_op_aktual": data.grafik_op_aktual,
     "grafik_md_aktual": data.grafik_md_aktual,
     "grafik_proyeksi": data.grafik_proyeksi
@@ -189,6 +200,28 @@
                             fill: true,
                             tension: 0.3,
                             pointRadius: 3
+                        },
+                        {
+                            label: 'MA 7 Hari (Pemasukan)',
+                            data: chartData.grafik_ma7,
+                            borderColor: '#8E44AD',
+                            borderDash: [5, 5],
+                            backgroundColor: 'transparent',
+                            fill: false,
+                            tension: 0.4,
+                            pointRadius: 0,
+                            borderWidth: 2
+                        },
+                        {
+                            label: 'MA 30 Hari (Pemasukan)',
+                            data: chartData.grafik_ma30,
+                            borderColor: '#1ABC9C',
+                            borderDash: [5, 5],
+                            backgroundColor: 'transparent',
+                            fill: false,
+                            tension: 0.4,
+                            pointRadius: 0,
+                            borderWidth: 2
                         },
                         {
                             label: 'Pengeluaran Operasional',
