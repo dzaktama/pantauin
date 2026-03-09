@@ -30,16 +30,73 @@
                             }}</h5>
                         <p class="text-muted small mb-3">Dibuat: {{ buku.created_at.strftime('%d %b %Y') }}</p>
 
-                        <!-- Form Switch Buku Kas Aktif -->
-                        <form action="{{ url_for('switch_buku_kas', buku_id=buku.id) }}" method="POST">
+                        <!-- Form Navigasi Pintasan Buku Kas -->
+                        <form action="{{ url_for('switch_buku_kas', buku_id=buku.id) }}" method="POST"
+                            class="d-flex flex-column gap-2 mb-3">
                             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
                             {% if session.get('buku_kas_id') == buku.id %}
-                            <button type="button" class="btn btn-primary-custom w-100 disabled"><i
-                                    class="bi bi-check2-circle me-1"></i> Sedang Dibuka</button>
-                            {% else %}
-                            <button type="submit" class="btn btn-outline-primary w-100">Buka Project Ini</button>
+                            <div class="badge bg-primary px-3 py-2 mb-2 w-100 rounded-pill"><i
+                                    class="bi bi-circle-fill text-success me-2" style="font-size: 0.6rem;"></i>Sedang
+                                Dibuka</div>
                             {% endif %}
+
+                            <button type="submit" name="destination" value="dashboard"
+                                class="btn btn-primary btn-sm w-100"><i class="bi bi-speedometer2 me-1"></i> Buka
+                                Dashboard</button>
+                            <div class="d-flex gap-2">
+                                <button type="submit" name="destination" value="input"
+                                    class="btn btn-outline-secondary btn-sm w-50"><i class="bi bi-plus-circle me-1"></i>
+                                    Input CSV</button>
+                                <button type="submit" name="destination" value="riwayat"
+                                    class="btn btn-outline-secondary btn-sm w-50"><i
+                                        class="bi bi-clock-history me-1"></i> Riwayat</button>
+                            </div>
                         </form>
+
+                        <hr class="text-muted opacity-25 my-2">
+
+                        <!-- Tombol Pemicu Modal Delete -->
+                        <button type="button" class="btn btn-link text-danger text-decoration-none btn-sm w-100 p-0"
+                            data-bs-toggle="modal" data-bs-target="#resetModal{{ buku.id }}">
+                            <i class="bi bi-trash3 me-1"></i> Kosongkan Transaksi
+                        </button>
+
+                        <!-- Modal Konfirmasi Hapus Data (Reset) -->
+                        <div class="modal fade" id="resetModal{{ buku.id }}" tabindex="-1"
+                            aria-labelledby="resetModalLabel{{ buku.id }}" aria-hidden="true" data-bs-backdrop="static">
+                            <div class="modal-dialog modal-dialog-centered text-start">
+                                <div class="modal-content border-0 shadow">
+                                    <div class="modal-header bg-danger text-white border-0">
+                                        <h5 class="modal-title fw-bold" id="resetModalLabel{{ buku.id }}"><i
+                                                class="bi bi-exclamation-triangle-fill me-2"></i> Peringatan Kritis!
+                                        </h5>
+                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body py-4">
+                                        <p class="mb-0">Anda akan MENGHAPUS SELURUH data <strong>Riwayat Transaksi
+                                                Harian</strong> pada buku kas <span class="fw-bold text-danger">"{{
+                                                buku.nama_buku }}"</span>.</p>
+                                        <div class="alert alert-warning mt-3 border-warning border-start border-4 border-0 rounded-0"
+                                            role="alert">
+                                            <i class="bi bi-info-circle-fill me-2"></i> Informasi: Data <em>Profil
+                                                Perusahaan</em> milik buku ini <strong>tidak akan terhapus</strong>.
+                                            Aksi ini tidak dapat dibatalkan.
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer border-0 pt-0">
+                                        <button type="button" class="btn btn-light"
+                                            data-bs-dismiss="modal">Batal</button>
+                                        <form action="{{ url_for('reset_buku_kas', buku_id=buku.id) }}" method="POST">
+                                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                            <button type="submit" class="btn btn-danger fw-bold"><i
+                                                    class="bi bi-trash3-fill me-1"></i> Ya, Kosongkan Data</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -142,8 +142,39 @@ def create_app(config_class=Config):
     def switch_buku_kas(buku_id):
         bk = BukuKas.query.filter_by(id=buku_id, user_id=session['user_id']).first_or_404()
         session['buku_kas_id'] = bk.id
+        
+        # Tangkap parameter destinasi dari tombol yang diklik
+        destination = request.form.get('destination', 'dashboard')
         flash(f"Berpindah ke proyek: {bk.nama_buku}", "info")
-        return redirect(url_for('dashboard'))
+        
+        if destination == 'input':
+            return redirect(url_for('input_transaksi'))
+        elif destination == 'riwayat':
+            return redirect(url_for('riwayat_transaksi'))
+        else:
+            return redirect(url_for('dashboard'))
+
+    @app.route('/buku-kas/reset/<int:buku_id>', methods=['POST'])
+    @login_required
+    def reset_buku_kas(buku_id):
+        # Pastikan user pemilik asli buku kas
+        bk = BukuKas.query.filter_by(id=buku_id, user_id=session['user_id']).first_or_404()
+        
+        try:
+            # Hapus semua transaksi massal
+            jumlah_dihapus = Transaksi.query.filter_by(buku_kas_id=bk.id).delete()
+            db.session.commit()
+            
+            # Bersihkan cache kalkulator jika buku sedang aktif
+            if session.get('buku_kas_id') == bk.id:
+                cache.clear()
+                
+            flash(f"Data Transaksi pada Buku '{bk.nama_buku}' ({jumlah_dihapus} baris) berhasil dikosongkan. Profil Perusahaan tetap aman.", "success")
+        except Exception as e:
+            db.session.rollback()
+            flash(f"Gagal mengosongkan data transaksi: {str(e)}", "danger")
+            
+        return redirect(url_for('buku_kas_manager'))
 
     # --- CORE ROUTES ---
     @app.route('/dashboard')

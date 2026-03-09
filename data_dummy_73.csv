@@ -1,0 +1,1057 @@
+tanggal,keterangan,pemasukan,pengeluaran,jenis_pengeluaran
+2025-12-10,Penjualan Produk C,286691,0,
+2025-12-10,Beli Bahan Baku Daging,0,321451,operasional
+2025-12-10,Penjualan Produk C,368563,0,
+2025-12-10,Beli Bahan Baku Daging,0,292080,operasional
+2025-12-10,Penjualan Produk A,129427,0,
+2025-12-10,Beli Bahan Baku Kemasan,0,185844,operasional
+2025-12-10,Penjualan Produk B,312410,0,
+2025-12-10,Beli Bahan Baku Tepung,0,60885,operasional
+2025-12-10,Penjualan Produk Paket Khusus,511103,0,
+2025-12-10,Beli Bahan Baku Sayuran,0,253335,operasional
+2025-12-11,Penjualan Produk Paket Khusus,425507,0,
+2025-12-11,Beli Bahan Baku Daging,0,504171,operasional
+2025-12-11,Penjualan Produk Paket Khusus,159632,0,
+2025-12-11,Beli Bahan Baku Sayuran,0,238457,operasional
+2025-12-11,Penjualan Produk B,189702,0,
+2025-12-11,Beli Bahan Baku Tepung,0,48520,operasional
+2025-12-11,Penjualan Produk Paket Khusus,181482,0,
+2025-12-11,Beli Bahan Baku Tepung,0,89151,operasional
+2025-12-11,Penjualan Produk A,643086,0,
+2025-12-11,Beli Bahan Baku Kemasan,0,230837,operasional
+2025-12-12,Penjualan Produk A,625084,0,
+2025-12-12,Beli Bahan Baku Daging,0,249244,operasional
+2025-12-12,Penjualan Produk Paket Khusus,311978,0,
+2025-12-12,Beli Bahan Baku Tepung,0,252831,operasional
+2025-12-12,Penjualan Produk B,132358,0,
+2025-12-12,Beli Bahan Baku Kemasan,0,96132,operasional
+2025-12-12,Penjualan Produk Paket Khusus,72159,0,
+2025-12-12,Beli Bahan Baku Tepung,0,159263,operasional
+2025-12-12,Penjualan Produk C,134429,0,
+2025-12-12,Beli Bahan Baku Daging,0,89870,operasional
+2025-12-12,Penjualan Produk A,65582,0,
+2025-12-12,Beli Bahan Baku Kemasan,0,90781,operasional
+2025-12-12,Penjualan Produk Paket Khusus,264109,0,
+2025-12-12,Beli Bahan Baku Daging,0,107441,operasional
+2025-12-13,Penjualan Produk A,193156,0,
+2025-12-13,Beli Bahan Baku Kemasan,0,432358,operasional
+2025-12-13,Penjualan Produk C,257479,0,
+2025-12-13,Beli Bahan Baku Kemasan,0,121269,operasional
+2025-12-13,Penjualan Produk B,144112,0,
+2025-12-13,Beli Bahan Baku Daging,0,76346,operasional
+2025-12-13,Penjualan Produk C,181329,0,
+2025-12-13,Beli Bahan Baku Tepung,0,110538,operasional
+2025-12-13,Penjualan Produk C,272846,0,
+2025-12-13,Beli Bahan Baku Sayuran,0,48675,operasional
+2025-12-13,Penjualan Produk Paket Khusus,466892,0,
+2025-12-13,Beli Bahan Baku Sayuran,0,201298,operasional
+2025-12-14,Penjualan Produk C,555978,0,
+2025-12-14,Beli Bahan Baku Tepung,0,340030,operasional
+2025-12-14,Penjualan Produk Paket Khusus,173812,0,
+2025-12-14,Beli Bahan Baku Daging,0,295676,operasional
+2025-12-14,Penjualan Produk Paket Khusus,266306,0,
+2025-12-14,Beli Bahan Baku Daging,0,126034,operasional
+2025-12-14,Penjualan Produk A,111612,0,
+2025-12-14,Beli Bahan Baku Sayuran,0,40015,operasional
+2025-12-14,Penjualan Produk Paket Khusus,325545,0,
+2025-12-14,Beli Bahan Baku Kemasan,0,167775,operasional
+2025-12-15,Penjualan Produk B,289527,0,
+2025-12-15,Beli Bahan Baku Tepung,0,143021,operasional
+2025-12-15,Penjualan Produk B,425515,0,
+2025-12-15,Beli Bahan Baku Kemasan,0,186905,operasional
+2025-12-15,Penjualan Produk A,223101,0,
+2025-12-15,Beli Bahan Baku Daging,0,130728,operasional
+2025-12-15,Penjualan Produk Paket Khusus,65364,0,
+2025-12-15,Beli Bahan Baku Kemasan,0,245618,operasional
+2025-12-15,Penjualan Produk B,112526,0,
+2025-12-15,Beli Bahan Baku Tepung,0,64362,operasional
+2025-12-15,Penjualan Produk Paket Khusus,103062,0,
+2025-12-15,Beli Bahan Baku Daging,0,49792,operasional
+2025-12-15,Penjualan Produk A,243826,0,
+2025-12-15,Beli Bahan Baku Daging,0,153270,operasional
+2025-12-16,Penjualan Produk Paket Khusus,221307,0,
+2025-12-16,Beli Bahan Baku Sayuran,0,317971,operasional
+2025-12-16,Penjualan Produk Paket Khusus,151384,0,
+2025-12-16,Beli Bahan Baku Tepung,0,227875,operasional
+2025-12-16,Penjualan Produk Paket Khusus,153076,0,
+2025-12-16,Beli Bahan Baku Sayuran,0,110605,operasional
+2025-12-16,Penjualan Produk C,206066,0,
+2025-12-16,Beli Bahan Baku Kemasan,0,111134,operasional
+2025-12-16,Penjualan Produk Paket Khusus,143281,0,
+2025-12-16,Beli Bahan Baku Sayuran,0,69277,operasional
+2025-12-16,Penjualan Produk A,131913,0,
+2025-12-16,Beli Bahan Baku Kemasan,0,48106,operasional
+2025-12-16,Penjualan Produk A,401732,0,
+2025-12-16,Beli Bahan Baku Tepung,0,75470,operasional
+2025-12-17,Penjualan Produk A,543747,0,
+2025-12-17,Beli Bahan Baku Tepung,0,126646,operasional
+2025-12-17,Penjualan Produk B,392464,0,
+2025-12-17,Beli Bahan Baku Sayuran,0,152727,operasional
+2025-12-17,Penjualan Produk Paket Khusus,209712,0,
+2025-12-17,Beli Bahan Baku Tepung,0,88789,operasional
+2025-12-17,Penjualan Produk C,167878,0,
+2025-12-17,Beli Bahan Baku Kemasan,0,340311,operasional
+2025-12-17,Penjualan Produk C,37923,0,
+2025-12-17,Beli Bahan Baku Daging,0,149483,operasional
+2025-12-17,Penjualan Produk Paket Khusus,41664,0,
+2025-12-17,Beli Bahan Baku Daging,0,26761,operasional
+2025-12-17,Penjualan Produk A,246980,0,
+2025-12-17,Beli Bahan Baku Sayuran,0,190280,operasional
+2025-12-18,Penjualan Produk Paket Khusus,390383,0,
+2025-12-18,Beli Bahan Baku Kemasan,0,145387,operasional
+2025-12-18,Penjualan Produk B,157299,0,
+2025-12-18,Beli Bahan Baku Tepung,0,353240,operasional
+2025-12-18,Penjualan Produk Paket Khusus,296502,0,
+2025-12-18,Beli Bahan Baku Daging,0,187569,operasional
+2025-12-18,Penjualan Produk C,197841,0,
+2025-12-18,Beli Bahan Baku Kemasan,0,57833,operasional
+2025-12-18,Penjualan Produk B,382000,0,
+2025-12-18,Beli Bahan Baku Sayuran,0,249211,operasional
+2025-12-19,Penjualan Produk C,522431,0,
+2025-12-19,Beli Bahan Baku Daging,0,302219,operasional
+2025-12-19,Penjualan Produk A,263871,0,
+2025-12-19,Beli Bahan Baku Daging,0,274602,operasional
+2025-12-19,Penjualan Produk B,176282,0,
+2025-12-19,Beli Bahan Baku Tepung,0,57113,operasional
+2025-12-19,Penjualan Produk B,106877,0,
+2025-12-19,Beli Bahan Baku Kemasan,0,86343,operasional
+2025-12-19,Penjualan Produk B,352471,0,
+2025-12-19,Beli Bahan Baku Kemasan,0,274086,operasional
+2025-12-20,Penjualan Produk C,451517,0,
+2025-12-20,Beli Bahan Baku Kemasan,0,221265,operasional
+2025-12-20,Penjualan Produk Paket Khusus,260024,0,
+2025-12-20,Beli Bahan Baku Tepung,0,157006,operasional
+2025-12-20,Penjualan Produk C,264454,0,
+2025-12-20,Beli Bahan Baku Sayuran,0,264460,operasional
+2025-12-20,Penjualan Produk Paket Khusus,122632,0,
+2025-12-20,Beli Bahan Baku Sayuran,0,111169,operasional
+2025-12-20,Penjualan Produk Paket Khusus,434661,0,
+2025-12-20,Beli Bahan Baku Tepung,0,302476,operasional
+2025-12-21,Penjualan Produk C,509658,0,
+2025-12-21,Beli Bahan Baku Daging,0,410699,operasional
+2025-12-21,Penjualan Produk A,397930,0,
+2025-12-21,Beli Bahan Baku Tepung,0,294358,operasional
+2025-12-21,Penjualan Produk A,259253,0,
+2025-12-21,Beli Bahan Baku Daging,0,112240,operasional
+2025-12-21,Penjualan Produk A,148795,0,
+2025-12-21,Beli Bahan Baku Daging,0,104580,operasional
+2025-12-21,Penjualan Produk C,31466,0,
+2025-12-21,Beli Bahan Baku Daging,0,17362,operasional
+2025-12-21,Penjualan Produk C,234492,0,
+2025-12-21,Beli Bahan Baku Tepung,0,120123,operasional
+2025-12-22,Penjualan Produk C,374945,0,
+2025-12-22,Beli Bahan Baku Kemasan,0,103771,operasional
+2025-12-22,Penjualan Produk C,114038,0,
+2025-12-22,Beli Bahan Baku Kemasan,0,179892,operasional
+2025-12-22,Penjualan Produk C,288405,0,
+2025-12-22,Beli Bahan Baku Tepung,0,87039,operasional
+2025-12-22,Penjualan Produk A,195544,0,
+2025-12-22,Beli Bahan Baku Tepung,0,173752,operasional
+2025-12-22,Penjualan Produk A,99734,0,
+2025-12-22,Beli Bahan Baku Kemasan,0,83024,operasional
+2025-12-22,Penjualan Produk C,117522,0,
+2025-12-22,Beli Bahan Baku Kemasan,0,60308,operasional
+2025-12-22,Penjualan Produk Paket Khusus,221229,0,
+2025-12-22,Beli Bahan Baku Kemasan,0,237377,operasional
+2025-12-23,Penjualan Produk A,189895,0,
+2025-12-23,Beli Bahan Baku Daging,0,533951,operasional
+2025-12-23,Penjualan Produk Paket Khusus,376685,0,
+2025-12-23,Beli Bahan Baku Sayuran,0,134645,operasional
+2025-12-23,Penjualan Produk Paket Khusus,301643,0,
+2025-12-23,Beli Bahan Baku Tepung,0,122701,operasional
+2025-12-23,Penjualan Produk C,135687,0,
+2025-12-23,Beli Bahan Baku Kemasan,0,156225,operasional
+2025-12-23,Penjualan Produk A,614694,0,
+2025-12-23,Beli Bahan Baku Sayuran,0,156284,operasional
+2025-12-24,Penjualan Produk C,607499,0,
+2025-12-24,Beli Bahan Baku Kemasan,0,150234,operasional
+2025-12-24,Penjualan Produk B,402755,0,
+2025-12-24,Beli Bahan Baku Kemasan,0,461131,operasional
+2025-12-24,Penjualan Produk C,235836,0,
+2025-12-24,Beli Bahan Baku Sayuran,0,195293,operasional
+2025-12-24,Penjualan Produk Paket Khusus,108580,0,
+2025-12-24,Beli Bahan Baku Kemasan,0,37555,operasional
+2025-12-24,Penjualan Produk B,61675,0,
+2025-12-24,Beli Bahan Baku Tepung,0,61832,operasional
+2025-12-24,Penjualan Produk C,202063,0,
+2025-12-24,Beli Bahan Baku Sayuran,0,218859,operasional
+2025-12-25,Penjualan Produk Paket Khusus,304614,0,
+2025-12-25,Beli Bahan Baku Kemasan,0,414823,operasional
+2025-12-25,Penjualan Produk B,359057,0,
+2025-12-25,Beli Bahan Baku Tepung,0,205022,operasional
+2025-12-25,Penjualan Produk B,96727,0,
+2025-12-25,Beli Bahan Baku Sayuran,0,128610,operasional
+2025-12-25,Penjualan Produk Paket Khusus,269382,0,
+2025-12-25,Beli Bahan Baku Sayuran,0,51029,operasional
+2025-12-25,Penjualan Produk Paket Khusus,170957,0,
+2025-12-25,Beli Bahan Baku Daging,0,107795,operasional
+2025-12-25,Penjualan Produk Paket Khusus,260766,0,
+2025-12-25,Beli Bahan Baku Kemasan,0,110569,operasional
+2025-12-26,Penjualan Produk C,442069,0,
+2025-12-26,Beli Bahan Baku Tepung,0,374207,operasional
+2025-12-26,Penjualan Produk B,194126,0,
+2025-12-26,Beli Bahan Baku Sayuran,0,218674,operasional
+2025-12-26,Penjualan Produk B,87675,0,
+2025-12-26,Beli Bahan Baku Daging,0,75544,operasional
+2025-12-26,Penjualan Produk C,248002,0,
+2025-12-26,Beli Bahan Baku Tepung,0,102812,operasional
+2025-12-26,Penjualan Produk C,519240,0,
+2025-12-26,Beli Bahan Baku Daging,0,211648,operasional
+2025-12-27,Penjualan Produk C,233402,0,
+2025-12-27,Beli Bahan Baku Kemasan,0,422117,operasional
+2025-12-27,Penjualan Produk B,172115,0,
+2025-12-27,Beli Bahan Baku Kemasan,0,111109,operasional
+2025-12-27,Penjualan Produk C,142697,0,
+2025-12-27,Beli Bahan Baku Kemasan,0,113054,operasional
+2025-12-27,Penjualan Produk B,281098,0,
+2025-12-27,Beli Bahan Baku Tepung,0,129320,operasional
+2025-12-27,Penjualan Produk B,98881,0,
+2025-12-27,Beli Bahan Baku Daging,0,31702,operasional
+2025-12-27,Penjualan Produk Paket Khusus,577412,0,
+2025-12-27,Beli Bahan Baku Kemasan,0,207937,operasional
+2025-12-27,Beli Aset Mesin Pres,0,678123,modal
+2025-12-28,Penjualan Produk A,438275,0,
+2025-12-28,Beli Bahan Baku Kemasan,0,309625,operasional
+2025-12-28,Penjualan Produk Paket Khusus,184061,0,
+2025-12-28,Beli Bahan Baku Tepung,0,174337,operasional
+2025-12-28,Penjualan Produk B,112315,0,
+2025-12-28,Beli Bahan Baku Daging,0,125497,operasional
+2025-12-28,Penjualan Produk C,94398,0,
+2025-12-28,Beli Bahan Baku Kemasan,0,96727,operasional
+2025-12-28,Penjualan Produk Paket Khusus,142595,0,
+2025-12-28,Beli Bahan Baku Sayuran,0,37538,operasional
+2025-12-28,Penjualan Produk B,439757,0,
+2025-12-28,Beli Bahan Baku Tepung,0,209913,operasional
+2025-12-29,Penjualan Produk C,334650,0,
+2025-12-29,Beli Bahan Baku Daging,0,286986,operasional
+2025-12-29,Penjualan Produk C,163524,0,
+2025-12-29,Beli Bahan Baku Tepung,0,154133,operasional
+2025-12-29,Penjualan Produk A,329219,0,
+2025-12-29,Beli Bahan Baku Tepung,0,130198,operasional
+2025-12-29,Penjualan Produk A,91341,0,
+2025-12-29,Beli Bahan Baku Sayuran,0,46852,operasional
+2025-12-29,Penjualan Produk Paket Khusus,541688,0,
+2025-12-29,Beli Bahan Baku Daging,0,351117,operasional
+2025-12-30,Penjualan Produk B,565137,0,
+2025-12-30,Beli Bahan Baku Sayuran,0,442773,operasional
+2025-12-30,Penjualan Produk C,191231,0,
+2025-12-30,Beli Bahan Baku Daging,0,118430,operasional
+2025-12-30,Penjualan Produk A,251602,0,
+2025-12-30,Beli Bahan Baku Kemasan,0,120822,operasional
+2025-12-30,Penjualan Produk A,104768,0,
+2025-12-30,Beli Bahan Baku Kemasan,0,173587,operasional
+2025-12-30,Penjualan Produk A,158428,0,
+2025-12-30,Beli Bahan Baku Daging,0,63630,operasional
+2025-12-30,Penjualan Produk B,60908,0,
+2025-12-30,Beli Bahan Baku Daging,0,38491,operasional
+2025-12-30,Penjualan Produk C,342600,0,
+2025-12-30,Beli Bahan Baku Kemasan,0,181697,operasional
+2025-12-31,Penjualan Produk Paket Khusus,461020,0,
+2025-12-31,Beli Bahan Baku Daging,0,256456,operasional
+2025-12-31,Penjualan Produk Paket Khusus,215635,0,
+2025-12-31,Beli Bahan Baku Tepung,0,209614,operasional
+2025-12-31,Penjualan Produk A,238895,0,
+2025-12-31,Beli Bahan Baku Kemasan,0,297083,operasional
+2025-12-31,Penjualan Produk B,102700,0,
+2025-12-31,Beli Bahan Baku Kemasan,0,66629,operasional
+2025-12-31,Penjualan Produk A,518950,0,
+2025-12-31,Beli Bahan Baku Tepung,0,245010,operasional
+2026-01-01,Penjualan Produk C,515990,0,
+2026-01-01,Beli Bahan Baku Tepung,0,485955,operasional
+2026-01-01,Penjualan Produk A,133227,0,
+2026-01-01,Beli Bahan Baku Kemasan,0,123859,operasional
+2026-01-01,Penjualan Produk B,217453,0,
+2026-01-01,Beli Bahan Baku Kemasan,0,119453,operasional
+2026-01-01,Penjualan Produk A,145602,0,
+2026-01-01,Beli Bahan Baku Daging,0,125161,operasional
+2026-01-01,Penjualan Produk C,159666,0,
+2026-01-01,Beli Bahan Baku Kemasan,0,113664,operasional
+2026-01-01,Penjualan Produk B,506455,0,
+2026-01-01,Beli Bahan Baku Daging,0,155066,operasional
+2026-01-02,Penjualan Produk Paket Khusus,577105,0,
+2026-01-02,Beli Bahan Baku Kemasan,0,550935,operasional
+2026-01-02,Penjualan Produk Paket Khusus,401948,0,
+2026-01-02,Beli Bahan Baku Daging,0,275355,operasional
+2026-01-02,Penjualan Produk B,249890,0,
+2026-01-02,Beli Bahan Baku Tepung,0,99667,operasional
+2026-01-02,Penjualan Produk A,105815,0,
+2026-01-02,Beli Bahan Baku Kemasan,0,78263,operasional
+2026-01-02,Penjualan Produk Paket Khusus,327308,0,
+2026-01-02,Beli Bahan Baku Sayuran,0,136568,operasional
+2026-01-03,Penjualan Produk C,444108,0,
+2026-01-03,Beli Bahan Baku Tepung,0,273086,operasional
+2026-01-03,Penjualan Produk B,359463,0,
+2026-01-03,Beli Bahan Baku Kemasan,0,185503,operasional
+2026-01-03,Penjualan Produk A,169270,0,
+2026-01-03,Beli Bahan Baku Sayuran,0,263462,operasional
+2026-01-03,Penjualan Produk A,72168,0,
+2026-01-03,Beli Bahan Baku Kemasan,0,85129,operasional
+2026-01-03,Penjualan Produk A,419043,0,
+2026-01-03,Beli Bahan Baku Daging,0,178794,operasional
+2026-01-03,Beli Aset Etalase,0,949752,modal
+2026-01-04,Penjualan Produk A,349076,0,
+2026-01-04,Beli Bahan Baku Sayuran,0,332593,operasional
+2026-01-04,Penjualan Produk A,211407,0,
+2026-01-04,Beli Bahan Baku Kemasan,0,166821,operasional
+2026-01-04,Penjualan Produk B,146341,0,
+2026-01-04,Beli Bahan Baku Tepung,0,51252,operasional
+2026-01-04,Penjualan Produk C,242351,0,
+2026-01-04,Beli Bahan Baku Sayuran,0,68372,operasional
+2026-01-04,Penjualan Produk Paket Khusus,530073,0,
+2026-01-04,Beli Bahan Baku Kemasan,0,388655,operasional
+2026-01-05,Penjualan Produk C,594383,0,
+2026-01-05,Beli Bahan Baku Sayuran,0,210237,operasional
+2026-01-05,Penjualan Produk C,166630,0,
+2026-01-05,Beli Bahan Baku Daging,0,104422,operasional
+2026-01-05,Penjualan Produk B,245795,0,
+2026-01-05,Beli Bahan Baku Kemasan,0,144060,operasional
+2026-01-05,Penjualan Produk B,123837,0,
+2026-01-05,Beli Bahan Baku Tepung,0,148880,operasional
+2026-01-05,Penjualan Produk B,155239,0,
+2026-01-05,Beli Bahan Baku Daging,0,170562,operasional
+2026-01-05,Penjualan Produk Paket Khusus,250145,0,
+2026-01-05,Beli Bahan Baku Sayuran,0,266530,operasional
+2026-01-05,Beli Aset Etalase,0,1299279,modal
+2026-01-06,Penjualan Produk Paket Khusus,287422,0,
+2026-01-06,Beli Bahan Baku Kemasan,0,312891,operasional
+2026-01-06,Penjualan Produk B,187387,0,
+2026-01-06,Beli Bahan Baku Tepung,0,374822,operasional
+2026-01-06,Penjualan Produk B,324955,0,
+2026-01-06,Beli Bahan Baku Sayuran,0,109013,operasional
+2026-01-06,Penjualan Produk C,247102,0,
+2026-01-06,Beli Bahan Baku Tepung,0,136517,operasional
+2026-01-06,Penjualan Produk C,85934,0,
+2026-01-06,Beli Bahan Baku Sayuran,0,52298,operasional
+2026-01-06,Penjualan Produk A,538894,0,
+2026-01-06,Beli Bahan Baku Kemasan,0,171203,operasional
+2026-01-07,Penjualan Produk Paket Khusus,561980,0,
+2026-01-07,Beli Bahan Baku Sayuran,0,421850,operasional
+2026-01-07,Penjualan Produk Paket Khusus,230713,0,
+2026-01-07,Beli Bahan Baku Kemasan,0,159738,operasional
+2026-01-07,Penjualan Produk Paket Khusus,225088,0,
+2026-01-07,Beli Bahan Baku Tepung,0,232838,operasional
+2026-01-07,Penjualan Produk B,197235,0,
+2026-01-07,Beli Bahan Baku Sayuran,0,117756,operasional
+2026-01-07,Penjualan Produk C,51738,0,
+2026-01-07,Beli Bahan Baku Kemasan,0,28827,operasional
+2026-01-07,Penjualan Produk B,329839,0,
+2026-01-07,Beli Bahan Baku Kemasan,0,89921,operasional
+2026-01-08,Penjualan Produk B,362549,0,
+2026-01-08,Beli Bahan Baku Tepung,0,219262,operasional
+2026-01-08,Penjualan Produk A,289625,0,
+2026-01-08,Beli Bahan Baku Sayuran,0,361258,operasional
+2026-01-08,Penjualan Produk Paket Khusus,300113,0,
+2026-01-08,Beli Bahan Baku Tepung,0,114196,operasional
+2026-01-08,Penjualan Produk B,214741,0,
+2026-01-08,Beli Bahan Baku Kemasan,0,70247,operasional
+2026-01-08,Penjualan Produk A,396230,0,
+2026-01-08,Beli Bahan Baku Kemasan,0,268043,operasional
+2026-01-09,Penjualan Produk A,263935,0,
+2026-01-09,Beli Bahan Baku Daging,0,122093,operasional
+2026-01-09,Penjualan Produk C,138315,0,
+2026-01-09,Beli Bahan Baku Daging,0,119174,operasional
+2026-01-09,Penjualan Produk A,299649,0,
+2026-01-09,Beli Bahan Baku Kemasan,0,112205,operasional
+2026-01-09,Penjualan Produk B,279608,0,
+2026-01-09,Beli Bahan Baku Daging,0,81422,operasional
+2026-01-09,Penjualan Produk Paket Khusus,162830,0,
+2026-01-09,Beli Bahan Baku Tepung,0,269308,operasional
+2026-01-09,Penjualan Produk A,354932,0,
+2026-01-09,Beli Bahan Baku Daging,0,326025,operasional
+2026-01-10,Penjualan Produk C,188469,0,
+2026-01-10,Beli Bahan Baku Kemasan,0,543081,operasional
+2026-01-10,Penjualan Produk C,477195,0,
+2026-01-10,Beli Bahan Baku Sayuran,0,251258,operasional
+2026-01-10,Penjualan Produk A,106844,0,
+2026-01-10,Beli Bahan Baku Kemasan,0,130607,operasional
+2026-01-10,Penjualan Produk Paket Khusus,333936,0,
+2026-01-10,Beli Bahan Baku Tepung,0,35279,operasional
+2026-01-10,Penjualan Produk B,98169,0,
+2026-01-10,Beli Bahan Baku Sayuran,0,14941,operasional
+2026-01-10,Penjualan Produk A,166654,0,
+2026-01-10,Beli Bahan Baku Tepung,0,48492,operasional
+2026-01-10,Penjualan Produk C,293157,0,
+2026-01-10,Beli Bahan Baku Kemasan,0,76396,operasional
+2026-01-11,Penjualan Produk Paket Khusus,598921,0,
+2026-01-11,Beli Bahan Baku Kemasan,0,336958,operasional
+2026-01-11,Penjualan Produk Paket Khusus,367826,0,
+2026-01-11,Beli Bahan Baku Daging,0,121722,operasional
+2026-01-11,Penjualan Produk Paket Khusus,77084,0,
+2026-01-11,Beli Bahan Baku Daging,0,91495,operasional
+2026-01-11,Penjualan Produk Paket Khusus,134131,0,
+2026-01-11,Beli Bahan Baku Tepung,0,94846,operasional
+2026-01-11,Penjualan Produk B,76434,0,
+2026-01-11,Beli Bahan Baku Kemasan,0,181845,operasional
+2026-01-11,Penjualan Produk B,365925,0,
+2026-01-11,Beli Bahan Baku Tepung,0,231618,operasional
+2026-01-12,Penjualan Produk Paket Khusus,257668,0,
+2026-01-12,Beli Bahan Baku Tepung,0,486781,operasional
+2026-01-12,Penjualan Produk A,379569,0,
+2026-01-12,Beli Bahan Baku Kemasan,0,232663,operasional
+2026-01-12,Penjualan Produk C,272792,0,
+2026-01-12,Beli Bahan Baku Daging,0,130179,operasional
+2026-01-12,Penjualan Produk A,104702,0,
+2026-01-12,Beli Bahan Baku Daging,0,75910,operasional
+2026-01-12,Penjualan Produk Paket Khusus,159461,0,
+2026-01-12,Beli Bahan Baku Tepung,0,25935,operasional
+2026-01-12,Penjualan Produk A,357563,0,
+2026-01-12,Beli Bahan Baku Tepung,0,86923,operasional
+2026-01-13,Penjualan Produk B,464483,0,
+2026-01-13,Beli Bahan Baku Tepung,0,313004,operasional
+2026-01-13,Penjualan Produk A,370328,0,
+2026-01-13,Beli Bahan Baku Sayuran,0,150621,operasional
+2026-01-13,Penjualan Produk C,80030,0,
+2026-01-13,Beli Bahan Baku Tepung,0,202579,operasional
+2026-01-13,Penjualan Produk C,68080,0,
+2026-01-13,Beli Bahan Baku Sayuran,0,40760,operasional
+2026-01-13,Penjualan Produk A,99115,0,
+2026-01-13,Beli Bahan Baku Sayuran,0,38316,operasional
+2026-01-13,Penjualan Produk B,396033,0,
+2026-01-13,Beli Bahan Baku Tepung,0,274996,operasional
+2026-01-14,Penjualan Produk A,589129,0,
+2026-01-14,Beli Bahan Baku Kemasan,0,569269,operasional
+2026-01-14,Penjualan Produk C,188765,0,
+2026-01-14,Beli Bahan Baku Kemasan,0,136429,operasional
+2026-01-14,Penjualan Produk Paket Khusus,152428,0,
+2026-01-14,Beli Bahan Baku Tepung,0,200663,operasional
+2026-01-14,Penjualan Produk Paket Khusus,140408,0,
+2026-01-14,Beli Bahan Baku Daging,0,89598,operasional
+2026-01-14,Penjualan Produk A,123930,0,
+2026-01-14,Beli Bahan Baku Sayuran,0,39566,operasional
+2026-01-14,Penjualan Produk Paket Khusus,451191,0,
+2026-01-14,Beli Bahan Baku Tepung,0,113536,operasional
+2026-01-15,Penjualan Produk Paket Khusus,330834,0,
+2026-01-15,Beli Bahan Baku Tepung,0,251137,operasional
+2026-01-15,Penjualan Produk Paket Khusus,482728,0,
+2026-01-15,Beli Bahan Baku Tepung,0,345941,operasional
+2026-01-15,Penjualan Produk C,279055,0,
+2026-01-15,Beli Bahan Baku Sayuran,0,265514,operasional
+2026-01-15,Penjualan Produk Paket Khusus,132518,0,
+2026-01-15,Beli Bahan Baku Sayuran,0,97410,operasional
+2026-01-15,Penjualan Produk B,102734,0,
+2026-01-15,Beli Bahan Baku Sayuran,0,39336,operasional
+2026-01-15,Penjualan Produk A,41354,0,
+2026-01-15,Beli Bahan Baku Tepung,0,14715,operasional
+2026-01-15,Penjualan Produk A,273346,0,
+2026-01-15,Beli Bahan Baku Daging,0,125598,operasional
+2026-01-16,Penjualan Produk C,382967,0,
+2026-01-16,Beli Bahan Baku Kemasan,0,275043,operasional
+2026-01-16,Penjualan Produk Paket Khusus,257695,0,
+2026-01-16,Beli Bahan Baku Tepung,0,257644,operasional
+2026-01-16,Penjualan Produk C,223221,0,
+2026-01-16,Beli Bahan Baku Kemasan,0,202588,operasional
+2026-01-16,Penjualan Produk B,121296,0,
+2026-01-16,Beli Bahan Baku Tepung,0,114870,operasional
+2026-01-16,Penjualan Produk C,95131,0,
+2026-01-16,Beli Bahan Baku Daging,0,13693,operasional
+2026-01-16,Penjualan Produk A,353871,0,
+2026-01-16,Beli Bahan Baku Sayuran,0,123034,operasional
+2026-01-17,Penjualan Produk B,262619,0,
+2026-01-17,Beli Bahan Baku Kemasan,0,525511,operasional
+2026-01-17,Penjualan Produk Paket Khusus,222865,0,
+2026-01-17,Beli Bahan Baku Sayuran,0,239925,operasional
+2026-01-17,Penjualan Produk C,382150,0,
+2026-01-17,Beli Bahan Baku Sayuran,0,70558,operasional
+2026-01-17,Penjualan Produk B,149366,0,
+2026-01-17,Beli Bahan Baku Daging,0,110071,operasional
+2026-01-17,Penjualan Produk A,122726,0,
+2026-01-17,Beli Bahan Baku Tepung,0,70227,operasional
+2026-01-17,Penjualan Produk B,96486,0,
+2026-01-17,Beli Bahan Baku Tepung,0,36593,operasional
+2026-01-17,Penjualan Produk B,432916,0,
+2026-01-17,Beli Bahan Baku Sayuran,0,49122,operasional
+2026-01-17,Beli Aset Etalase,0,996824,modal
+2026-01-18,Penjualan Produk C,244231,0,
+2026-01-18,Beli Bahan Baku Tepung,0,501477,operasional
+2026-01-18,Penjualan Produk A,498539,0,
+2026-01-18,Beli Bahan Baku Daging,0,249005,operasional
+2026-01-18,Penjualan Produk A,277097,0,
+2026-01-18,Beli Bahan Baku Tepung,0,101830,operasional
+2026-01-18,Penjualan Produk Paket Khusus,220543,0,
+2026-01-18,Beli Bahan Baku Kemasan,0,96759,operasional
+2026-01-18,Penjualan Produk C,479046,0,
+2026-01-18,Beli Bahan Baku Daging,0,215391,operasional
+2026-01-19,Penjualan Produk B,472141,0,
+2026-01-19,Beli Bahan Baku Kemasan,0,293057,operasional
+2026-01-19,Penjualan Produk A,312310,0,
+2026-01-19,Beli Bahan Baku Tepung,0,247148,operasional
+2026-01-19,Penjualan Produk C,280261,0,
+2026-01-19,Beli Bahan Baku Sayuran,0,149008,operasional
+2026-01-19,Penjualan Produk B,125164,0,
+2026-01-19,Beli Bahan Baku Sayuran,0,146731,operasional
+2026-01-19,Penjualan Produk C,94339,0,
+2026-01-19,Beli Bahan Baku Kemasan,0,58461,operasional
+2026-01-19,Penjualan Produk Paket Khusus,80022,0,
+2026-01-19,Beli Bahan Baku Tepung,0,23592,operasional
+2026-01-19,Penjualan Produk A,131051,0,
+2026-01-19,Beli Bahan Baku Kemasan,0,109014,operasional
+2026-01-20,Penjualan Produk A,306248,0,
+2026-01-20,Beli Bahan Baku Sayuran,0,458769,operasional
+2026-01-20,Penjualan Produk Paket Khusus,354127,0,
+2026-01-20,Beli Bahan Baku Tepung,0,189907,operasional
+2026-01-20,Penjualan Produk A,89727,0,
+2026-01-20,Beli Bahan Baku Tepung,0,82557,operasional
+2026-01-20,Penjualan Produk C,73530,0,
+2026-01-20,Beli Bahan Baku Sayuran,0,78184,operasional
+2026-01-20,Penjualan Produk B,614977,0,
+2026-01-20,Beli Bahan Baku Kemasan,0,182286,operasional
+2026-01-21,Penjualan Produk C,186769,0,
+2026-01-21,Beli Bahan Baku Tepung,0,477142,operasional
+2026-01-21,Penjualan Produk C,188245,0,
+2026-01-21,Beli Bahan Baku Tepung,0,105299,operasional
+2026-01-21,Penjualan Produk B,217129,0,
+2026-01-21,Beli Bahan Baku Tepung,0,166275,operasional
+2026-01-21,Penjualan Produk A,246793,0,
+2026-01-21,Beli Bahan Baku Sayuran,0,148632,operasional
+2026-01-21,Penjualan Produk B,201577,0,
+2026-01-21,Beli Bahan Baku Tepung,0,17717,operasional
+2026-01-21,Penjualan Produk A,187036,0,
+2026-01-21,Beli Bahan Baku Sayuran,0,25007,operasional
+2026-01-21,Penjualan Produk B,311728,0,
+2026-01-21,Beli Bahan Baku Sayuran,0,126118,operasional
+2026-01-22,Penjualan Produk B,504887,0,
+2026-01-22,Beli Bahan Baku Daging,0,437656,operasional
+2026-01-22,Penjualan Produk A,287637,0,
+2026-01-22,Beli Bahan Baku Sayuran,0,265393,operasional
+2026-01-22,Penjualan Produk C,237517,0,
+2026-01-22,Beli Bahan Baku Kemasan,0,68180,operasional
+2026-01-22,Penjualan Produk B,86903,0,
+2026-01-22,Beli Bahan Baku Daging,0,53599,operasional
+2026-01-22,Penjualan Produk B,402380,0,
+2026-01-22,Beli Bahan Baku Sayuran,0,174639,operasional
+2026-01-23,Penjualan Produk Paket Khusus,534563,0,
+2026-01-23,Beli Bahan Baku Sayuran,0,121733,operasional
+2026-01-23,Penjualan Produk Paket Khusus,247359,0,
+2026-01-23,Beli Bahan Baku Sayuran,0,376872,operasional
+2026-01-23,Penjualan Produk Paket Khusus,291000,0,
+2026-01-23,Beli Bahan Baku Daging,0,239194,operasional
+2026-01-23,Penjualan Produk Paket Khusus,125305,0,
+2026-01-23,Beli Bahan Baku Kemasan,0,129526,operasional
+2026-01-23,Penjualan Produk A,99547,0,
+2026-01-23,Beli Bahan Baku Kemasan,0,26935,operasional
+2026-01-23,Penjualan Produk Paket Khusus,222427,0,
+2026-01-23,Beli Bahan Baku Sayuran,0,165449,operasional
+2026-01-24,Penjualan Produk Paket Khusus,198678,0,
+2026-01-24,Beli Bahan Baku Sayuran,0,133019,operasional
+2026-01-24,Penjualan Produk B,210591,0,
+2026-01-24,Beli Bahan Baku Tepung,0,199679,operasional
+2026-01-24,Penjualan Produk C,237595,0,
+2026-01-24,Beli Bahan Baku Sayuran,0,184249,operasional
+2026-01-24,Penjualan Produk C,116971,0,
+2026-01-24,Beli Bahan Baku Daging,0,60586,operasional
+2026-01-24,Penjualan Produk B,272826,0,
+2026-01-24,Beli Bahan Baku Daging,0,95326,operasional
+2026-01-24,Penjualan Produk A,424590,0,
+2026-01-24,Beli Bahan Baku Daging,0,323627,operasional
+2026-01-25,Penjualan Produk B,491241,0,
+2026-01-25,Beli Bahan Baku Daging,0,350342,operasional
+2026-01-25,Penjualan Produk Paket Khusus,359607,0,
+2026-01-25,Beli Bahan Baku Kemasan,0,111018,operasional
+2026-01-25,Penjualan Produk A,311016,0,
+2026-01-25,Beli Bahan Baku Kemasan,0,181743,operasional
+2026-01-25,Penjualan Produk A,196899,0,
+2026-01-25,Beli Bahan Baku Sayuran,0,113632,operasional
+2026-01-25,Penjualan Produk Paket Khusus,299477,0,
+2026-01-25,Beli Bahan Baku Sayuran,0,355489,operasional
+2026-01-26,Penjualan Produk B,521236,0,
+2026-01-26,Beli Bahan Baku Sayuran,0,466001,operasional
+2026-01-26,Penjualan Produk C,256452,0,
+2026-01-26,Beli Bahan Baku Kemasan,0,237392,operasional
+2026-01-26,Penjualan Produk Paket Khusus,206947,0,
+2026-01-26,Beli Bahan Baku Kemasan,0,103967,operasional
+2026-01-26,Penjualan Produk A,75267,0,
+2026-01-26,Beli Bahan Baku Kemasan,0,78101,operasional
+2026-01-26,Penjualan Produk B,430010,0,
+2026-01-26,Beli Bahan Baku Daging,0,112836,operasional
+2026-01-27,Penjualan Produk A,346333,0,
+2026-01-27,Beli Bahan Baku Tepung,0,510902,operasional
+2026-01-27,Penjualan Produk C,332111,0,
+2026-01-27,Beli Bahan Baku Kemasan,0,274231,operasional
+2026-01-27,Penjualan Produk A,269292,0,
+2026-01-27,Beli Bahan Baku Sayuran,0,89445,operasional
+2026-01-27,Penjualan Produk Paket Khusus,131359,0,
+2026-01-27,Beli Bahan Baku Daging,0,97056,operasional
+2026-01-27,Penjualan Produk C,474404,0,
+2026-01-27,Beli Bahan Baku Daging,0,101999,operasional
+2026-01-28,Penjualan Produk C,286051,0,
+2026-01-28,Beli Bahan Baku Sayuran,0,330805,operasional
+2026-01-28,Penjualan Produk C,242105,0,
+2026-01-28,Beli Bahan Baku Kemasan,0,384673,operasional
+2026-01-28,Penjualan Produk Paket Khusus,365654,0,
+2026-01-28,Beli Bahan Baku Kemasan,0,63961,operasional
+2026-01-28,Penjualan Produk A,253490,0,
+2026-01-28,Beli Bahan Baku Kemasan,0,128673,operasional
+2026-01-28,Penjualan Produk A,166950,0,
+2026-01-28,Beli Bahan Baku Sayuran,0,70068,operasional
+2026-01-28,Penjualan Produk C,325532,0,
+2026-01-28,Beli Bahan Baku Kemasan,0,142776,operasional
+2026-01-29,Penjualan Produk A,652538,0,
+2026-01-29,Beli Bahan Baku Kemasan,0,287764,operasional
+2026-01-29,Penjualan Produk Paket Khusus,295704,0,
+2026-01-29,Beli Bahan Baku Sayuran,0,379745,operasional
+2026-01-29,Penjualan Produk Paket Khusus,125705,0,
+2026-01-29,Beli Bahan Baku Sayuran,0,136863,operasional
+2026-01-29,Penjualan Produk A,191595,0,
+2026-01-29,Beli Bahan Baku Sayuran,0,152890,operasional
+2026-01-29,Penjualan Produk C,403241,0,
+2026-01-29,Beli Bahan Baku Kemasan,0,201978,operasional
+2026-01-30,Penjualan Produk Paket Khusus,615297,0,
+2026-01-30,Beli Bahan Baku Kemasan,0,345648,operasional
+2026-01-30,Penjualan Produk Paket Khusus,320604,0,
+2026-01-30,Beli Bahan Baku Sayuran,0,276975,operasional
+2026-01-30,Penjualan Produk Paket Khusus,161675,0,
+2026-01-30,Beli Bahan Baku Daging,0,130666,operasional
+2026-01-30,Penjualan Produk C,63228,0,
+2026-01-30,Beli Bahan Baku Sayuran,0,52211,operasional
+2026-01-30,Penjualan Produk B,399873,0,
+2026-01-30,Beli Bahan Baku Tepung,0,238020,operasional
+2026-01-31,Penjualan Produk A,609389,0,
+2026-01-31,Beli Bahan Baku Kemasan,0,218932,operasional
+2026-01-31,Penjualan Produk C,226928,0,
+2026-01-31,Beli Bahan Baku Tepung,0,322457,operasional
+2026-01-31,Penjualan Produk C,132381,0,
+2026-01-31,Beli Bahan Baku Tepung,0,238407,operasional
+2026-01-31,Penjualan Produk B,148983,0,
+2026-01-31,Beli Bahan Baku Kemasan,0,52631,operasional
+2026-01-31,Penjualan Produk B,100650,0,
+2026-01-31,Beli Bahan Baku Kemasan,0,66310,operasional
+2026-01-31,Penjualan Produk Paket Khusus,343672,0,
+2026-01-31,Beli Bahan Baku Kemasan,0,158039,operasional
+2026-02-01,Penjualan Produk B,222334,0,
+2026-02-01,Beli Bahan Baku Daging,0,308927,operasional
+2026-02-01,Penjualan Produk B,245923,0,
+2026-02-01,Beli Bahan Baku Daging,0,194092,operasional
+2026-02-01,Penjualan Produk B,365408,0,
+2026-02-01,Beli Bahan Baku Daging,0,315807,operasional
+2026-02-01,Penjualan Produk B,102067,0,
+2026-02-01,Beli Bahan Baku Kemasan,0,125219,operasional
+2026-02-01,Penjualan Produk C,213877,0,
+2026-02-01,Beli Bahan Baku Daging,0,42358,operasional
+2026-02-01,Penjualan Produk A,568405,0,
+2026-02-01,Beli Bahan Baku Sayuran,0,189219,operasional
+2026-02-02,Penjualan Produk C,181846,0,
+2026-02-02,Beli Bahan Baku Kemasan,0,179730,operasional
+2026-02-02,Penjualan Produk B,157168,0,
+2026-02-02,Beli Bahan Baku Kemasan,0,240215,operasional
+2026-02-02,Penjualan Produk A,267281,0,
+2026-02-02,Beli Bahan Baku Daging,0,176005,operasional
+2026-02-02,Penjualan Produk Paket Khusus,114297,0,
+2026-02-02,Beli Bahan Baku Sayuran,0,176701,operasional
+2026-02-02,Penjualan Produk A,277502,0,
+2026-02-02,Beli Bahan Baku Tepung,0,90141,operasional
+2026-02-02,Penjualan Produk Paket Khusus,167138,0,
+2026-02-02,Beli Bahan Baku Sayuran,0,32987,operasional
+2026-02-02,Penjualan Produk B,331132,0,
+2026-02-02,Beli Bahan Baku Sayuran,0,124619,operasional
+2026-02-03,Penjualan Produk B,289066,0,
+2026-02-03,Beli Bahan Baku Sayuran,0,277754,operasional
+2026-02-03,Penjualan Produk C,150586,0,
+2026-02-03,Beli Bahan Baku Daging,0,290068,operasional
+2026-02-03,Penjualan Produk Paket Khusus,252356,0,
+2026-02-03,Beli Bahan Baku Tepung,0,224721,operasional
+2026-02-03,Penjualan Produk Paket Khusus,324257,0,
+2026-02-03,Beli Bahan Baku Daging,0,81956,operasional
+2026-02-03,Penjualan Produk Paket Khusus,73934,0,
+2026-02-03,Beli Bahan Baku Tepung,0,54570,operasional
+2026-02-03,Penjualan Produk B,90277,0,
+2026-02-03,Beli Bahan Baku Daging,0,85008,operasional
+2026-02-03,Penjualan Produk B,484061,0,
+2026-02-03,Beli Bahan Baku Sayuran,0,93329,operasional
+2026-02-04,Penjualan Produk Paket Khusus,529539,0,
+2026-02-04,Beli Bahan Baku Kemasan,0,459515,operasional
+2026-02-04,Penjualan Produk C,158111,0,
+2026-02-04,Beli Bahan Baku Tepung,0,111614,operasional
+2026-02-04,Penjualan Produk B,338593,0,
+2026-02-04,Beli Bahan Baku Kemasan,0,60460,operasional
+2026-02-04,Penjualan Produk C,184677,0,
+2026-02-04,Beli Bahan Baku Kemasan,0,148646,operasional
+2026-02-04,Penjualan Produk B,53514,0,
+2026-02-04,Beli Bahan Baku Daging,0,93844,operasional
+2026-02-04,Penjualan Produk A,317979,0,
+2026-02-04,Beli Bahan Baku Sayuran,0,165958,operasional
+2026-02-05,Penjualan Produk A,351974,0,
+2026-02-05,Beli Bahan Baku Sayuran,0,468810,operasional
+2026-02-05,Penjualan Produk Paket Khusus,477237,0,
+2026-02-05,Beli Bahan Baku Kemasan,0,207168,operasional
+2026-02-05,Penjualan Produk A,129298,0,
+2026-02-05,Beli Bahan Baku Kemasan,0,183038,operasional
+2026-02-05,Penjualan Produk B,165235,0,
+2026-02-05,Beli Bahan Baku Daging,0,76991,operasional
+2026-02-05,Penjualan Produk Paket Khusus,72889,0,
+2026-02-05,Beli Bahan Baku Tepung,0,19783,operasional
+2026-02-05,Penjualan Produk B,355838,0,
+2026-02-05,Beli Bahan Baku Daging,0,93409,operasional
+2026-02-06,Penjualan Produk A,439714,0,
+2026-02-06,Beli Bahan Baku Kemasan,0,235592,operasional
+2026-02-06,Penjualan Produk C,235623,0,
+2026-02-06,Beli Bahan Baku Kemasan,0,183562,operasional
+2026-02-06,Penjualan Produk B,122408,0,
+2026-02-06,Beli Bahan Baku Tepung,0,110222,operasional
+2026-02-06,Penjualan Produk A,206595,0,
+2026-02-06,Beli Bahan Baku Sayuran,0,314949,operasional
+2026-02-06,Penjualan Produk A,72445,0,
+2026-02-06,Beli Bahan Baku Tepung,0,49442,operasional
+2026-02-06,Penjualan Produk Paket Khusus,636460,0,
+2026-02-06,Beli Bahan Baku Kemasan,0,286501,operasional
+2026-02-06,Beli Aset Renovasi Kios,0,606339,modal
+2026-02-07,Penjualan Produk Paket Khusus,600319,0,
+2026-02-07,Beli Bahan Baku Kemasan,0,168845,operasional
+2026-02-07,Penjualan Produk C,212783,0,
+2026-02-07,Beli Bahan Baku Daging,0,341467,operasional
+2026-02-07,Penjualan Produk B,279108,0,
+2026-02-07,Beli Bahan Baku Tepung,0,109725,operasional
+2026-02-07,Penjualan Produk C,57575,0,
+2026-02-07,Beli Bahan Baku Daging,0,80836,operasional
+2026-02-07,Penjualan Produk Paket Khusus,415612,0,
+2026-02-07,Beli Bahan Baku Sayuran,0,317618,operasional
+2026-02-08,Penjualan Produk A,596762,0,
+2026-02-08,Beli Bahan Baku Sayuran,0,541246,operasional
+2026-02-08,Penjualan Produk C,354838,0,
+2026-02-08,Beli Bahan Baku Tepung,0,280578,operasional
+2026-02-08,Penjualan Produk A,178691,0,
+2026-02-08,Beli Bahan Baku Tepung,0,66989,operasional
+2026-02-08,Penjualan Produk A,186964,0,
+2026-02-08,Beli Bahan Baku Sayuran,0,58954,operasional
+2026-02-08,Penjualan Produk A,420606,0,
+2026-02-08,Beli Bahan Baku Tepung,0,224564,operasional
+2026-02-09,Penjualan Produk B,283668,0,
+2026-02-09,Beli Bahan Baku Sayuran,0,175215,operasional
+2026-02-09,Penjualan Produk Paket Khusus,262015,0,
+2026-02-09,Beli Bahan Baku Daging,0,402180,operasional
+2026-02-09,Penjualan Produk C,188025,0,
+2026-02-09,Beli Bahan Baku Kemasan,0,116560,operasional
+2026-02-09,Penjualan Produk Paket Khusus,113358,0,
+2026-02-09,Beli Bahan Baku Tepung,0,173742,operasional
+2026-02-09,Penjualan Produk B,72583,0,
+2026-02-09,Beli Bahan Baku Kemasan,0,30866,operasional
+2026-02-09,Penjualan Produk C,621561,0,
+2026-02-09,Beli Bahan Baku Tepung,0,147099,operasional
+2026-02-10,Penjualan Produk Paket Khusus,462452,0,
+2026-02-10,Beli Bahan Baku Tepung,0,507409,operasional
+2026-02-10,Penjualan Produk B,450836,0,
+2026-02-10,Beli Bahan Baku Kemasan,0,162639,operasional
+2026-02-10,Penjualan Produk B,243935,0,
+2026-02-10,Beli Bahan Baku Kemasan,0,111312,operasional
+2026-02-10,Penjualan Produk C,54798,0,
+2026-02-10,Beli Bahan Baku Sayuran,0,151197,operasional
+2026-02-10,Penjualan Produk Paket Khusus,422971,0,
+2026-02-10,Beli Bahan Baku Sayuran,0,171321,operasional
+2026-02-11,Penjualan Produk B,550156,0,
+2026-02-11,Beli Bahan Baku Sayuran,0,232627,operasional
+2026-02-11,Penjualan Produk A,104577,0,
+2026-02-11,Beli Bahan Baku Daging,0,139622,operasional
+2026-02-11,Penjualan Produk B,158280,0,
+2026-02-11,Beli Bahan Baku Tepung,0,123827,operasional
+2026-02-11,Penjualan Produk C,243069,0,
+2026-02-11,Beli Bahan Baku Sayuran,0,103007,operasional
+2026-02-11,Penjualan Produk Paket Khusus,157765,0,
+2026-02-11,Beli Bahan Baku Daging,0,141950,operasional
+2026-02-11,Penjualan Produk Paket Khusus,374725,0,
+2026-02-11,Beli Bahan Baku Daging,0,334344,operasional
+2026-02-12,Penjualan Produk Paket Khusus,255332,0,
+2026-02-12,Beli Bahan Baku Tepung,0,168884,operasional
+2026-02-12,Penjualan Produk Paket Khusus,318781,0,
+2026-02-12,Beli Bahan Baku Tepung,0,382916,operasional
+2026-02-12,Penjualan Produk A,281170,0,
+2026-02-12,Beli Bahan Baku Sayuran,0,75808,operasional
+2026-02-12,Penjualan Produk A,167433,0,
+2026-02-12,Beli Bahan Baku Kemasan,0,83956,operasional
+2026-02-12,Penjualan Produk C,605788,0,
+2026-02-12,Beli Bahan Baku Kemasan,0,358423,operasional
+2026-02-13,Penjualan Produk Paket Khusus,636651,0,
+2026-02-13,Beli Bahan Baku Sayuran,0,507560,operasional
+2026-02-13,Penjualan Produk B,219972,0,
+2026-02-13,Beli Bahan Baku Tepung,0,336799,operasional
+2026-02-13,Penjualan Produk B,302677,0,
+2026-02-13,Beli Bahan Baku Tepung,0,120675,operasional
+2026-02-13,Penjualan Produk B,165899,0,
+2026-02-13,Beli Bahan Baku Kemasan,0,67027,operasional
+2026-02-13,Penjualan Produk C,440263,0,
+2026-02-13,Beli Bahan Baku Tepung,0,191703,operasional
+2026-02-14,Penjualan Produk A,297873,0,
+2026-02-14,Beli Bahan Baku Tepung,0,434950,operasional
+2026-02-14,Penjualan Produk Paket Khusus,390867,0,
+2026-02-14,Beli Bahan Baku Tepung,0,103128,operasional
+2026-02-14,Penjualan Produk B,261414,0,
+2026-02-14,Beli Bahan Baku Tepung,0,101543,operasional
+2026-02-14,Penjualan Produk A,179691,0,
+2026-02-14,Beli Bahan Baku Daging,0,197287,operasional
+2026-02-14,Penjualan Produk C,492880,0,
+2026-02-14,Beli Bahan Baku Sayuran,0,219138,operasional
+2026-02-15,Penjualan Produk B,589777,0,
+2026-02-15,Beli Bahan Baku Daging,0,210208,operasional
+2026-02-15,Penjualan Produk Paket Khusus,404076,0,
+2026-02-15,Beli Bahan Baku Daging,0,319439,operasional
+2026-02-15,Penjualan Produk C,185593,0,
+2026-02-15,Beli Bahan Baku Kemasan,0,181871,operasional
+2026-02-15,Penjualan Produk Paket Khusus,79838,0,
+2026-02-15,Beli Bahan Baku Kemasan,0,171895,operasional
+2026-02-15,Penjualan Produk B,58929,0,
+2026-02-15,Beli Bahan Baku Sayuran,0,87618,operasional
+2026-02-15,Penjualan Produk A,328083,0,
+2026-02-15,Beli Bahan Baku Sayuran,0,124829,operasional
+2026-02-16,Penjualan Produk A,301535,0,
+2026-02-16,Beli Bahan Baku Tepung,0,446801,operasional
+2026-02-16,Penjualan Produk B,517764,0,
+2026-02-16,Beli Bahan Baku Kemasan,0,200416,operasional
+2026-02-16,Penjualan Produk B,274596,0,
+2026-02-16,Beli Bahan Baku Tepung,0,76240,operasional
+2026-02-16,Penjualan Produk C,258927,0,
+2026-02-16,Beli Bahan Baku Sayuran,0,144072,operasional
+2026-02-16,Penjualan Produk A,422199,0,
+2026-02-16,Beli Bahan Baku Daging,0,329003,operasional
+2026-02-17,Penjualan Produk A,511302,0,
+2026-02-17,Beli Bahan Baku Daging,0,492305,operasional
+2026-02-17,Penjualan Produk Paket Khusus,118460,0,
+2026-02-17,Beli Bahan Baku Sayuran,0,131714,operasional
+2026-02-17,Penjualan Produk Paket Khusus,270995,0,
+2026-02-17,Beli Bahan Baku Sayuran,0,178144,operasional
+2026-02-17,Penjualan Produk A,87721,0,
+2026-02-17,Beli Bahan Baku Sayuran,0,24532,operasional
+2026-02-17,Penjualan Produk A,513106,0,
+2026-02-17,Beli Bahan Baku Sayuran,0,163047,operasional
+2026-02-18,Penjualan Produk C,381115,0,
+2026-02-18,Beli Bahan Baku Tepung,0,315307,operasional
+2026-02-18,Penjualan Produk B,394361,0,
+2026-02-18,Beli Bahan Baku Tepung,0,274226,operasional
+2026-02-18,Penjualan Produk A,151898,0,
+2026-02-18,Beli Bahan Baku Daging,0,69209,operasional
+2026-02-18,Penjualan Produk C,141346,0,
+2026-02-18,Beli Bahan Baku Kemasan,0,137259,operasional
+2026-02-18,Penjualan Produk B,138736,0,
+2026-02-18,Beli Bahan Baku Tepung,0,62077,operasional
+2026-02-18,Penjualan Produk Paket Khusus,290056,0,
+2026-02-18,Beli Bahan Baku Tepung,0,171475,operasional
+2026-02-19,Penjualan Produk C,616990,0,
+2026-02-19,Beli Bahan Baku Kemasan,0,135945,operasional
+2026-02-19,Penjualan Produk A,258270,0,
+2026-02-19,Beli Bahan Baku Tepung,0,278498,operasional
+2026-02-19,Penjualan Produk A,194438,0,
+2026-02-19,Beli Bahan Baku Tepung,0,196172,operasional
+2026-02-19,Penjualan Produk Paket Khusus,113190,0,
+2026-02-19,Beli Bahan Baku Tepung,0,199864,operasional
+2026-02-19,Penjualan Produk C,146820,0,
+2026-02-19,Beli Bahan Baku Tepung,0,92670,operasional
+2026-02-19,Penjualan Produk A,256800,0,
+2026-02-19,Beli Bahan Baku Daging,0,160372,operasional
+2026-02-20,Penjualan Produk Paket Khusus,550128,0,
+2026-02-20,Beli Bahan Baku Tepung,0,494154,operasional
+2026-02-20,Penjualan Produk B,281888,0,
+2026-02-20,Beli Bahan Baku Kemasan,0,219706,operasional
+2026-02-20,Penjualan Produk C,164851,0,
+2026-02-20,Beli Bahan Baku Tepung,0,204991,operasional
+2026-02-20,Penjualan Produk B,160699,0,
+2026-02-20,Beli Bahan Baku Daging,0,25849,operasional
+2026-02-20,Penjualan Produk A,145087,0,
+2026-02-20,Beli Bahan Baku Daging,0,34919,operasional
+2026-02-20,Penjualan Produk A,98754,0,
+2026-02-20,Beli Bahan Baku Daging,0,41764,operasional
+2026-02-20,Penjualan Produk Paket Khusus,295235,0,
+2026-02-20,Beli Bahan Baku Daging,0,130822,operasional
+2026-02-21,Penjualan Produk B,422458,0,
+2026-02-21,Beli Bahan Baku Tepung,0,137220,operasional
+2026-02-21,Penjualan Produk A,247368,0,
+2026-02-21,Beli Bahan Baku Daging,0,432705,operasional
+2026-02-21,Penjualan Produk Paket Khusus,155740,0,
+2026-02-21,Beli Bahan Baku Sayuran,0,164163,operasional
+2026-02-21,Penjualan Produk Paket Khusus,214647,0,
+2026-02-21,Beli Bahan Baku Tepung,0,108791,operasional
+2026-02-21,Penjualan Produk C,479443,0,
+2026-02-21,Beli Bahan Baku Tepung,0,216415,operasional
+2026-02-22,Penjualan Produk C,281125,0,
+2026-02-22,Beli Bahan Baku Daging,0,221401,operasional
+2026-02-22,Penjualan Produk A,440984,0,
+2026-02-22,Beli Bahan Baku Tepung,0,123225,operasional
+2026-02-22,Penjualan Produk B,131227,0,
+2026-02-22,Beli Bahan Baku Daging,0,278597,operasional
+2026-02-22,Penjualan Produk A,159225,0,
+2026-02-22,Beli Bahan Baku Daging,0,89854,operasional
+2026-02-22,Penjualan Produk C,96706,0,
+2026-02-22,Beli Bahan Baku Sayuran,0,244383,operasional
+2026-02-22,Penjualan Produk A,173117,0,
+2026-02-22,Beli Bahan Baku Tepung,0,30396,operasional
+2026-02-22,Penjualan Produk C,508348,0,
+2026-02-22,Beli Bahan Baku Daging,0,235002,operasional
+2026-02-23,Penjualan Produk C,676805,0,
+2026-02-23,Beli Bahan Baku Daging,0,289050,operasional
+2026-02-23,Penjualan Produk C,232589,0,
+2026-02-23,Beli Bahan Baku Sayuran,0,417160,operasional
+2026-02-23,Penjualan Produk Paket Khusus,94825,0,
+2026-02-23,Beli Bahan Baku Kemasan,0,127097,operasional
+2026-02-23,Penjualan Produk A,253190,0,
+2026-02-23,Beli Bahan Baku Tepung,0,125892,operasional
+2026-02-23,Penjualan Produk Paket Khusus,522695,0,
+2026-02-23,Beli Bahan Baku Sayuran,0,240300,operasional
+2026-02-24,Penjualan Produk B,339096,0,
+2026-02-24,Beli Bahan Baku Daging,0,269902,operasional
+2026-02-24,Penjualan Produk C,241997,0,
+2026-02-24,Beli Bahan Baku Tepung,0,303312,operasional
+2026-02-24,Penjualan Produk C,163270,0,
+2026-02-24,Beli Bahan Baku Daging,0,96601,operasional
+2026-02-24,Penjualan Produk A,106112,0,
+2026-02-24,Beli Bahan Baku Tepung,0,85090,operasional
+2026-02-24,Penjualan Produk A,156054,0,
+2026-02-24,Beli Bahan Baku Kemasan,0,140901,operasional
+2026-02-24,Penjualan Produk C,499325,0,
+2026-02-24,Beli Bahan Baku Tepung,0,152299,operasional
+2026-02-25,Penjualan Produk C,597193,0,
+2026-02-25,Beli Bahan Baku Kemasan,0,429227,operasional
+2026-02-25,Penjualan Produk Paket Khusus,154399,0,
+2026-02-25,Beli Bahan Baku Daging,0,271465,operasional
+2026-02-25,Penjualan Produk A,381625,0,
+2026-02-25,Beli Bahan Baku Daging,0,222474,operasional
+2026-02-25,Penjualan Produk A,145627,0,
+2026-02-25,Beli Bahan Baku Sayuran,0,69663,operasional
+2026-02-25,Penjualan Produk C,179725,0,
+2026-02-25,Beli Bahan Baku Tepung,0,88496,operasional
+2026-02-25,Penjualan Produk A,54793,0,
+2026-02-25,Beli Bahan Baku Tepung,0,46440,operasional
+2026-02-25,Penjualan Produk Paket Khusus,260821,0,
+2026-02-25,Beli Bahan Baku Daging,0,112662,operasional
+2026-02-26,Penjualan Produk C,431237,0,
+2026-02-26,Beli Bahan Baku Tepung,0,340940,operasional
+2026-02-26,Penjualan Produk Paket Khusus,377720,0,
+2026-02-26,Beli Bahan Baku Kemasan,0,321986,operasional
+2026-02-26,Penjualan Produk Paket Khusus,203534,0,
+2026-02-26,Beli Bahan Baku Sayuran,0,192986,operasional
+2026-02-26,Penjualan Produk B,143604,0,
+2026-02-26,Beli Bahan Baku Tepung,0,144424,operasional
+2026-02-26,Penjualan Produk A,127041,0,
+2026-02-26,Beli Bahan Baku Sayuran,0,39259,operasional
+2026-02-26,Penjualan Produk Paket Khusus,398103,0,
+2026-02-26,Beli Bahan Baku Sayuran,0,128764,operasional
+2026-02-26,Beli Aset Etalase,0,548974,modal
+2026-02-27,Penjualan Produk A,180311,0,
+2026-02-27,Beli Bahan Baku Kemasan,0,519886,operasional
+2026-02-27,Penjualan Produk B,617561,0,
+2026-02-27,Beli Bahan Baku Tepung,0,201912,operasional
+2026-02-27,Penjualan Produk A,111320,0,
+2026-02-27,Beli Bahan Baku Sayuran,0,109410,operasional
+2026-02-27,Penjualan Produk C,263343,0,
+2026-02-27,Beli Bahan Baku Sayuran,0,119866,operasional
+2026-02-27,Penjualan Produk C,569956,0,
+2026-02-27,Beli Bahan Baku Kemasan,0,239171,operasional
+2026-02-28,Penjualan Produk Paket Khusus,514374,0,
+2026-02-28,Beli Bahan Baku Tepung,0,471837,operasional
+2026-02-28,Penjualan Produk A,272998,0,
+2026-02-28,Beli Bahan Baku Daging,0,136962,operasional
+2026-02-28,Penjualan Produk C,295836,0,
+2026-02-28,Beli Bahan Baku Sayuran,0,161674,operasional
+2026-02-28,Penjualan Produk Paket Khusus,246756,0,
+2026-02-28,Beli Bahan Baku Daging,0,119950,operasional
+2026-02-28,Penjualan Produk Paket Khusus,398360,0,
+2026-02-28,Beli Bahan Baku Daging,0,253141,operasional
+2026-03-01,Penjualan Produk B,680309,0,
+2026-03-01,Beli Bahan Baku Kemasan,0,122537,operasional
+2026-03-01,Penjualan Produk B,133614,0,
+2026-03-01,Beli Bahan Baku Tepung,0,521382,operasional
+2026-03-01,Penjualan Produk C,275944,0,
+2026-03-01,Beli Bahan Baku Daging,0,171929,operasional
+2026-03-01,Penjualan Produk C,198829,0,
+2026-03-01,Beli Bahan Baku Daging,0,55660,operasional
+2026-03-01,Penjualan Produk B,160058,0,
+2026-03-01,Beli Bahan Baku Sayuran,0,112395,operasional
+2026-03-01,Penjualan Produk Paket Khusus,338253,0,
+2026-03-01,Beli Bahan Baku Tepung,0,215489,operasional
+2026-03-02,Penjualan Produk C,382667,0,
+2026-03-02,Beli Bahan Baku Tepung,0,122553,operasional
+2026-03-02,Penjualan Produk C,294998,0,
+2026-03-02,Beli Bahan Baku Tepung,0,316677,operasional
+2026-03-02,Penjualan Produk C,251338,0,
+2026-03-02,Beli Bahan Baku Tepung,0,61109,operasional
+2026-03-02,Penjualan Produk C,238770,0,
+2026-03-02,Beli Bahan Baku Tepung,0,206455,operasional
+2026-03-02,Penjualan Produk B,51335,0,
+2026-03-02,Beli Bahan Baku Tepung,0,123242,operasional
+2026-03-02,Penjualan Produk A,42972,0,
+2026-03-02,Beli Bahan Baku Kemasan,0,34348,operasional
+2026-03-02,Penjualan Produk C,288653,0,
+2026-03-02,Beli Bahan Baku Daging,0,155497,operasional
+2026-03-03,Penjualan Produk B,410910,0,
+2026-03-03,Beli Bahan Baku Tepung,0,453387,operasional
+2026-03-03,Penjualan Produk Paket Khusus,386652,0,
+2026-03-03,Beli Bahan Baku Sayuran,0,107811,operasional
+2026-03-03,Penjualan Produk Paket Khusus,281309,0,
+2026-03-03,Beli Bahan Baku Tepung,0,176886,operasional
+2026-03-03,Penjualan Produk B,59413,0,
+2026-03-03,Beli Bahan Baku Daging,0,52002,operasional
+2026-03-03,Penjualan Produk C,76644,0,
+2026-03-03,Beli Bahan Baku Sayuran,0,90887,operasional
+2026-03-03,Penjualan Produk Paket Khusus,97426,0,
+2026-03-03,Beli Bahan Baku Daging,0,37780,operasional
+2026-03-03,Penjualan Produk B,219563,0,
+2026-03-03,Beli Bahan Baku Daging,0,86233,operasional
+2026-03-04,Penjualan Produk C,255465,0,
+2026-03-04,Beli Bahan Baku Kemasan,0,527943,operasional
+2026-03-04,Penjualan Produk B,357995,0,
+2026-03-04,Beli Bahan Baku Kemasan,0,105936,operasional
+2026-03-04,Penjualan Produk A,283126,0,
+2026-03-04,Beli Bahan Baku Kemasan,0,180693,operasional
+2026-03-04,Penjualan Produk C,294516,0,
+2026-03-04,Beli Bahan Baku Tepung,0,125087,operasional
+2026-03-04,Penjualan Produk C,144120,0,
+2026-03-04,Beli Bahan Baku Kemasan,0,52756,operasional
+2026-03-04,Penjualan Produk B,77518,0,
+2026-03-04,Beli Bahan Baku Sayuran,0,66672,operasional
+2026-03-04,Penjualan Produk B,229200,0,
+2026-03-04,Beli Bahan Baku Daging,0,68597,operasional
+2026-03-05,Penjualan Produk Paket Khusus,456086,0,
+2026-03-05,Beli Bahan Baku Tepung,0,506256,operasional
+2026-03-05,Penjualan Produk B,174098,0,
+2026-03-05,Beli Bahan Baku Kemasan,0,180763,operasional
+2026-03-05,Penjualan Produk C,134531,0,
+2026-03-05,Beli Bahan Baku Kemasan,0,107899,operasional
+2026-03-05,Penjualan Produk C,79911,0,
+2026-03-05,Beli Bahan Baku Kemasan,0,50161,operasional
+2026-03-05,Penjualan Produk C,676724,0,
+2026-03-05,Beli Bahan Baku Sayuran,0,185220,operasional
+2026-03-06,Penjualan Produk Paket Khusus,229425,0,
+2026-03-06,Beli Bahan Baku Daging,0,437849,operasional
+2026-03-06,Penjualan Produk C,533243,0,
+2026-03-06,Beli Bahan Baku Daging,0,165717,operasional
+2026-03-06,Penjualan Produk B,203048,0,
+2026-03-06,Beli Bahan Baku Sayuran,0,196171,operasional
+2026-03-06,Penjualan Produk A,82872,0,
+2026-03-06,Beli Bahan Baku Daging,0,84775,operasional
+2026-03-06,Penjualan Produk B,117863,0,
+2026-03-06,Beli Bahan Baku Daging,0,29868,operasional
+2026-03-06,Penjualan Produk Paket Khusus,397633,0,
+2026-03-06,Beli Bahan Baku Sayuran,0,143342,operasional
+2026-03-07,Penjualan Produk A,364045,0,
+2026-03-07,Beli Bahan Baku Sayuran,0,272907,operasional
+2026-03-07,Penjualan Produk B,294340,0,
+2026-03-07,Beli Bahan Baku Daging,0,241593,operasional
+2026-03-07,Penjualan Produk Paket Khusus,266220,0,
+2026-03-07,Beli Bahan Baku Sayuran,0,303525,operasional
+2026-03-07,Penjualan Produk C,195953,0,
+2026-03-07,Beli Bahan Baku Kemasan,0,54312,operasional
+2026-03-07,Penjualan Produk A,621195,0,
+2026-03-07,Beli Bahan Baku Sayuran,0,280873,operasional
+2026-03-08,Penjualan Produk B,545869,0,
+2026-03-08,Beli Bahan Baku Tepung,0,136665,operasional
+2026-03-08,Penjualan Produk Paket Khusus,419270,0,
+2026-03-08,Beli Bahan Baku Daging,0,461356,operasional
+2026-03-08,Penjualan Produk C,182802,0,
+2026-03-08,Beli Bahan Baku Daging,0,202362,operasional
+2026-03-08,Penjualan Produk A,95806,0,
+2026-03-08,Beli Bahan Baku Daging,0,80480,operasional
+2026-03-08,Penjualan Produk Paket Khusus,226867,0,
+2026-03-08,Beli Bahan Baku Kemasan,0,79675,operasional
+2026-03-08,Penjualan Produk A,52242,0,
+2026-03-08,Beli Bahan Baku Daging,0,35599,operasional
+2026-03-08,Penjualan Produk Paket Khusus,299890,0,
+2026-03-08,Beli Bahan Baku Kemasan,0,216987,operasional
+2026-03-09,Penjualan Produk Paket Khusus,467082,0,
+2026-03-09,Beli Bahan Baku Daging,0,355992,operasional
+2026-03-09,Penjualan Produk C,457614,0,
+2026-03-09,Beli Bahan Baku Daging,0,151032,operasional
+2026-03-09,Penjualan Produk A,200682,0,
+2026-03-09,Beli Bahan Baku Sayuran,0,96687,operasional
+2026-03-09,Penjualan Produk B,125212,0,
+2026-03-09,Beli Bahan Baku Kemasan,0,67378,operasional
+2026-03-09,Penjualan Produk Paket Khusus,99427,0,
+2026-03-09,Beli Bahan Baku Sayuran,0,122316,operasional
+2026-03-09,Penjualan Produk C,48337,0,
+2026-03-09,Beli Bahan Baku Tepung,0,65756,operasional
+2026-03-09,Penjualan Produk A,251889,0,
+2026-03-09,Beli Bahan Baku Daging,0,284805,operasional
