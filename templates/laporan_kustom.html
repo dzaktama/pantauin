@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+
+{% block title %}Kustomisasi Laporan - PANTAUIN{% endblock %}
+
+{% block content %}
+<div class="container pb-5" style="max-width: 800px;">
+    <!-- Header -->
+    <div class="text-center mb-5">
+        <h1 class="h3 fw-bold text-dark">Pra-Cetak Laporan PDF</h1>
+        <p class="text-secondary mt-2">Kustomisasi halaman dan ulasan kecerdasan buatan sebelum mencetak hasil akhir
+            untuk <span class="fw-bold text-primary">{{ nama_buku }}</span>.</p>
+    </div>
+
+    <!-- Area Notifikasi Alert -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <div class="alert alert-{{ 'success' if category == 'success' else 'danger' if category == 'error' else 'warning' }} d-flex align-items-center shadow-sm"
+        role="alert">
+        <i
+            class="bi bi-{{ 'check-circle-fill' if category == 'success' else 'exclamation-triangle-fill' }} me-2 fs-5"></i>
+        <div>{{ message }}</div>
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    <form method="POST" action="{{ url_for('download_report') }}" class="d-flex flex-column gap-4">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+
+        <!-- Opsi Halaman -->
+        <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
+            <div class="card-header bg-primary text-white py-3 fw-bold d-flex align-items-center">
+                <i class="bi bi-file-earmark-pdf fs-5 me-2"></i>
+                Struktur Laporan
+            </div>
+            <div class="card-body p-4 p-md-5 d-flex flex-column gap-4">
+
+                <div class="form-check d-flex align-items-start gap-2">
+                    <input class="form-check-input mt-1 shadow-sm" type="checkbox" id="lampir_profil"
+                        name="lampir_profil" checked style="width: 1.25em; height: 1.25em;">
+                    <div class="ms-2">
+                        <label class="form-check-label fw-bold text-dark" for="lampir_profil">
+                            Lampirkan Profil Usaha
+                        </label>
+                        <p class="text-muted small mb-0 mt-1">Mencetak 1 halaman mandiri berisikan formulir puluhan
+                            isian mendetail yang sebelumnya telah Anda lengkapi.</p>
+                    </div>
+                </div>
+
+                <div class="form-check d-flex align-items-start gap-2">
+                    <input class="form-check-input mt-1 shadow-sm" type="checkbox" id="lampir_proyeksi"
+                        name="lampir_proyeksi" checked style="width: 1.25em; height: 1.25em;">
+                    <div class="ms-2">
+                        <label class="form-check-label fw-bold text-dark" for="lampir_proyeksi">
+                            Sertakan Bab Proyeksi &amp; Rekomendasi Pintar
+                        </label>
+                        <p class="text-muted small mb-0 mt-1">Mencetak tabel simulasi kas 4 minggu ke depan berserta
+                            <i>bullet points</i> Action Plan tindak lanjut.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Opsi Editor AI -->
+        <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
+            <div class="card-header" style="background-color: #6f42c1; color: white;">
+                <h5 class="card-title fw-bold mb-0 py-1 d-flex align-items-center text-white" style="font-size: 1rem;">
+                    <i class="bi bi-robot fs-5 me-2"></i>
+                    Ulasan Auditor AI Gemini
+                </h5>
+            </div>
+            <div class="card-body p-4 p-md-5">
+                <label for="narasi_ai" class="form-label fw-bold text-secondary small">Editor Teks Narasi AI
+                    (Opsional)</label>
+                <p class="text-muted small mb-3">Ulasan ini dihasilkan otomatis oleh Gemini. Anda bebas merevisi,
+                    menambah, atau menghapus paragraf jika terdapat bahasa yang dirasa kurang pantas sebelum diturunkan
+                    ke cetakan PDF.</p>
+                <textarea id="narasi_ai" name="narasi_ai" rows="10" class="form-control rounded-3 bg-light shadow-sm"
+                    style="font-size: 0.9rem; line-height: 1.6;">{{ teks_ai }}</textarea>
+            </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="d-flex justify-content-end gap-3 mt-4">
+            <a href="{{ url_for('dashboard') }}" class="btn btn-light rounded-3 px-4 fw-medium border">Batal</a>
+            <button type="submit" name="action" value="preview" formtarget="_blank"
+                class="btn btn-info text-white rounded-3 px-4 fw-bold shadow-sm d-flex align-items-center">
+                <i class="bi bi-eye-fill me-2"></i>
+                Pratinjau PDF
+            </button>
+            <button type="submit" name="action" value="download"
+                class="btn btn-primary rounded-3 px-4 fw-bold shadow-sm d-flex align-items-center">
+                <i class="bi bi-printer-fill me-2"></i>
+                Unduh Dokumen PDF
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}

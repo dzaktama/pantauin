@@ -1,0 +1,252 @@
+{% extends 'base.html' %}
+
+{% block title %}Profil Perusahaan - PANTAUIN{% endblock %}
+
+{% block content %}
+<div class="container pb-5" style="max-width: 900px;">
+    <!-- Header -->
+    <div class="mb-4">
+        <h1 class="h3 fw-bold text-dark">Profil Perusahaan</h1>
+        <p class="text-secondary mt-2">Lengkapi identitas <span class="fw-bold text-primary">{{ nama_buku }}</span>
+            secara masif untuk dicetak di Laporan PDF resmi Anda.</p>
+    </div>
+
+    <!-- Area Notifikasi Alert -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <div class="alert alert-{{ 'success' if category == 'success' else 'danger' if category == 'error' else 'warning' }} d-flex align-items-center shadow-sm"
+        role="alert">
+        <i
+            class="bi bi-{{ 'check-circle-fill' if category == 'success' else 'exclamation-triangle-fill' }} me-2 fs-5"></i>
+        <div>{{ message }}</div>
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    <form method="POST" action="" class="d-flex flex-column gap-4">
+        {{ form.hidden_tag() }}
+
+        <!-- BAGIAN 1: Identitas dan Legalitas Dasar -->
+        <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
+            <div class="card-header bg-primary text-white py-3 fw-bold d-flex align-items-center">
+                <i class="bi bi-building fs-5 me-2"></i>
+                I. Identitas & Legalitas Usaha
+            </div>
+            <div class="card-body p-4 p-md-5">
+
+                <div class="row g-4 mb-4">
+                    <div class="col-md-6">
+                        {{ form.nama_perusahaan.label(class="form-label fw-bold text-secondary small") }}
+                        {{ form.nama_perusahaan(class="form-control rounded-3", placeholder="PT Jaya Abadi") }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form.jenis_usaha.label(class="form-label fw-bold text-secondary small") }}
+                        {{ form.jenis_usaha(class="form-control rounded-3", placeholder="Makanan Ringan Olahan") }}
+                    </div>
+                </div>
+
+                <div class="row g-4 mb-4">
+                    <div class="col-md-4">
+                        {{ form.bentuk_usaha.label(class="form-label fw-bold text-secondary small") }}
+                        {{ form.bentuk_usaha(class="form-select rounded-3") }}
+                    </div>
+                    <div class="col-md-4">
+                        {{ form.contact_person.label(class="form-label fw-bold text-secondary small") }}
+                        {{ form.contact_person(class="form-control rounded-3", placeholder="Budi Santoso") }}
+                    </div>
+                    <div class="col-md-4">
+                        {{ form.jabatan.label(class="form-label fw-bold text-secondary small") }}
+                        {{ form.jabatan(class="form-control rounded-3", placeholder="Pemilik / Direktur") }}
+                    </div>
+                </div>
+
+                <div class="row g-4 mb-4">
+                    <div class="col-md-6">
+                        {{ form.no_telp.label(class="form-label fw-bold text-secondary small") }}
+                        {{ form.no_telp(class="form-control rounded-3", placeholder="0812-XXXX-XXXX") }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form.email_web.label(class="form-label fw-bold text-secondary small") }}
+                        {{ form.email_web(class="form-control rounded-3", placeholder="www.website.com / @instagram") }}
+                    </div>
+                </div>
+
+                <hr class="text-muted my-4">
+                <h6 class="text-uppercase fw-bold text-muted small mb-3">Alamat Lengkap</h6>
+
+                <div class="row g-4 mb-4">
+                    <div class="col-12">
+                        {{ form.alamat_jalan.label(class="form-label fw-bold text-secondary small") }}
+                        {{ form.alamat_jalan(class="form-control rounded-3", placeholder="Jl. Sudirman No. 123") }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form.alamat_rtrw.label(class="form-label fw-bold text-secondary small") }}
+                        {{ form.alamat_rtrw(class="form-control rounded-3", placeholder="01 / 02") }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form.alamat_desa.label(class="form-label fw-bold text-secondary small") }}
+                        {{ form.alamat_desa(class="form-control rounded-3") }}
+                    </div>
+                    <div class="col-md-4">
+                        {{ form.alamat_kecamatan.label(class="form-label fw-bold text-secondary small") }}
+                        {{ form.alamat_kecamatan(class="form-control rounded-3") }}
+                    </div>
+                    <div class="col-md-4">
+                        {{ form.alamat_kabkota.label(class="form-label fw-bold text-secondary small") }}
+                        {{ form.alamat_kabkota(class="form-control rounded-3") }}
+                    </div>
+                    <div class="col-md-4">
+                        {{ form.alamat_provinsi.label(class="form-label fw-bold text-secondary small") }}
+                        {{ form.alamat_provinsi(class="form-control rounded-3") }}
+                    </div>
+                    <div class="col-md-12">
+                        {{ form.kode_pos.label(class="form-label fw-bold text-secondary small") }}
+                        {{ form.kode_pos(class="form-control rounded-3") }}
+                    </div>
+                </div>
+
+                <hr class="text-muted my-4">
+                <h6 class="text-uppercase fw-bold text-muted small mb-3">Perizinan & SDM</h6>
+
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        {{ form.ijin_usaha.label(class="form-label fw-bold text-secondary small") }}
+                        {{ form.ijin_usaha(class="form-control rounded-3", placeholder="NIB: 12345...") }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form.haki.label(class="form-label fw-bold text-secondary small") }}
+                        {{ form.haki(class="form-control rounded-3", placeholder="Sertifikat Halal No...") }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form.merk_dagang.label(class="form-label fw-bold text-secondary small") }}
+                        {{ form.merk_dagang(class="form-control rounded-3", placeholder="Keripik Mantap") }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form.tahun_berdiri.label(class="form-label fw-bold text-secondary small") }}
+                        {{ form.tahun_berdiri(class="form-control rounded-3", placeholder="2018") }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form.tk_tetap.label(class="form-label fw-bold text-secondary small") }}
+                        {{ form.tk_tetap(class="form-control rounded-3", type="number") }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form.tk_tidak_tetap.label(class="form-label fw-bold text-secondary small") }}
+                        {{ form.tk_tidak_tetap(class="form-control rounded-3", type="number") }}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- BAGIAN 2: Data Produksi & Pemasaran -->
+        <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
+            <div class="card-header bg-warning text-dark py-3 fw-bold d-flex align-items-center">
+                <i class="bi bi-box-seam fs-5 me-2"></i>
+                II. Produksi, Teknologi & Pemasaran
+            </div>
+            <div class="card-body p-4 p-md-5">
+
+                <div class="mb-4">
+                    {{ form.jenis_produk.label(class="form-label fw-bold text-secondary small") }}
+                    {{ form.jenis_produk(class="form-control rounded-3", rows="3", placeholder="1. Keripik Singkong
+                    Balado\n2. Keripik Tempe Mendoan\n...") }}
+                </div>
+
+                <div class="row g-4 mb-4">
+                    <div class="col-md-6">
+                        {{ form.kapasitas_produksi.label(class="form-label fw-bold text-secondary small") }}
+                        {{ form.kapasitas_produksi(class="form-control rounded-3", placeholder="50 kg / bulan") }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form.omzet_usaha.label(class="form-label fw-bold text-secondary small") }}
+                        {{ form.omzet_usaha(class="form-control rounded-3", placeholder="Rp 15.000.000 / bln") }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form.teknologi_produksi.label(class="form-label fw-bold text-secondary small") }}
+                        {{ form.teknologi_produksi(class="form-control rounded-3") }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form.teknologi_pengemasan.label(class="form-label fw-bold text-secondary small") }}
+                        {{ form.teknologi_pengemasan(class="form-control rounded-3") }}
+                    </div>
+                </div>
+
+                <hr class="text-muted my-4">
+
+                <div class="row g-4 mb-4">
+                    <div class="col-md-6">
+                        {{ form.bahan_baku_asal.label(class="form-label fw-bold text-secondary small") }}
+                        {{ form.bahan_baku_asal(class="form-control rounded-3", placeholder="Pasar Beringharjo Lokal
+                        Yogyakarta") }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form.bahan_baku_ketersediaan.label(class="form-label fw-bold text-secondary small") }}
+                        {{ form.bahan_baku_ketersediaan(class="form-select rounded-3") }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form.kemasan_bahan.label(class="form-label fw-bold text-secondary small") }}
+                        {{ form.kemasan_bahan(class="form-control rounded-3", placeholder="Plastik Pouch Zipper
+                        Standup") }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form.kemasan_desain.label(class="form-label fw-bold text-secondary small") }}
+                        {{ form.kemasan_desain(class="form-select rounded-3") }}
+                    </div>
+                    <div class="col-md-12">
+                        {{ form.desain_produk.label(class="form-label fw-bold text-secondary small") }}
+                        {{ form.desain_produk(class="form-select rounded-3") }}
+                    </div>
+                </div>
+
+                <hr class="text-muted my-4">
+
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        {{ form.segmen_pasar.label(class="form-label fw-bold text-secondary small") }}
+                        {{ form.segmen_pasar(class="form-control rounded-3", placeholder="Menengah 70%, Bawah 30%") }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form.daerah_pemasaran.label(class="form-label fw-bold text-secondary small") }}
+                        {{ form.daerah_pemasaran(class="form-control rounded-3", placeholder="Lokal 90%, Luar Kota 10%")
+                        }}
+                    </div>
+                    <div class="col-md-12">
+                        {{ form.wilayah_pemasaran.label(class="form-label fw-bold text-secondary small") }}
+                        {{ form.wilayah_pemasaran(class="form-control rounded-3", placeholder="Kabupaten Sleman dan
+                        Sekitarnya") }}
+                    </div>
+                    <div class="col-md-12">
+                        {{ form.sistem_penjualan.label(class="form-label fw-bold text-secondary small") }}
+                        {{ form.sistem_penjualan(class="form-control rounded-3", placeholder="Retail langsung & Titip
+                        Warung") }}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- BAGIAN 3: Komitmen -->
+        <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
+            <div class="card-header bg-success text-white py-3 fw-bold d-flex align-items-center">
+                <i class="bi bi-shield-check fs-5 me-2"></i>
+                III. Komitmen Kemitraan
+            </div>
+            <div class="card-body p-4 p-md-5">
+                {{ form.komitmen.label(class="form-label fw-bold text-secondary small") }}
+                {{ form.komitmen(class="form-control rounded-3", rows="4", placeholder="Mengirimkan katalog rutin,
+                Mengikuti pameran, Memberi sample uji coba...") }}
+                <div class="form-text mt-2"><i class="bi bi-info-circle me-1"></i> Pisahkan ragam komitmen Anda
+                    menggunakan tanda koma (,).</div>
+            </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="d-flex justify-content-end gap-3 mt-4">
+            <a href="{{ url_for('dashboard') }}" class="btn btn-light rounded-3 px-4 fw-medium border">Batal</a>
+            {{ form.submit(class="btn btn-primary rounded-3 px-5 fw-bold shadow-sm") }}
+        </div>
+    </form>
+</div>
+{% endblock %}

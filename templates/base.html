@@ -60,6 +60,13 @@
                         <i class="bi bi-speedometer fs-5 me-3"></i> Simulator Risiko
                     </a>
                 </li>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {% if request.endpoint == 'edit_profil_perusahaan' %}active{% endif %}"
+                        href="{{ url_for('edit_profil_perusahaan') }}">
+                        <i class="bi bi-briefcase-fill fs-5 me-3"></i> Profil Usaha
+                    </a>
+                    </a>
+                </li>
                 <li class="nav-item mb-1 mt-4 px-3">
                     <span class="text-white-50 small fw-bold text-uppercase ms-3">Sistem</span>
                 </li>

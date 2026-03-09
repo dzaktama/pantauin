@@ -1,7 +1,7 @@
 import os
 import csv
 import io
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 from functools import wraps
 
 from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify, send_file
@@ -9,9 +9,10 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from dotenv import load_dotenv
 
 from config import Config
-from models import db, User, Transaksi, BukuKas
-from forms import LoginForm, RegisterForm, TransaksiForm, UploadCSVForm, BukuKasForm
+from models import db, User, Transaksi, BukuKas, ProfilPerusahaan
+from forms import LoginForm, RegisterForm, TransaksiForm, BukuKasForm, UploadCSVForm, ProfilPerusahaanForm
 from flask_caching import Cache
+import json
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from flask_wtf.csrf import CSRFProtect
@@ -153,6 +154,12 @@ def create_app(config_class=Config):
             if not buku_kas_id: 
                 return redirect(url_for('buku_kas_manager'))
             
+            # Wajib isi profil perusahaan jika belum
+            profil = ProfilPerusahaan.query.filter_by(buku_kas_id=buku_kas_id).first()
+            if not profil:
+                flash("Isi profil perusahaan usahamu terlebih dahulu sebelum menjelajah dasbor.", "warning")
+                return redirect(url_for('edit_profil_perusahaan'))
+            
             # Filter Parameter Periode Dashboard
             periode = request.args.get('periode', 30, type=int)
             if periode not in [30, 60, 90]:
@@ -184,6 +191,71 @@ def create_app(config_class=Config):
             import traceback
             traceback.print_exc()
             return render_template('error.html', pesan=f"Gagal merender dasbor analisis! Detail: {str(e)}"), 500
+
+    @app.route('/profil-perusahaan', methods=['GET', 'POST'])
+    @login_required
+    def edit_profil_perusahaan():
+        buku_kas_id = session.get('buku_kas_id')
+        if not buku_kas_id: return redirect(url_for('buku_kas_manager'))
+            
+        buku_aktif = BukuKas.query.get_or_404(buku_kas_id)
+        profil = ProfilPerusahaan.query.filter_by(buku_kas_id=buku_kas_id).first()
+        
+        form = ProfilPerusahaanForm(obj=profil)
+        
+        if request.method == 'GET' and profil and profil.detil_industri:
+            try:
+                dt_extr = json.loads(profil.detil_industri)
+                form.jenis_produk.data = dt_extr.get('jenis_produk', '')
+                form.kapasitas_produksi.data = dt_extr.get('kapasitas_produksi', '')
+                form.omzet_usaha.data = dt_extr.get('omzet_usaha', '')
+                form.teknologi_produksi.data = dt_extr.get('teknologi_produksi', '')
+                form.teknologi_pengemasan.data = dt_extr.get('teknologi_pengemasan', '')
+                form.bahan_baku_asal.data = dt_extr.get('bahan_baku_asal', '')
+                form.bahan_baku_ketersediaan.data = dt_extr.get('bahan_baku_ketersediaan', '')
+                form.desain_produk.data = dt_extr.get('desain_produk', '')
+                form.kemasan_bahan.data = dt_extr.get('kemasan_bahan', '')
+                form.kemasan_desain.data = dt_extr.get('kemasan_desain', '')
+                form.segmen_pasar.data = dt_extr.get('segmen_pasar', '')
+                form.daerah_pemasaran.data = dt_extr.get('daerah_pemasaran', '')
+                form.wilayah_pemasaran.data = dt_extr.get('wilayah_pemasaran', '')
+                form.sistem_penjualan.data = dt_extr.get('sistem_penjualan', '')
+                form.komitmen.data = dt_extr.get('komitmen', '')
+            except:
+                pass
+
+        if form.validate_on_submit():
+            dt_extr = {
+                'jenis_produk': form.jenis_produk.data,
+                'kapasitas_produksi': form.kapasitas_produksi.data,
+                'omzet_usaha': form.omzet_usaha.data,
+                'teknologi_produksi': form.teknologi_produksi.data,
+                'teknologi_pengemasan': form.teknologi_pengemasan.data,
+                'bahan_baku_asal': form.bahan_baku_asal.data,
+                'bahan_baku_ketersediaan': form.bahan_baku_ketersediaan.data,
+                'desain_produk': form.desain_produk.data,
+                'kemasan_bahan': form.kemasan_bahan.data,
+                'kemasan_desain': form.kemasan_desain.data,
+                'segmen_pasar': form.segmen_pasar.data,
+                'daerah_pemasaran': form.daerah_pemasaran.data,
+                'wilayah_pemasaran': form.wilayah_pemasaran.data,
+                'sistem_penjualan': form.sistem_penjualan.data,
+                'komitmen': form.komitmen.data
+            }
+            
+            if not profil:
+                profil = ProfilPerusahaan(buku_kas_id=buku_kas_id)
+                db.session.add(profil)
+            
+            form.populate_obj(profil)
+            profil.detil_industri = json.dumps(dt_extr)
+            profil.buku_kas_id = buku_kas_id
+            
+            db.session.commit()
+            flash("Profil Perusahaan berhasil disimpan!", "success")
+            return redirect(url_for('dashboard'))
+            
+        return render_template('profil_perusahaan.html', form=form, nama_buku=buku_aktif.nama_buku)
 
     @app.route('/input', methods=['GET', 'POST'])
     @login_required
@@ -379,13 +451,19 @@ def create_app(config_class=Config):
             traceback.print_exc()
             return jsonify({"reply": f"AI Kelebihan beban detail: {str(e)}"}), 500
 
-    @app.route('/unduh-laporan', methods=['GET'])
+    @app.route('/unduh-laporan', methods=['GET', 'POST'])
     @login_required
     def download_report():
         try:
             buku_kas_id = session.get('buku_kas_id')
             if not buku_kas_id: return redirect(url_for('buku_kas_manager'))
             
+            # Wajib isi profil perusahaan jika belum (untuk dicetak)
+            profil = ProfilPerusahaan.query.filter_by(buku_kas_id=buku_kas_id).first()
+            if not profil:
+                flash("Isi profil perusahaan usahamu terlebih dahulu sebelum mencetak Laporan Utama.", "warning")
+                return redirect(url_for('edit_profil_perusahaan'))
+                
             cache_key = f"dashboard_bk_{buku_kas_id}_30_{datetime.now().strftime('%Y%m%d')}_v3"
             data = cache.get(cache_key)
             if not data:
@@ -396,20 +474,80 @@ def create_app(config_class=Config):
             if not data.get('is_cukup'):
                 flash("Anda belum memiliki cukup data transaksi untuk dicetak pada Buku Kas ini (minimal 14 hari).", "warning")
                 return redirect(url_for('dashboard'))
-            
+                
             buku_aktif = BukuKas.query.get(buku_kas_id)
-            nama_proyek = buku_aktif.nama_buku if buku_aktif else session['username']
-            base_dir = os.path.abspath(os.path.dirname(__file__))
-            output_file = os.path.join(base_dir, f'Laporan_PANTAUIN_{int(datetime.now().timestamp())}.pdf')
+            nama_proyek = profil.nama_perusahaan if profil and profil.nama_perusahaan else (buku_aktif.nama_buku if buku_aktif else session['username'])
             
-            # Panggil fungsi report lab
-            generate_pdf_report(nama_proyek, data['skor'], data['rata_pemasukan'], data['rata_pengeluaran'], data['peringatan'], data.get('catatan_mingguan', []), output_file)
+            # Ambil narasi AI dari cache yang pernah dirender dashboard
+            saran_gemini = cache.get(f"saran_bk_{buku_kas_id}") or "Hasil analitik AI belum tesedia, silakan generate ulang dashboard."
             
-            return send_file(output_file, as_attachment=True, download_name=f"PANTAUIN_Laporan_{date.today()}_{nama_proyek.replace(' ', '_')}.pdf")
+            if request.method == 'POST':
+                # Tangkap Opsi Kustomisasi
+                teks_ai_diedit = request.form.get('narasi_ai', saran_gemini)
+                lampir_profil = request.form.get('lampir_profil', 'off') == 'on'
+                lampir_proyeksi = request.form.get('lampir_proyeksi', 'off') == 'on'
+                
+                base_dir = os.path.abspath(os.path.dirname(__file__))
+                output_file = os.path.join(base_dir, f'Laporan_PANTAUIN_{int(datetime.now().timestamp())}.pdf')
+                
+                # Fetch Profil Detil untuk dilempar ke Generator bila lampir disetujui
+                profil_dict = None
+                if lampir_profil and profil:
+                    try:
+                        dt_ekstra = json.loads(profil.detil_industri) if profil.detil_industri else {}
+                    except: dt_ekstra = {}
+                    profil_dict = {
+                        'entitas': profil.nama_perusahaan,
+                        'contact_person': profil.contact_person,
+                        'jabatan': profil.jabatan,
+                        'bentuk_usaha': profil.bentuk_usaha,
+                        'tahun_berdiri': profil.tahun_berdiri,
+                        'alamat': f"{profil.alamat_jalan}, {profil.alamat_rtrw}, {profil.alamat_desa}, {profil.alamat_kecamatan}, {profil.alamat_kabkota}, {profil.alamat_provinsi} {profil.kode_pos}",
+                        'kontak': f"{profil.no_telp} / {profil.email_web}",
+                        'legalitas': f"Ijin: {profil.ijin_usaha} | HAKI: {profil.haki}",
+                        'tk': f"Tetap: {profil.tk_tetap}, Tidak Tetap: {profil.tk_tidak_tetap}",
+                        'kapasitas': dt_ekstra.get('kapasitas_produksi', '-'),
+                        'omzet': dt_ekstra.get('omzet_usaha', '-'),
+                        'bahan_baku': f"Asal: {dt_ekstra.get('bahan_baku_asal', '-')} ({dt_ekstra.get('bahan_baku_ketersediaan', '')})",
+                        'pasar': dt_ekstra.get('segmen_pasar', '-'),
+                        'wilayah': dt_ekstra.get('wilayah_pemasaran', '-')
+                    }
+                
+                # Panggil fungsi report lab
+                generate_pdf_report(
+                    user_name=nama_proyek, 
+                    score=data['skor'], 
+                    avg_in=data['rata_pemasukan'], 
+                    avg_out=data['rata_pengeluaran'], 
+                    warnings=data['peringatan'], 
+                    catatan_mingguan=data.get('catatan_mingguan', []), 
+                    output_path=output_file,
+                    breakdown=data.get('rincian_skor', {}),
+                    stat_4_minggu=data.get('statistik_4_minggu', []),
+                    proyeksi=data.get('grafik_proyeksi', []),
+                    proyeksi_pengeluaran=data.get('proyeksi_pengeluaran', []),
+                    tgl_cetak_dt=datetime.now(),
+                    tgl_mulai_dt=date.today() - timedelta(days=30),
+                    tgl_akhir_dt=date.today(),
+                    # Parameter Argumen Kustom
+                    kustom_teks_ai=teks_ai_diedit,
+                    lampir_proyeksi=lampir_proyeksi,
+                    profil_dict=profil_dict # Jika None, generator akan skip bab Profil Perusahaan
+                )
+                action_type = request.form.get('action', 'download')
+                
+                if action_type == 'preview':
+                    return send_file(output_file, as_attachment=False, mimetype='application/pdf')
+                else:
+                    return send_file(output_file, as_attachment=True, download_name=f"PANTAUIN_Kustom_{date.today()}_{nama_proyek.replace(' ', '_')}.pdf")
+            
+            # Jika GET -> Render Preview Halaman Customize
+            return render_template('laporan_kustom.html', nama_buku=nama_proyek, teks_ai=saran_gemini)
+            
         except Exception as e:
             import traceback
             traceback.print_exc()
-            return render_template('error.html', pesan=f"Gagal membuat PDF Laporan. Error: {str(e)}"), 500
+            return render_template('error.html', pesan=f"Gagal memproses File Laporan: {str(e)}"), 500
 
     return app
 
