@@ -112,6 +112,82 @@
     </div>
 </div>
 
+<!-- Indikator Vital Bisnis & Performa Produk -->
+<div class="row g-4 mb-4">
+    <!-- Indikator Vital Bisnis -->
+    <div class="col-lg-6">
+        <div class="card summary-card p-4 h-100">
+            <h5 class="fw-bold text-dark mb-3"><i class="bi bi-heart-pulse-fill text-danger me-2"></i>Indikator Vital Bisnis</h5>
+            <div class="row g-3">
+                <div class="col-sm-6">
+                    <div class="p-3 bg-light rounded text-center">
+                        <small class="text-muted d-block mb-1">Gross Margin</small>
+                        <h4 class="fw-bold mb-0 text-dark {% if data.rincian_skor.nilai_gross_margin_pct >= 30 %}text-success{% else %}text-danger{% endif %}">{{ "%.1f"|format(data.rincian_skor.nilai_gross_margin_pct) }}%</h4>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="p-3 bg-light rounded text-center">
+                        <small class="text-muted d-block mb-1">Rasio Operasional</small>
+                        <h4 class="fw-bold mb-0 text-dark {% if data.rincian_skor.nilai_rasio_out <= 60 %}text-success{% else %}text-warning{% endif %}">{{ "%.1f"|format(data.rincian_skor.nilai_rasio_out) }}%</h4>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="p-3 bg-light rounded text-center">
+                        <small class="text-muted d-block mb-1">Tren Penjualan (Growth)</small>
+                        <h4 class="fw-bold mb-0 text-dark {% if data.rincian_skor.nilai_tren_growth >= 0 %}text-success{% else %}text-danger{% endif %}">{{ "%.1f"|format(data.rincian_skor.nilai_tren_growth) }}%</h4>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="p-3 bg-light rounded text-center">
+                        <small class="text-muted d-block mb-1">Margin Operasional</small>
+                        <h4 class="fw-bold mb-0 text-dark">{{ "%.1f"|format(data.rincian_skor.nilai_margin_ops) }}%</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Performa Produk -->
+    <div class="col-lg-6">
+        <div class="card summary-card p-4 h-100">
+            <h5 class="fw-bold text-dark mb-3"><i class="bi bi-box-seam-fill text-primary me-2"></i>Performa Produk (30 Hari)</h5>
+            {% if data.data_produk %}
+            <div class="row g-3">
+                <div class="col-6">
+                    <h6 class="text-success fw-bold border-bottom pb-2 mb-3"><i class="bi bi-arrow-up-circle-fill me-1"></i>Top Terlaris</h6>
+                    {% if data.data_produk.top_3_terlaris %}
+                        <ol class="ps-3 mb-0" style="font-size: 0.95rem;">
+                        {% for p in data.data_produk.top_3_terlaris %}
+                            <li class="mb-2"><span class="fw-bold text-dark">{{ p.nama }}</span> <br> <small class="text-muted">{{ p.total }} terjual</small></li>
+                        {% endfor %}
+                        </ol>
+                    {% else %}
+                        <p class="text-muted small">Belum ada data</p>
+                    {% endif %}
+                </div>
+                <div class="col-6 border-start">
+                    <h6 class="text-danger fw-bold border-bottom pb-2 mb-3"><i class="bi bi-arrow-down-circle-fill me-1"></i>Kurang Laris</h6>
+                    {% if data.data_produk.bottom_3_menurun %}
+                        <ol class="ps-3 mb-0" style="font-size: 0.95rem;">
+                        {% for p in data.data_produk.bottom_3_menurun %}
+                            <li class="mb-2"><span class="fw-bold text-dark">{{ p.nama }}</span> <br> <small class="text-muted">{{ p.total }} terjual</small></li>
+                        {% endfor %}
+                        </ol>
+                    {% else %}
+                        <p class="text-muted small">Belum ada data</p>
+                    {% endif %}
+                </div>
+            </div>
+            {% else %}
+                <div class="text-center py-4 text-muted border rounded bg-light">
+                    <i class="bi bi-inboxes fs-1 d-block mb-2 opacity-50"></i>
+                    Belum ada data produk tercatat.
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
 <!-- Visualisasi Grafik -->
 <div class="card summary-card p-4 mb-5">
     <div class="d-flex justify-content-between align-items-center mb-4">

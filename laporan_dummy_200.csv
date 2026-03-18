@@ -1,0 +1,201 @@
+tanggal,kategori,nama_produk,kuantitas,pemasukan,pengeluaran,jenis_pengeluaran,jumlah_pelanggan,catatan
+2026-01-15,Makanan & Minuman,Es Teh Manis,18,90000,74968,operasional,18,
+2026-01-15,Makanan & Minuman,Ayam Bakar Madu,2,50000,30000,operasional,2,Cuaca mendukung jualan
+2026-01-15,Makanan & Minuman,Es Jeruk,7,42000,21000,operasional,7,Beli stok bahan
+2026-01-15,Jasa,Reparasi AC,10,1500000,225408,operasional,7,Pesanan online membludak
+2026-01-16,Makanan & Minuman,Nasi Goreng Spesial,40,800000,432816,operasional,40,
+2026-01-16,Makanan & Minuman,Nasi Goreng Spesial,33,660000,330000,operasional,33,
+2026-01-16,Makanan & Minuman,Es Teh Manis,15,75000,30000,operasional,15,Pesanan online membludak
+2026-01-16,Retail,Kaus Sablon,10,500000,300000,operasional,3,
+2026-01-17,Makanan & Minuman,Es Teh Manis,23,115000,46000,operasional,23,
+2026-01-17,Makanan & Minuman,Ayam Bakar Madu,2,50000,65697,operasional,2,Ramai pelanggan rombongan
+2026-01-18,Makanan & Minuman,Ayam Bakar Madu,3,75000,80885,operasional,3,Ramai pelanggan rombongan
+2026-01-18,Makanan & Minuman,Nasi Goreng Spesial,31,620000,310000,operasional,31,Ramai pelanggan rombongan
+2026-01-18,Makanan & Minuman,Ayam Bakar Madu,2,50000,30000,operasional,2,Pesanan online membludak
+2026-01-18,Makanan & Minuman,Nasi Goreng Spesial,23,460000,230000,operasional,23,Pesanan online membludak
+2026-01-18,Makanan & Minuman,Es Teh Manis,26,130000,52000,operasional,26,Cuaca buruk jadi sepi
+2026-01-18,Makanan & Minuman,Ayam Geprek,4,72000,919184,modal,4,Beli stok bahan
+2026-01-19,Makanan & Minuman,Ayam Geprek,4,72000,40000,operasional,4,
+2026-01-19,Retail,Jaket Denim,1,150000,100000,operasional,1,Pesanan online membludak
+2026-01-19,Makanan & Minuman,Ayam Bakar Madu,1,25000,54828,operasional,1,Beli stok bahan
+2026-01-19,Makanan & Minuman,Es Teh Manis,20,100000,40000,operasional,20,Pesanan online membludak
+2026-01-20,Makanan & Minuman,Es Teh Manis,28,140000,56000,operasional,28,
+2026-01-20,Retail,Kaus Sablon,5,250000,150000,operasional,1,Ramai pelanggan rombongan
+2026-01-20,Makanan & Minuman,Es Jeruk,3,18000,9000,operasional,3,
+2026-01-21,Makanan & Minuman,Es Teh Manis,23,115000,46000,operasional,23,Cuaca mendukung jualan
+2026-01-22,Makanan & Minuman,Ayam Geprek,9,162000,90000,operasional,9,Pesanan online membludak
+2026-01-22,Makanan & Minuman,Ayam Geprek,9,162000,90000,operasional,9,Cuaca buruk jadi sepi
+2026-01-22,Makanan & Minuman,Es Teh Manis,30,150000,60000,operasional,30,
+2026-01-23,Makanan & Minuman,Nasi Goreng Spesial,26,520000,260000,operasional,26,Cuaca mendukung jualan
+2026-01-23,Makanan & Minuman,Es Jeruk,3,18000,9000,operasional,3,Cuaca buruk jadi sepi
+2026-01-23,Makanan & Minuman,Ayam Bakar Madu,2,50000,30000,operasional,2,Beli stok bahan
+2026-01-23,Retail,Kaus Sablon,8,400000,240000,operasional,5,Cuaca buruk jadi sepi
+2026-01-23,Retail,Jaket Denim,3,450000,300000,operasional,2,Pesanan online membludak
+2026-01-23,Makanan & Minuman,Nasi Goreng Spesial,18,360000,180000,operasional,18,
+2026-01-24,Retail,Jaket Denim,3,450000,300000,operasional,3,
+2026-01-24,Makanan & Minuman,Es Jeruk,7,42000,61639,operasional,7,
+2026-01-26,Jasa,Reparasi AC,9,1350000,180000,operasional,1,Cuaca mendukung jualan
+2026-01-27,Makanan & Minuman,Nasi Goreng Spesial,31,620000,310000,operasional,31,Ramai pelanggan rombongan
+2026-01-27,Jasa,Cuci Motor,3,45000,29903,operasional,2,Beli stok bahan
+2026-01-27,Retail,Kaus Sablon,9,450000,270000,operasional,8,Cuaca buruk jadi sepi
+2026-01-27,Makanan & Minuman,Ayam Bakar Madu,2,50000,30000,operasional,2,Cuaca mendukung jualan
+2026-01-27,Makanan & Minuman,Es Jeruk,5,30000,15000,operasional,5,
+2026-01-28,Makanan & Minuman,Es Jeruk,3,18000,9000,operasional,3,
+2026-01-29,Makanan & Minuman,Nasi Goreng Spesial,23,460000,1716690,modal,23,Beli stok bahan
+2026-01-29,Makanan & Minuman,Es Jeruk,10,60000,63202,operasional,10,Beli stok bahan
+2026-01-29,Makanan & Minuman,Es Jeruk,4,24000,43963,operasional,4,Pesanan online membludak
+2026-01-29,Makanan & Minuman,Ayam Bakar Madu,1,25000,1390469,modal,1,
+2026-01-29,Makanan & Minuman,Ayam Bakar Madu,1,25000,15000,operasional,1,
+2026-01-29,Makanan & Minuman,Es Teh Manis,23,115000,82477,operasional,23,
+2026-01-29,Makanan & Minuman,Es Teh Manis,36,180000,72000,operasional,36,
+2026-01-29,Makanan & Minuman,Es Teh Manis,23,115000,74957,operasional,23,
+2026-01-30,Makanan & Minuman,Nasi Goreng Spesial,38,760000,380000,operasional,38,
+2026-01-30,Makanan & Minuman,Nasi Goreng Spesial,19,380000,190000,operasional,19,
+2026-01-30,Jasa,Cuci Motor,10,150000,20000,operasional,9,
+2026-01-30,Makanan & Minuman,Nasi Goreng Spesial,38,760000,380000,operasional,38,
+2026-01-30,Makanan & Minuman,Es Teh Manis,19,95000,38000,operasional,19,Cuaca mendukung jualan
+2026-01-31,Makanan & Minuman,Ayam Bakar Madu,1,25000,15000,operasional,1,Ramai pelanggan rombongan
+2026-01-31,Makanan & Minuman,Nasi Goreng Spesial,23,460000,261953,operasional,23,Cuaca buruk jadi sepi
+2026-01-31,Makanan & Minuman,Ayam Geprek,3,54000,30000,operasional,3,Ramai pelanggan rombongan
+2026-02-01,Makanan & Minuman,Es Jeruk,6,36000,18000,operasional,6,Pesanan online membludak
+2026-02-01,Retail,Kaus Sablon,8,400000,1297282,modal,2,
+2026-02-01,Makanan & Minuman,Ayam Bakar Madu,3,75000,45000,operasional,3,
+2026-02-01,Makanan & Minuman,Es Teh Manis,16,80000,32000,operasional,16,Beli stok bahan
+2026-02-01,Makanan & Minuman,Nasi Goreng Spesial,23,460000,251713,operasional,23,
+2026-02-01,Makanan & Minuman,Es Jeruk,6,36000,18000,operasional,6,
+2026-02-02,Makanan & Minuman,Ayam Bakar Madu,2,50000,30000,operasional,2,
+2026-02-02,Jasa,Reparasi AC,9,1350000,180000,operasional,6,Cuaca buruk jadi sepi
+2026-02-02,Retail,Kaus Sablon,10,500000,300000,operasional,9,Pesanan online membludak
+2026-02-03,Makanan & Minuman,Nasi Goreng Spesial,26,520000,260000,operasional,26,
+2026-02-03,Makanan & Minuman,Ayam Geprek,7,126000,106579,operasional,7,Cuaca mendukung jualan
+2026-02-03,Makanan & Minuman,Es Jeruk,9,54000,48890,operasional,9,
+2026-02-03,Makanan & Minuman,Es Teh Manis,35,175000,70000,operasional,35,Ramai pelanggan rombongan
+2026-02-03,Makanan & Minuman,Es Jeruk,3,18000,9000,operasional,3,
+2026-02-04,Retail,Jaket Denim,1,150000,100000,operasional,1,
+2026-02-04,Makanan & Minuman,Ayam Bakar Madu,3,75000,45000,operasional,3,Ramai pelanggan rombongan
+2026-02-04,Makanan & Minuman,Es Teh Manis,40,200000,117132,operasional,40,Beli stok bahan
+2026-02-05,Retail,Jaket Denim,2,300000,200000,operasional,2,Pesanan online membludak
+2026-02-05,Makanan & Minuman,Es Teh Manis,24,120000,48000,operasional,24,Pesanan online membludak
+2026-02-06,Makanan & Minuman,Es Teh Manis,38,190000,99200,operasional,38,
+2026-02-07,Makanan & Minuman,Es Jeruk,9,54000,27000,operasional,9,Cuaca mendukung jualan
+2026-02-07,Makanan & Minuman,Ayam Bakar Madu,3,75000,820431,modal,3,
+2026-02-07,Makanan & Minuman,Ayam Bakar Madu,2,50000,30000,operasional,2,
+2026-02-07,Makanan & Minuman,Nasi Goreng Spesial,18,360000,180000,operasional,18,
+2026-02-07,Makanan & Minuman,Ayam Bakar Madu,3,75000,45000,operasional,3,Beli stok bahan
+2026-02-07,Retail,Kaus Sablon,10,500000,300000,operasional,5,
+2026-02-07,Makanan & Minuman,Es Jeruk,10,60000,30000,operasional,10,Cuaca buruk jadi sepi
+2026-02-09,Jasa,Cuci Motor,3,45000,6000,operasional,1,Cuaca mendukung jualan
+2026-02-09,Retail,Kaus Sablon,8,400000,240000,operasional,5,
+2026-02-09,Makanan & Minuman,Es Jeruk,5,30000,15000,operasional,5,
+2026-02-09,Makanan & Minuman,Nasi Goreng Spesial,38,760000,421529,operasional,38,Cuaca buruk jadi sepi
+2026-02-10,Makanan & Minuman,Ayam Geprek,9,162000,90000,operasional,9,Cuaca buruk jadi sepi
+2026-02-10,Makanan & Minuman,Nasi Goreng Spesial,34,680000,340000,operasional,34,
+2026-02-10,Makanan & Minuman,Es Teh Manis,34,170000,68000,operasional,34,Beli stok bahan
+2026-02-10,Makanan & Minuman,Es Jeruk,6,36000,18000,operasional,6,
+2026-02-11,Retail,Kaus Sablon,10,500000,300000,operasional,1,
+2026-02-12,Makanan & Minuman,Ayam Bakar Madu,3,75000,45000,operasional,3,Cuaca mendukung jualan
+2026-02-12,Retail,Jaket Denim,1,150000,100000,operasional,1,
+2026-02-13,Makanan & Minuman,Nasi Goreng Spesial,37,740000,407514,operasional,37,Pesanan online membludak
+2026-02-13,Makanan & Minuman,Ayam Bakar Madu,3,75000,45000,operasional,3,Cuaca buruk jadi sepi
+2026-02-13,Retail,Jaket Denim,3,450000,300000,operasional,2,Ramai pelanggan rombongan
+2026-02-14,Retail,Kaus Sablon,10,500000,300000,operasional,3,Cuaca mendukung jualan
+2026-02-14,Makanan & Minuman,Ayam Geprek,5,90000,640742,modal,5,Beli stok bahan
+2026-02-14,Makanan & Minuman,Ayam Geprek,10,180000,136650,operasional,10,Beli stok bahan
+2026-02-15,Makanan & Minuman,Es Jeruk,6,36000,66742,operasional,6,Cuaca buruk jadi sepi
+2026-02-15,Retail,Jaket Denim,1,150000,100000,operasional,1,
+2026-02-15,Retail,Kaus Sablon,7,350000,210000,operasional,6,Cuaca buruk jadi sepi
+2026-02-15,Makanan & Minuman,Ayam Geprek,4,72000,77834,operasional,4,Pesanan online membludak
+2026-02-16,Jasa,Reparasi AC,4,600000,80000,operasional,3,Beli stok bahan
+2026-02-16,Makanan & Minuman,Nasi Goreng Spesial,34,680000,340000,operasional,34,
+2026-02-16,Makanan & Minuman,Nasi Goreng Spesial,21,420000,259235,operasional,21,Cuaca mendukung jualan
+2026-02-16,Retail,Kaus Sablon,10,500000,300000,operasional,2,
+2026-02-17,Retail,Kaus Sablon,9,450000,270000,operasional,8,
+2026-02-17,Makanan & Minuman,Ayam Bakar Madu,2,50000,59960,operasional,2,Beli stok bahan
+2026-02-17,Jasa,Cuci Motor,10,150000,20000,operasional,10,Cuaca mendukung jualan
+2026-02-17,Makanan & Minuman,Ayam Bakar Madu,3,75000,45000,operasional,3,
+2026-02-17,Makanan & Minuman,Ayam Bakar Madu,3,75000,45000,operasional,3,
+2026-02-17,Retail,Jaket Denim,3,450000,300000,operasional,1,Cuaca buruk jadi sepi
+2026-02-17,Makanan & Minuman,Nasi Goreng Spesial,34,680000,340000,operasional,34,Cuaca buruk jadi sepi
+2026-02-18,Retail,Jaket Denim,2,300000,200000,operasional,1,Ramai pelanggan rombongan
+2026-02-18,Jasa,Reparasi AC,5,750000,145745,operasional,3,
+2026-02-19,Jasa,Reparasi AC,3,450000,60000,operasional,2,
+2026-02-19,Makanan & Minuman,Ayam Geprek,7,126000,70000,operasional,7,
+2026-02-19,Jasa,Cuci Motor,9,135000,18000,operasional,7,Pesanan online membludak
+2026-02-19,Makanan & Minuman,Es Teh Manis,37,185000,74000,operasional,37,Ramai pelanggan rombongan
+2026-02-20,Jasa,Reparasi AC,7,1050000,140000,operasional,7,
+2026-02-20,Makanan & Minuman,Ayam Geprek,4,72000,40000,operasional,4,Cuaca buruk jadi sepi
+2026-02-20,Makanan & Minuman,Es Jeruk,4,24000,12000,operasional,4,Beli stok bahan
+2026-02-20,Makanan & Minuman,Es Jeruk,10,60000,30000,operasional,10,
+2026-02-20,Makanan & Minuman,Es Teh Manis,26,130000,80101,operasional,26,Cuaca buruk jadi sepi
+2026-02-20,Makanan & Minuman,Ayam Geprek,4,72000,40000,operasional,4,Pesanan online membludak
+2026-02-21,Makanan & Minuman,Ayam Bakar Madu,2,50000,30000,operasional,2,
+2026-02-21,Retail,Jaket Denim,2,300000,200000,operasional,2,Ramai pelanggan rombongan
+2026-02-21,Makanan & Minuman,Nasi Goreng Spesial,15,300000,150000,operasional,15,
+2026-02-21,Makanan & Minuman,Es Teh Manis,34,170000,68000,operasional,34,
+2026-02-21,Makanan & Minuman,Ayam Bakar Madu,3,75000,68150,operasional,3,Pesanan online membludak
+2026-02-22,Makanan & Minuman,Es Teh Manis,38,190000,118748,operasional,38,Beli stok bahan
+2026-02-22,Makanan & Minuman,Es Jeruk,3,18000,9000,operasional,3,Cuaca mendukung jualan
+2026-02-22,Makanan & Minuman,Nasi Goreng Spesial,25,500000,250000,operasional,25,Pesanan online membludak
+2026-02-23,Makanan & Minuman,Ayam Bakar Madu,2,50000,30000,operasional,2,Ramai pelanggan rombongan
+2026-02-24,Makanan & Minuman,Nasi Goreng Spesial,32,640000,320000,operasional,32,
+2026-02-24,Makanan & Minuman,Ayam Geprek,3,54000,1013211,modal,3,
+2026-02-24,Jasa,Cuci Motor,7,105000,14000,operasional,5,Pesanan online membludak
+2026-02-25,Makanan & Minuman,Es Jeruk,6,36000,41364,operasional,6,Beli stok bahan
+2026-02-25,Makanan & Minuman,Es Teh Manis,15,75000,30000,operasional,15,
+2026-02-26,Makanan & Minuman,Ayam Bakar Madu,3,75000,45000,operasional,3,
+2026-02-26,Makanan & Minuman,Nasi Goreng Spesial,25,500000,250000,operasional,25,Cuaca mendukung jualan
+2026-02-27,Jasa,Reparasi AC,4,600000,80000,operasional,2,
+2026-02-28,Makanan & Minuman,Es Jeruk,8,48000,24000,operasional,8,
+2026-02-28,Jasa,Reparasi AC,9,1350000,1611911,modal,8,Ramai pelanggan rombongan
+2026-02-28,Makanan & Minuman,Nasi Goreng Spesial,20,400000,243897,operasional,20,
+2026-03-01,Jasa,Reparasi AC,9,1350000,735248,modal,5,
+2026-03-01,Makanan & Minuman,Ayam Geprek,6,108000,60000,operasional,6,
+2026-03-01,Makanan & Minuman,Es Jeruk,10,60000,75937,operasional,10,Pesanan online membludak
+2026-03-01,Jasa,Cuci Motor,4,60000,8000,operasional,3,Beli stok bahan
+2026-03-02,Retail,Jaket Denim,1,150000,100000,operasional,1,Cuaca buruk jadi sepi
+2026-03-02,Jasa,Reparasi AC,9,1350000,180000,operasional,8,
+2026-03-02,Jasa,Cuci Motor,10,150000,20000,operasional,5,
+2026-03-02,Makanan & Minuman,Ayam Bakar Madu,1,25000,39393,operasional,1,Cuaca buruk jadi sepi
+2026-03-03,Makanan & Minuman,Ayam Bakar Madu,2,50000,63886,operasional,2,Beli stok bahan
+2026-03-03,Makanan & Minuman,Es Jeruk,3,18000,571509,modal,3,Cuaca mendukung jualan
+2026-03-03,Makanan & Minuman,Ayam Bakar Madu,1,25000,15000,operasional,1,
+2026-03-04,Makanan & Minuman,Ayam Geprek,3,54000,30000,operasional,3,
+2026-03-04,Retail,Jaket Denim,2,300000,233842,operasional,1,
+2026-03-04,Makanan & Minuman,Es Teh Manis,33,165000,66000,operasional,33,Cuaca mendukung jualan
+2026-03-04,Makanan & Minuman,Nasi Goreng Spesial,38,760000,418974,operasional,38,
+2026-03-05,Makanan & Minuman,Es Teh Manis,15,75000,30000,operasional,15,Beli stok bahan
+2026-03-05,Jasa,Cuci Motor,10,150000,20000,operasional,4,Cuaca mendukung jualan
+2026-03-05,Makanan & Minuman,Nasi Goreng Spesial,28,560000,280000,operasional,28,
+2026-03-05,Makanan & Minuman,Es Jeruk,3,18000,9000,operasional,3,
+2026-03-05,Makanan & Minuman,Ayam Bakar Madu,2,50000,30000,operasional,2,Cuaca buruk jadi sepi
+2026-03-05,Makanan & Minuman,Ayam Geprek,8,144000,80000,operasional,8,Pesanan online membludak
+2026-03-06,Makanan & Minuman,Es Teh Manis,15,75000,30000,operasional,15,Ramai pelanggan rombongan
+2026-03-06,Retail,Kaus Sablon,9,450000,270000,operasional,3,
+2026-03-06,Makanan & Minuman,Es Teh Manis,39,195000,104651,operasional,39,
+2026-03-06,Retail,Kaus Sablon,8,400000,240000,operasional,6,
+2026-03-07,Makanan & Minuman,Ayam Geprek,6,108000,60000,operasional,6,Beli stok bahan
+2026-03-07,Makanan & Minuman,Es Teh Manis,31,155000,62000,operasional,31,Ramai pelanggan rombongan
+2026-03-07,Retail,Jaket Denim,3,450000,300000,operasional,3,Cuaca buruk jadi sepi
+2026-03-07,Makanan & Minuman,Nasi Goreng Spesial,20,400000,200000,operasional,20,Ramai pelanggan rombongan
+2026-03-07,Makanan & Minuman,Ayam Bakar Madu,3,75000,45000,operasional,3,
+2026-03-08,Jasa,Cuci Motor,4,60000,44987,operasional,1,Cuaca mendukung jualan
+2026-03-09,Makanan & Minuman,Nasi Goreng Spesial,23,460000,259744,operasional,23,Pesanan online membludak
+2026-03-10,Retail,Kaus Sablon,6,300000,180000,operasional,5,
+2026-03-10,Retail,Jaket Denim,1,150000,100000,operasional,1,Cuaca mendukung jualan
+2026-03-10,Makanan & Minuman,Nasi Goreng Spesial,38,760000,405128,operasional,38,Cuaca mendukung jualan
+2026-03-11,Makanan & Minuman,Es Jeruk,8,48000,24000,operasional,8,
+2026-03-11,Makanan & Minuman,Ayam Geprek,8,144000,80000,operasional,8,Cuaca mendukung jualan
+2026-03-11,Makanan & Minuman,Es Jeruk,9,54000,27000,operasional,9,Pesanan online membludak
+2026-03-11,Makanan & Minuman,Es Teh Manis,31,155000,98950,operasional,31,
+2026-03-12,Makanan & Minuman,Ayam Geprek,10,180000,100000,operasional,10,Ramai pelanggan rombongan
+2026-03-13,Makanan & Minuman,Es Jeruk,9,54000,27000,operasional,9,Pesanan online membludak
+2026-03-14,Retail,Jaket Denim,2,300000,200000,operasional,2,
+2026-03-14,Makanan & Minuman,Ayam Bakar Madu,2,50000,67369,operasional,2,
+2026-03-14,Makanan & Minuman,Ayam Geprek,3,54000,30000,operasional,3,Pesanan online membludak
+2026-03-15,Makanan & Minuman,Ayam Bakar Madu,2,50000,30000,operasional,2,Cuaca buruk jadi sepi
+2026-03-16,Makanan & Minuman,Ayam Geprek,10,180000,131116,operasional,10,Cuaca mendukung jualan
+2026-03-16,Makanan & Minuman,Ayam Bakar Madu,3,75000,1085549,modal,3,Beli stok bahan
+2026-03-16,Makanan & Minuman,Es Jeruk,3,18000,9000,operasional,3,
+2026-03-16,Makanan & Minuman,Es Jeruk,5,30000,15000,operasional,5,
+2026-03-16,Makanan & Minuman,Es Jeruk,9,54000,27000,operasional,9,Ramai pelanggan rombongan
+2026-03-16,Retail,Jaket Denim,3,450000,300000,operasional,2,

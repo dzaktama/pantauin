@@ -80,15 +80,23 @@ def get_chatbot_response(user_message, context_data):
 def format_rp(nilai):
     return f"{int(nilai):,}".replace(",", ".")
 
-def get_pdf_narration(nama_bisnis, skor, label_skor, total_pemasukan, total_pengeluaran_ops, saldo_bersih, avg_harian_masuk, gross_margin, tren_penjualan, stabilitas, rasio_pengeluaran, konsistensi, peringatan_list, proyeksi_pemasukan, proyeksi_saldo):
+def get_pdf_narration(nama_bisnis, skor, label_skor, total_pemasukan, total_pengeluaran_ops, saldo_bersih, avg_harian_masuk, gross_margin, tren_penjualan, stabilitas, rasio_pengeluaran, konsistensi, peringatan_list, proyeksi_pemasukan, proyeksi_saldo, data_produk=None):
     """
-    Membuat analisis empat paragraf untuk PDF berdasarkan instruksi konsultan UMKM.
+    bikin narasi laporan pdf yang memuat angka performa dan rekomendasi taktis tentang produk
     """
     if not model:
         return "Capaian bulan ini sudah tercatat. Terus perhatikan tren perbandingan pemasukan dan pengeluaran Anda.\nFokuslah pada pencatatan harian yang konsisten untuk analisis yang lebih baik.\nManajemen arus kas yang ketat akan memuluskan langkah bisnis.\nSimpan sebagian laba sebagai dana darurat setidaknya 2 minggu operasional."
 
     try:
         peringatan_str = ", ".join(peringatan_list) if peringatan_list else "Tidak ada"
+        
+        data_produk_text = ""
+        if data_produk:
+            top_3 = ", ".join([f"{p['nama']} ({p['total']} terjual)" for p in data_produk.get('top_3_terlaris', [])])
+            bottom_3 = ", ".join([f"{p['nama']} ({p['total']} terjual)" for p in data_produk.get('bottom_3_menurun', [])])
+            if top_3 or bottom_3:
+                data_produk_text = f"Data Produk Terlaris: {top_3}. Produk Kurang Laris (Dead Stock): {bottom_3}."
+
         prompt = f"""
         Kamu adalah konsultan bisnis berpengalaman yang sedang menulis laporan untuk pemilik UMKM bernama "{nama_bisnis}".
 
@@ -106,6 +114,7 @@ def get_pdf_narration(nama_bisnis, skor, label_skor, total_pemasukan, total_peng
         - Peringatan aktif: {peringatan_str}
         - Proyeksi pemasukan 4 minggu ke depan: Rp {format_rp(proyeksi_pemasukan)}
         - Proyeksi saldo 4 minggu ke depan: Rp {format_rp(proyeksi_saldo)}
+        - Catatan Performa Produk: {data_produk_text}
 
         Tulis analisis dalam TEPAT 4 paragraf pendek, masing-masing 3-4 kalimat. Gunakan bahasa yang mudah dipahami pemilik warung atau pedagang pasar — hindari istilah keuangan yang terlalu teknis. Sebut nama bisnis "{nama_bisnis}" minimal sekali. Sebut angka spesifik dari data di atas.
 
@@ -115,7 +124,7 @@ def get_pdf_narration(nama_bisnis, skor, label_skor, total_pemasukan, total_peng
 
         Paragraf 3 — YANG PERLU DIPERBAIKI: Sebutkan 1-2 indikator dengan nilai terendah. Jelaskan risiko konkretnya jika dibiarkan. Sebut angka spesifik.
 
-        Paragraf 4 — LANGKAH SELANJUTNYA: Berikan 2-3 tindakan konkret yang bisa dilakukan minggu ini. Spesifik dan actionable, bukan saran umum.
+        Paragraf 4 — LANGKAH SELANJUTNYA: Berikan tindakan konkret yang bisa dilakukan minggu ini berkaitan dengan nama-nama produk yang laku dan yang tidak laku berdasarkan Catatan Performa Produk di atas. Beri rekomendasi taktis (misal penyesuaian stok, bundel promosi, dll) yang menyebut langsung nama produk tersebut.
 
         Jangan gunakan bullet point. Tulis dalam paragraf mengalir. Maksimal 250 kata total.
         """

@@ -38,6 +38,7 @@
                 <tr>
                     <th class="py-3">Tanggal</th>
                     <th class="py-3 text-start">Kategori</th>
+                    <th class="py-3 text-start">Produk (Qty)</th>
                     <th class="py-3 text-success">(+) Masuk</th>
                     <th class="py-3 text-danger">(-) Keluar</th>
                     <th class="py-3" title="Jumlah Pelanggan"><i class="bi bi-people-fill"></i></th>
@@ -55,6 +56,14 @@
                         {% if row.jenis_pengeluaran == 'modal' %}<br><span class="badge bg-warning text-dark mt-1"
                             style="font-size:0.65rem;">Modal</span>{% endif %}
                     </td>
+                    <td class="text-start text-muted">
+                        {% if row.nama_produk %}
+                            <span class="fw-bold">{{ row.nama_produk }}</span>
+                            <br><small class="text-primary">{{ row.kuantitas }} unit</small>
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
                     <td class="fw-bold text-success js-rupiah" data-val="{{ row.pemasukan }}">0</td>
                     <td class="fw-bold text-danger js-rupiah" data-val="{{ row.pengeluaran }}">0</td>
                     <td class="text-muted">{{ row.jumlah_pelanggan if row.jumlah_pelanggan > 0 else '-' }}</td>
@@ -65,7 +74,7 @@
                 {% endfor %}
                 {% else %}
                 <tr>
-                    <td colspan="6" class="py-5 text-muted">
+                    <td colspan="7" class="py-5 text-muted">
                         <i class="bi bi-search fs-1 d-block mb-3 opacity-50"></i>
                         Tidak ada transaksi yang sesuai dengan kriteria pencariamu.
                     </td>

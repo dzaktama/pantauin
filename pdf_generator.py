@@ -214,7 +214,8 @@ def generate_pdf_report(
     user_name, score, avg_in, avg_out, warnings, catatan_mingguan,
     output_path, breakdown, stat_4_minggu, proyeksi, proyeksi_pengeluaran,
     tgl_cetak_dt, tgl_mulai_dt, tgl_akhir_dt,
-    kustom_teks_ai=None, lampir_proyeksi=True, profil_dict=None
+    kustom_teks_ai=None, lampir_proyeksi=True, profil_dict=None,
+    data_produk=None
 ):
     """
     Laporan Kesehatan Bisnis – Format Profesional (Bankable)
@@ -832,6 +833,38 @@ def generate_pdf_report(
     elements.append(PageBreak())
 
     # ══════════════════════════════════════════
+    # SEKELUMIT PERFORMA PRODUK
+    # ══════════════════════════════════════════
+    if data_produk and (data_produk.get('top_3_terlaris') or data_produk.get('bottom_3_menurun')):
+        elements.append(Paragraph(f"{sec}. PERFORMA PRODUK 30 HARI TERAKHIR", st_h1)); sec+=1
+        elements.append(HRFlowable(width=W, thickness=1, color=C_ACCENT, spaceAfter=8))
+        
+        prod_data = [[Paragraph(h, st_tbl_head) for h in ["Kategori", "Nama Produk", "Total Terjual"]]]
+        
+        if data_produk.get('top_3_terlaris'):
+            for idx, p in enumerate(data_produk['top_3_terlaris']):
+                cat = "TOP 3 TERLARIS" if idx == 0 else ""
+                prod_data.append([
+                    Paragraph(f"<b>{cat}</b>", S(f"pt{idx}", fontName="Helvetica-Bold", fontSize=9, textColor=C_GREEN)),
+                    Paragraph(p['nama'], st_tbl_cell_c),
+                    Paragraph(f"{p['total']} unit", st_tbl_cell_c)
+                ])
+                
+        if data_produk.get('bottom_3_menurun'):
+            for idx, p in enumerate(data_produk['bottom_3_menurun']):
+                cat = "BOTTOM 3 MENURUN" if idx == 0 else ""
+                prod_data.append([
+                    Paragraph(f"<b>{cat}</b>", S(f"pb{idx}", fontName="Helvetica-Bold", fontSize=9, textColor=C_RED)),
+                    Paragraph(p['nama'], st_tbl_cell_c),
+                    Paragraph(f"{p['total']} unit", st_tbl_cell_c)
+                ])
+
+        ts_prod = tbl_style_base()
+        ts_prod.add("ALIGN",(0,0),(-1,-1),"CENTER")
+        elements.append(Table(prod_data, colWidths=[4*cm, 8*cm, W-12*cm], style=ts_prod))
+        elements.append(Spacer(1, 16))
+
+    # ══════════════════════════════════════════
     # HALAMAN 7 – ANALISIS NARATIF
     # ══════════════════════════════════════════
     elements.append(Paragraph(f"{sec}. ANALISIS NARATIF", st_h1)); sec+=1
@@ -853,7 +886,8 @@ def generate_pdf_report(
                 rasio_pengeluaran=rasio_pengeluaran, konsistensi=konsistensi,
                 peringatan_list=warnings,
                 proyeksi_pemasukan=sum(proyeksi) if proyeksi else 0,
-                proyeksi_saldo=sum(p[3] for p in proy_arr_safe) if proy_arr_safe else 0
+                proyeksi_saldo=sum(p[3] for p in proy_arr_safe) if proy_arr_safe else 0,
+                data_produk=data_produk
             )
     except Exception:
         ai_text = (

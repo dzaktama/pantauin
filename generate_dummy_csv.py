@@ -1,106 +1,82 @@
 import csv
-import random
 from datetime import date, timedelta
-import math
+import random
 
-def generate_csv(filename, days_count=90):
-    start_date = date.today() - timedelta(days=days_count - 1)
+header = ['tanggal', 'kategori', 'nama_produk', 'kuantitas', 'pemasukan', 'pengeluaran', 'jenis_pengeluaran', 'jumlah_pelanggan', 'catatan']
+kategori_produk = {
+    'Makanan & Minuman': [
+        ('Nasi Goreng Spesial', 20000, 10000), 
+        ('Es Teh Manis', 5000, 2000), 
+        ('Ayam Geprek', 18000, 10000),
+        ('Ayam Bakar Madu', 25000, 15000),
+        ('Es Jeruk', 6000, 3000)
+    ],
+    'Retail': [
+        ('Kaus Sablon', 50000, 30000),
+        ('Jaket Denim', 150000, 100000)
+    ],
+    'Jasa': [
+        ('Reparasi AC', 150000, 20000),
+        ('Cuci Motor', 15000, 2000)
+    ]
+}
+
+# Mulai dari pertengahan Januari 2026 agar mencakup 45-60 hari penuh hingga Maret 2026
+start_date = date(2026, 1, 15) 
+days = 60
+
+data = []
+
+for i in range(200):
+    kategori = random.choices(['Makanan & Minuman', 'Retail', 'Jasa'], weights=[70, 20, 10])[0]
+    produk, harga_jual, harga_modal = random.choice(kategori_produk[kategori])
     
-    # Target parameter for score ~73
-    # 1. Stabilitas Cashflow (Margin Operasional > 20% -> Skor 100) -> Bobot 25% = 25
-    # 2. Tren Penjualan pertumbuhannya positif tapi tidak terlalu ekstrim -> Skor ~60 -> Bobot 25% = 15
-    # 3. Rasio Pengeluaran Operasional ~65% -> Skor 35 -> Bobot 20% = 7
-    # 4. Gross Margin Harian dijaga di angka ~25% -> Skor 83 -> Bobot 20% = 16.6
-    # 5. Konsistensi Pemasukan (CV 0.1) -> Skor 90 -> Bobot 10% = 9
-    # Total ~ 72.6 (dibulatkan jadi 73)
-
-    records = []
+    # Memanipulasi data agar AI menghasilkan rekomendasi menarik
+    if produk == 'Nasi Goreng Spesial' or produk == 'Es Teh Manis':
+        kuantitas = random.randint(15, 40) # Laris manis
+    elif produk == 'Ayam Bakar Madu' or produk == 'Jaket Denim':
+        kuantitas = random.randint(1, 3) # Dead stock / kurang laku
+    else:
+        kuantitas = random.randint(3, 10) # Rata-rata
+        
+    pemasukan = kuantitas * harga_jual
+    pengeluaran = kuantitas * harga_modal
     
-    # Base configuration
-    base_revenue = 1500000  # Pemasukan harian dasar Rp 1.500.000
+    # Overhead harian acak
+    jenis_pengeluaran = 'operasional'
+    if random.random() < 0.3:
+        pengeluaran += random.randint(20000, 50000)
+        
+    # Kadang ada pembelian modal besar
+    if random.random() < 0.05:
+        pengeluaran += random.randint(500000, 1500000)
+        jenis_pengeluaran = 'modal'
+
+    tanggal_transaksi = start_date + timedelta(days=random.randint(0, days))
+    jumlah_pelanggan = kuantitas if kategori == 'Makanan & Minuman' else random.randint(1, max(1, kuantitas))
     
-    for day in range(days_count):
-        current_date = start_date + timedelta(days=day)
-        
-        # 1. Pemasukan (Konsisten dengan sedikit variasi + tren naik pelan)
-        # Tambahkan tren linear yang sangat lambat (misal naik Rp 2.000 per hari)
-        trend_factor = day * 2000
-        # Variasi acak ± 10% untuk konsistensi (CV kecil)
-        daily_revenue = base_revenue + trend_factor + random.uniform(-150000, 150000)
-        
-        # 2. Pengeluaran Operasional (Target Rasio ~65% sampai 70% dari pemasukan)
-        # Ini akan mempengaruhi Stabilitas Cashflow (Margin Operasional) dan Rasio Pengeluaran
-        op_ratio = random.uniform(0.65, 0.70)
-        daily_op_expense = daily_revenue * op_ratio
-        
-        # 3. Pengeluaran Modal (Jarang terjadi, mungkin sebulan 1-2 kali)
-        daily_modal_expense = 0
-        if random.random() < 0.05:  # 5% peluang ada pengeluaran modal
-            daily_modal_expense = random.uniform(500000, 1500000)
+    catatan_opsi = ['', '', '', 'Ramai pelanggan rombongan', 'Cuaca mendukung jualan', 'Cuaca buruk jadi sepi', 'Beli stok bahan', 'Pesanan online membludak']
+    catatan = random.choice(catatan_opsi)
+    
+    data.append([
+        tanggal_transaksi.strftime('%Y-%m-%d'),
+        kategori,
+        produk,
+        kuantitas,
+        pemasukan,
+        pengeluaran,
+        jenis_pengeluaran,
+        jumlah_pelanggan,
+        catatan
+    ])
 
-        # Pecah transaksi harian menjadi beberapa baris (minimal mencapai total 1000 baris dalam 90 hari)
-        # Target: ~11 baris per hari (90 * 11 = 990 baris)
-        num_transactions = random.randint(10, 14)
-        
-        # Alokasikan pemasukan ke beberapa transaksi
-        revenue_chunks = []
-        remaining_rev = daily_revenue
-        for i in range(num_transactions // 2):
-            if i == (num_transactions // 2) - 1:
-                chunk = remaining_rev
-            else:
-                chunk = remaining_rev * random.uniform(0.1, 0.4)
-            revenue_chunks.append(int(chunk))
-            remaining_rev -= chunk
-            
-        # Alokasikan pengeluaran operasional
-        op_chunks = []
-        remaining_op = daily_op_expense
-        for i in range(num_transactions // 2):
-            if i == (num_transactions // 2) - 1:
-                chunk = remaining_op
-            else:
-                chunk = remaining_op * random.uniform(0.1, 0.5)
-            op_chunks.append(int(chunk))
-            remaining_op -= chunk
+# Urutkan berdasarkan tanggal terlama ke terbaru
+data.sort(key=lambda x: x[0])
 
-        # Buat records untuk hari ini
-        for idx in range(num_transactions // 2):
-            # Transaksi Pemasukan
-            records.append({
-                'tanggal': current_date.strftime('%Y-%m-%d'),
-                'keterangan': f"Penjualan Produk {random.choice(['A', 'B', 'C', 'Paket Khusus'])}",
-                'pemasukan': revenue_chunks[idx],
-                'pengeluaran': 0,
-                'jenis_pengeluaran': ''
-            })
-            
-            # Transaksi Pengeluaran Operasional
-            records.append({
-                'tanggal': current_date.strftime('%Y-%m-%d'),
-                'keterangan': f"Beli Bahan Baku {random.choice(['Tepung', 'Daging', 'Sayuran', 'Kemasan'])}",
-                'pemasukan': 0,
-                'pengeluaran': op_chunks[idx],
-                'jenis_pengeluaran': 'operasional'
-            })
-            
-        # Jika ada pengeluaran modal hari ini, tambahkan sebagai 1 baris terpisah
-        if daily_modal_expense > 0:
-            records.append({
-                'tanggal': current_date.strftime('%Y-%m-%d'),
-                'keterangan': f"Beli Aset {random.choice(['Etalase', 'Mesin Pres', 'Renovasi Kios'])}",
-                'pemasukan': 0,
-                'pengeluaran': int(daily_modal_expense),
-                'jenis_pengeluaran': 'modal'
-            })
+# Simpan jadi CSV
+with open('laporan_dummy_200.csv', 'w', newline='', encoding='utf-8') as f:
+    writer = csv.writer(f)
+    writer.writerow(header)
+    writer.writerows(data)
 
-    # Tulis ke file CSV
-    with open(filename, mode='w', newline='', encoding='utf-8') as file:
-        writer = csv.DictWriter(file, fieldnames=['tanggal', 'keterangan', 'pemasukan', 'pengeluaran', 'jenis_pengeluaran'])
-        writer.writeheader()
-        writer.writerows(records)
-
-    print(f"Berhasil membuat {len(records)} baris data di '{filename}'.")
-
-if __name__ == '__main__':
-    generate_csv('data_dummy_73.csv', days_count=90)
+print("Berhasil membuat file laporan_dummy_200.csv di dalam folder PANTAUIN")

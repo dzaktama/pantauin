@@ -203,9 +203,6 @@ def create_app(config_class=Config):
             if data is None or saran_gemini is None:
                 transaksi_list = Transaksi.query.filter_by(buku_kas_id=buku_kas_id).order_by(Transaksi.tanggal.asc()).all()
                 data = hitung_health_score(transaksi_list, periode_grafik=periode)
-                
-                t_list_30 = [t for t in transaksi_list if (date.today() - t.tanggal).days <= 30]
-                data_produk = analisis_tren_produk(t_list_30)
 
                 # Panggil Gemini jika data valid
                 if data['is_cukup']:
@@ -213,7 +210,7 @@ def create_app(config_class=Config):
                         data['skor'], data['total_pemasukan_minggu_ini'], 
                         data['total_pengeluaran_minggu_ini'], data['tren_status'],
                         data.get('catatan_mingguan', []),
-                        data_produk
+                        data.get('data_produk')
                     )
                 else:
                     saran_gemini = "Saran belum tersedia. Lengkapi pencatatan laporan buku ini setidaknya 14 hari."
@@ -389,6 +386,8 @@ def create_app(config_class=Config):
                                 buku_kas_id=buku_kas_id,
                                 tanggal=datetime.strptime(row['tanggal'], '%Y-%m-%d').date(),
                                 kategori=row.get('kategori', 'Lainnya'),
+                                nama_produk=row.get('nama_produk') or None,
+                                kuantitas=int(row.get('kuantitas') or 0),
                                 jenis_pengeluaran=row.get('jenis_pengeluaran', 'operasional').lower() if row.get('jenis_pengeluaran') else 'operasional',
                                 pemasukan=float(row.get('pemasukan') or 0),
                                 pengeluaran=float(row.get('pengeluaran') or 0),
@@ -418,9 +417,11 @@ def create_app(config_class=Config):
     @app.route('/download-template', methods=['GET'])
     @login_required
     def download_template():
-        content = "tanggal,kategori,pemasukan,pengeluaran,jenis_pengeluaran,jumlah_pelanggan,catatan\n" \
-                  "2026-03-01,Makanan & Minuman,500000,200000,operasional,15,Hari hujan rintik\n" \
-                  "2026-03-02,Retail,1500000,4500000,modal,5,Beli stok grosir baru\n"
+        content = "tanggal,kategori,nama_produk,kuantitas,pemasukan,pengeluaran,jenis_pengeluaran,jumlah_pelanggan,catatan\n" \
+                  "2026-03-01,Makanan & Minuman,Nasi Goreng Spesial,20,500000,200000,operasional,15,Hari hujan rintik\n" \
+                  "2026-03-02,Retail,Kaus Sablon,50,1500000,4500000,modal,5,Beli stok grosir baru\n" \
+                  "2026-03-03,Jasa,Reparasi AC,5,1000000,100000,operasional,4,Pelanggan baru membludak\n" \
+                  "2026-03-04,Makanan & Minuman,Es Teh Manis,30,150000,50000,operasional,30,Banyak anak sekolah beli\n"
         return send_file(io.BytesIO(content.encode('utf-8')), mimetype='text/csv', as_attachment=True, download_name='Template_PANTAUIN.csv')
 
     @app.route('/simulator', methods=['GET'])
@@ -569,7 +570,8 @@ def create_app(config_class=Config):
                     # Parameter Argumen Kustom
                     kustom_teks_ai=teks_ai_diedit,
                     lampir_proyeksi=lampir_proyeksi,
-                    profil_dict=profil_dict # Jika None, generator akan skip bab Profil Perusahaan
+                    profil_dict=profil_dict, # Jika None, generator akan skip bab Profil Perusahaan
+                    data_produk=data.get('data_produk')
                 )
                 action_type = request.form.get('action', 'download')
                 

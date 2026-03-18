@@ -210,9 +210,49 @@ def hitung_health_score(transaksi_list, periode_grafik=30):
                 base_val = base_val * np.random.uniform(0.95, 1.05)
             proyeksi_pengeluaran_list.append(base_val)
 
+    t_list_30 = [t for t in transaksi_list if (sekarang - t.tanggal).days <= 30]
+    data_produk = analisis_tren_produk(t_list_30)
+
+    val_in_30 = sum(s["pemasukan"] for s in statistik_4_minggu)
+    val_op_30 = sum(s["pengeluaran_op"] for s in statistik_4_minggu)
+    val_saldo_30 = sum(s["saldo"] for s in statistik_4_minggu)
+
+    proy_arr = []
+    if proyeksi_list and len(proyeksi_list)>=28 and proyeksi_pengeluaran_list and len(proyeksi_pengeluaran_list)>=28:
+        for i, lbl in enumerate(["Minggu +1","Minggu +2","Minggu +3","Minggu +4"]):
+            sl = slice(i*7, i*7+7)
+            pi = sum(proyeksi_list[sl])
+            po = sum(proyeksi_pengeluaran_list[sl])
+            proy_arr.append({"label": lbl, "pemasukan": pi, "pengeluaran": po, "saldo": pi-po})
+
+    risiko = _hitung_risiko(
+        skor_total, 
+        {"stabilitas": skor_stabilitas, "tren": skor_tren, "pengeluaran": skor_pengeluaran, "gross_margin": skor_gross_margin, "konsistensi": skor_konsistensi}, 
+        val_in_30, val_op_30, val_saldo_30,
+        round(rata_harian), 
+        round(np.mean([d['pengeluaran_op'] for d in data_harian]) if data_harian else 0), 
+        gross_margin_pct if 'gross_margin_pct' in locals() else 0, 
+        peringatan, 
+        proy_arr
+    )
+
+    rekomendasi = generate_rekomendasi(
+        val_saldo_30, 
+        round(np.mean([d['pengeluaran_op'] for d in data_harian]) if data_harian else 0), 
+        gross_margin_pct if 'gross_margin_pct' in locals() else 0, 
+        skor_tren, 
+        (rasio_out * 100) if 'rasio_out' in locals() else 0, 
+        proy_arr, 
+        skor_konsistensi
+    )
+
     return {
         "is_cukup": True,
         "periode_grafik": periode_grafik,
+        "data_produk": data_produk,
+        "risiko": risiko,
+        "rekomendasi": rekomendasi,
+        "proyeksi_tabel": proy_arr,
         "skor": skor_total,
         "label": label,
         "warna": warna,
@@ -252,6 +292,10 @@ def _fallback_empty_data(periode_grafik=30):
     return {
         "is_cukup": False,
         "periode_grafik": periode_grafik,
+        "data_produk": None,
+        "risiko": None,
+        "rekomendasi": [],
+        "proyeksi_tabel": [],
         "skor": 0,
         "label": "Data Belum Cukup",
         "warna": "kuning",
