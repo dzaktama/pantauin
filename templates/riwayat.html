@@ -63,27 +63,25 @@
 {% endif %}
 
 <div class="card summary-card p-4">
-    <!-- Form Pencarian (GET) -->
-    <form action="{{ url_for('riwayat') }}" method="GET" class="mb-4">
+    <!-- Form Pencarian Live Search -->
+    <div class="mb-4">
         <div class="row g-2">
-            <div class="col-md-10">
-                <div class="input-group input-group-lg">
-                    <span class="input-group-text bg-light text-muted border-end-0"><i class="bi bi-search"></i></span>
-                    <input type="text" name="q" class="form-control border-start-0"
-                        placeholder="Cari berdasarkan kategori atau catatan..." value="{{ q }}">
+            <div class="col-md-12">
+                <div class="input-group input-group-lg shadow-sm">
+                    <span class="input-group-text bg-white text-primary border-end-0"><i class="bi bi-search"></i></span>
+                    <input type="text" id="searchInput" class="form-control border-start-0"
+                        placeholder="Ketik untuk mencari cepat (Kategori, Nama Produk, dll)..." onkeyup="filterTable()">
                 </div>
             </div>
-            <div class="col-md-2">
-                <button type="submit" class="btn btn-primary-custom btn-lg w-100">Cari Data</button>
-            </div>
         </div>
-    </form>
+    </div>
 
     <!-- Tabel Data Utama -->
     <div class="table-responsive">
-        <table class="table table-hover table-striped mb-0 text-center align-middle" style="font-size: 0.95rem;">
+        <table class="table table-hover table-striped mb-0 text-center align-middle" style="font-size: 0.95rem;" id="transaksiTable">
             <thead class="table-dark">
                 <tr>
+                    <th class="py-3">No.</th>
                     <th class="py-3">Tanggal</th>
                     <th class="py-3 text-start">Kategori</th>
                     <th class="py-3 text-start">Produk (Qty)</th>
@@ -94,9 +92,10 @@
                 </tr>
             </thead>
             <tbody>
-                {% if pagination.items %}
-                {% for row in pagination.items %}
+                {% if transaksi_list %}
+                {% for row in transaksi_list %}
                 <tr>
+                    <td class="text-muted fw-bold">{{ loop.index }}</td>
                     <td class="fw-bold text-muted" style="white-space: nowrap;">{{ row.tanggal.strftime('%d %b %Y') }}
                     </td>
                     <td class="text-start">
@@ -120,55 +119,70 @@
                     </td>
                 </tr>
                 {% endfor %}
+                <tr id="emptyRow" style="display: none;">
+                    <td colspan="8" class="py-5 text-muted">
+                        <i class="bi bi-search fs-1 d-block mb-3 opacity-50"></i>
+                        Tidak ada transaksi yang cocok dengan kata pencarian ini.
+                    </td>
+                </tr>
                 {% else %}
                 <tr>
-                    <td colspan="7" class="py-5 text-muted">
-                        <i class="bi bi-search fs-1 d-block mb-3 opacity-50"></i>
-                        Tidak ada transaksi yang sesuai dengan kriteria pencariamu.
+                    <td colspan="8" class="py-5 text-muted">
+                        <i class="bi bi-file-earmark-x fs-1 d-block mb-3 opacity-50"></i>
+                        Belum ada riwayat transaksi pada buku ini.
                     </td>
                 </tr>
                 {% endif %}
             </tbody>
         </table>
     </div>
+</div>
 
-    <!-- Paginasi -->
-    {% if pagination.pages > 1 %}
-    <nav class="mt-4" aria-label="Page navigation riwayat">
-        <ul class="pagination justify-content-center mb-0">
-            <!-- Tombol Previous -->
-            <li class="page-item {% if not pagination.has_prev %}disabled{% endif %}">
-                <a class="page-link"
-                    href="{{ url_for('riwayat', page=pagination.prev_num, q=q) if pagination.has_prev else '#' }}">Sebelumnnya</a>
-            </li>
+<script>
+function filterTable() {
+    let input = document.getElementById("searchInput");
+    let filter = input.value.toLowerCase();
+    let table = document.getElementById("transaksiTable");
+    let tr = table.getElementsByTagName("tr");
+    let hasResult = false;
 
-            <!-- Nomor Halaman Pintar -->
-            {% for page_num in pagination.iter_pages(left_edge=1, right_edge=1, left_current=2, right_current=2) %}
-            {% if page_num %}
-            {% if pagination.page == page_num %}
-            <li class="page-item active"><span class="page-link"
-                    style="background-color: var(--primary-color); border-color: var(--primary-color);">{{ page_num
-                    }}</span></li>
-            {% else %}
-            <li class="page-item"><a class="page-link" style="color: var(--primary-color);"
-                    href="{{ url_for('riwayat', page=page_num, q=q) }}">{{ page_num }}</a></li>
-            {% endif %}
-            {% else %}
-            <li class="page-item disabled"><span class="page-link">...</span></li>
-            {% endif %}
-            {% endfor %}
+    // Mulai dari 1 untuk melompati sel row header <th/>
+    for (let i = 1; i < tr.length; i++) {
+        if (tr[i].getAttribute("id") === "emptyRow") continue;
+        
+        let display = false;
+        let td = tr[i].getElementsByTagName("td");
+        
+        for (let j = 0; j < td.length; j++) {
+            if (td[j]) {
+                if (td[j].textContent.toLowerCase().indexOf(filter) > -1) {
+                    display = true;
+                    break;
+                }
+            }
+        }
+        
+        if(tr[i].getElementsByTagName("th").length > 0) continue; // safety measure against thead
+        
+        if (display) {
+            tr[i].style.display = "";
+            hasResult = true;
+        } else {
+            tr[i].style.display = "none";
+        }
+    }
+    
+    let emptyRow = document.getElementById("emptyRow");
+    if (emptyRow) {
+        if (!hasResult && filter.trim() !== "") {
+            emptyRow.style.display = "";
+        } else {
+            emptyRow.style.display = "none";
+        }
+    }
+}
+</script>
 
-            <!-- Tombol Next -->
-            <li class="page-item {% if not pagination.has_next %}disabled{% endif %}">
-                <a class="page-link"
-                    href="{{ url_for('riwayat', page=pagination.next_num, q=q) if pagination.has_next else '#' }}">Berikutnya</a>
-            </li>
-        </ul>
-    </nav>
-    <div class="text-center mt-2 small text-muted">
-        Menampilkan halaman {{ pagination.page }} dari {{ pagination.pages }} (Total Data: {{ pagination.total }})
-    </div>
-    {% endif %}
 
 </div>
 {% endblock %}

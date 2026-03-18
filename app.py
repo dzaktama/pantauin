@@ -355,7 +355,7 @@ def create_app(config_class=Config):
                 data = hitung_health_score(transaksi_list, periode_grafik=30)
                 cache.set(cache_key, data)
             
-            return render_template('riwayat.html', pagination=pagination, q=q, data=data)
+            return render_template('riwayat.html', transaksi_list=transaksi_list, data=data)
         except Exception as e:
             return render_template('error.html', pesan=f"Gagal memuat halaman master data. Detail: {str(e)}"), 500
 
