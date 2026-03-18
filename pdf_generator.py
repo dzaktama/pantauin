@@ -77,7 +77,8 @@ def generate_pdf_report(
     output_path, breakdown, stat_4_minggu, proyeksi, proyeksi_pengeluaran,
     tgl_cetak_dt, tgl_mulai_dt, tgl_akhir_dt,
     kustom_teks_ai=None, lampir_proyeksi=True, profil_dict=None,
-    data_produk=None, risiko_dict=None, rekomendasi_list=None
+    data_produk=None, risiko_dict=None, rekomendasi_list=None,
+    advanced_analytics=None
 ):
     """
     Laporan Kesehatan Bisnis – Format Profesional (Bankable)
@@ -695,7 +696,8 @@ def generate_pdf_report(
                 peringatan_list=warnings,
                 proyeksi_pemasukan=sum(proyeksi) if proyeksi else 0,
                 proyeksi_saldo=sum(p[3] for p in proy_arr_safe) if proy_arr_safe else 0,
-                data_produk=data_produk
+                data_produk=data_produk,
+                advanced_analytics=advanced_analytics
             )
     except Exception:
         ai_text = (

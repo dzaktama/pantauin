@@ -212,6 +212,7 @@ def hitung_health_score(transaksi_list, periode_grafik=30):
 
     t_list_30 = [t for t in transaksi_list if (sekarang - t.tanggal).days <= 30]
     data_produk = analisis_tren_produk(t_list_30)
+    advanced_analytics = data_produk.pop('advanced_analytics', None)
 
     val_in_30 = sum(s["pemasukan"] for s in statistik_4_minggu)
     val_op_30 = sum(s["pengeluaran_op"] for s in statistik_4_minggu)
@@ -259,6 +260,7 @@ def hitung_health_score(transaksi_list, periode_grafik=30):
         "is_cukup": True,
         "periode_grafik": periode_grafik,
         "data_produk": data_produk,
+        "advanced_analytics": advanced_analytics,
         "risiko": risiko,
         "rekomendasi": rekomendasi,
         "proyeksi_tabel": proy_arr,
@@ -303,6 +305,7 @@ def _fallback_empty_data(periode_grafik=30):
         "is_cukup": False,
         "periode_grafik": periode_grafik,
         "data_produk": None,
+        "advanced_analytics": None,
         "risiko": None,
         "rekomendasi": [],
         "proyeksi_tabel": [],
@@ -336,21 +339,77 @@ def _fallback_empty_data(periode_grafik=30):
 
 def analisis_tren_produk(transaksi_list):
     """
-    bantu cari tahu produk mana yang paling banyak terjual dan mana yang kurang laris dari riwayat transaksi
+    bantu cari tahu produk mana yang paling banyak terjual dan mana yang kurang laris dari riwayat transaksi.
+    juga menghitung cash cow margin, prediksi dana restok top produk, dan sentimen catatan.
     """
     produk_agregat = defaultdict(int)
+    profit_agregat = defaultdict(float)
+    mingguan_kuantitas = defaultdict(lambda: defaultdict(int))
+    
+    keywords = ['hujan', 'sepi', 'ramai', 'promo', 'diskon', 'panas', 'libur', 'gajian']
+    keyword_counts = defaultdict(int)
+    sekarang = date.today()
+
     for t in transaksi_list:
         if getattr(t, 'nama_produk', None) and getattr(t, 'kuantitas', 0) > 0:
             nama = str(t.nama_produk).strip().lower()
             produk_agregat[nama] += t.kuantitas
             
+            hpp_total = getattr(t, 'harga_modal', 0.0) * t.kuantitas
+            margin = t.pemasukan - hpp_total
+            profit_agregat[nama] += margin
+            
+            minggu_ke = (sekarang - t.tanggal).days // 7
+            mingguan_kuantitas[nama][minggu_ke] += t.kuantitas
+            
+        catatan = getattr(t, 'catatan', '') or ''
+        catatan_lower = str(catatan).lower()
+        if catatan_lower:
+            for kw in keywords:
+                if kw in catatan_lower:
+                    keyword_counts[kw] += 1
+            
     sorted_produk = sorted(produk_agregat.items(), key=lambda x: x[1], reverse=True)
     top_3_terlaris = [{"nama": p[0].title(), "total": p[1]} for p in sorted_produk[:3]]
     bottom_3_menurun = [{"nama": p[0].title(), "total": p[1]} for p in sorted_produk[-3:]] if len(sorted_produk) >= 3 else []
     
+    sorted_profit = sorted(profit_agregat.items(), key=lambda x: x[1], reverse=True)
+    cash_cow = None
+    if sorted_profit and sorted_profit[0][1] > 0:
+        cash_cow = {"nama": sorted_profit[0][0].title(), "margin_kotor": sorted_profit[0][1]}
+        
+    prediksi_restok = []
+    for p in sorted_produk[:3]:
+        nama = p[0]
+        qty_m0 = mingguan_kuantitas[nama].get(0, 0)
+        qty_m1 = mingguan_kuantitas[nama].get(1, 0)
+        
+        if qty_m1 > 0 and qty_m0 > (qty_m1 * 1.2):
+            hpp_list = [getattr(t, 'harga_modal', 0.0) for t in transaksi_list if str(getattr(t, 'nama_produk', '')).lower() == nama and getattr(t, 'harga_modal', 0.0) > 0]
+            avg_hpp = sum(hpp_list) / len(hpp_list) if hpp_list else 0
+            
+            avg_weekly = sum(mingguan_kuantitas[nama].values()) / max(len(mingguan_kuantitas[nama]), 1)
+            estimasi_dana = avg_hpp * avg_weekly
+            
+            if estimasi_dana > 0:
+                prediksi_restok.append({
+                    "nama": nama.title(),
+                    "estimasi_dana": estimasi_dana
+                })
+                
+    sorted_keywords = sorted(keyword_counts.items(), key=lambda x: x[1], reverse=True)
+    korelasi_catatan = [{"keyword": k[0]} for k in sorted_keywords[:2]]
+    
+    advanced_analytics = {
+        "cash_cow": cash_cow,
+        "prediksi_restok": prediksi_restok,
+        "korelasi_catatan": korelasi_catatan
+    }
+    
     return {
         "top_3_terlaris": top_3_terlaris,
-        "bottom_3_menurun": bottom_3_menurun
+        "bottom_3_menurun": bottom_3_menurun,
+        "advanced_analytics": advanced_analytics
     }
 
 def format_rp(nilai):

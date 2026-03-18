@@ -15,7 +15,7 @@ try:
 except Exception as e:
     model = None
 
-def get_dashboard_suggestion(health_score, total_income, total_expense, trend_status, catatan_mingguan=None, data_produk=None):
+def get_dashboard_suggestion(health_score, total_income, total_expense, trend_status, catatan_mingguan=None, data_produk=None, advanced_analytics=None):
     """
     bikin saran untuk dashboard yang bahas strategi bisnis dan stok produk
     """
@@ -35,6 +35,22 @@ def get_dashboard_suggestion(health_score, total_income, total_expense, trend_st
             if top_3 or bottom_3:
                 data_produk_text = f"Data Produk Terlaris: {top_3}. Produk Kurang Laris (Dead Stock): {bottom_3}.\n"
                 
+        adv_text = ""
+        if advanced_analytics:
+            cc = advanced_analytics.get('cash_cow', {})
+            restok = advanced_analytics.get('prediksi_restok', [])
+            sentimen = advanced_analytics.get('korelasi_catatan', [])
+            
+            adv_text += f"\nData Lanjutan (PENTING):\n"
+            if cc:
+                adv_text += f"- Produk Cash Cow (Margin Kotor Tertinggi): {cc.get('nama')} dengan total margin Rp{format_rp(cc.get('margin_kotor', 0))}\n"
+            if restok:
+                r_list = [f"{r.get('nama')} (Rp{format_rp(r.get('estimasi_dana', 0))})" for r in restok]
+                adv_text += f"- Prediksi Siap Dana Restok (Kenaikan >20%): {', '.join(r_list)}\n"
+            if sentimen:
+                s_list = [s.get('keyword') for s in sentimen]
+                adv_text += f"- Pola Sentimen/Catatan: Muncul kata {', '.join(s_list)} yang berkorelasi dengan naik turunnya performa.\n"
+
         prompt = f"""
         Anda adalah asisten keuangan UMKM Indonesia yang bijaksana dan ramah.
         Kondisi bisnis minggu ini:
@@ -44,8 +60,9 @@ def get_dashboard_suggestion(health_score, total_income, total_expense, trend_st
         - Tren Penjualan: {trend_status}
         {catatan_text}
         {data_produk_text}
+        {adv_text}
         Berikan saran tindakan nyata dalam MAKSIMAL 3 KALIMAT singkat untuk pedagang atau pemilik warung. 
-        Berikan saran strategis penjualan, strategi harga, atau manajemen stok (dead stock) yang secara spesifik menyebut nama produk dari data produk di atas jika tersedia.
+        Berikan saran strategis berdasarkan data lanjutan tersebut secara spesifik (contoh: "Siapkan dana RpXYZ untuk restok produk A" atau "Fokus jualan produk B karena untungnya paling besar").
         Jangan beri sambutan, langsung pada poin saran. Gunakan Bahasa Indonesia informal namun sopan.
         """
         response = model.generate_content(prompt)
@@ -80,7 +97,7 @@ def get_chatbot_response(user_message, context_data):
 def format_rp(nilai):
     return f"{int(nilai):,}".replace(",", ".")
 
-def get_pdf_narration(nama_bisnis, skor, label_skor, total_pemasukan, total_pengeluaran_ops, saldo_bersih, avg_harian_masuk, gross_margin, tren_penjualan, stabilitas, rasio_pengeluaran, konsistensi, peringatan_list, proyeksi_pemasukan, proyeksi_saldo, data_produk=None):
+def get_pdf_narration(nama_bisnis, skor, label_skor, total_pemasukan, total_pengeluaran_ops, saldo_bersih, avg_harian_masuk, gross_margin, tren_penjualan, stabilitas, rasio_pengeluaran, konsistensi, peringatan_list, proyeksi_pemasukan, proyeksi_saldo, data_produk=None, advanced_analytics=None):
     """
     bikin narasi laporan pdf yang memuat angka performa dan rekomendasi taktis tentang produk
     """
@@ -96,6 +113,20 @@ def get_pdf_narration(nama_bisnis, skor, label_skor, total_pemasukan, total_peng
             bottom_3 = ", ".join([f"{p['nama']} ({p['total']} terjual)" for p in data_produk.get('bottom_3_menurun', [])])
             if top_3 or bottom_3:
                 data_produk_text = f"Data Produk Terlaris: {top_3}. Produk Kurang Laris (Dead Stock): {bottom_3}."
+
+        adv_text = ""
+        if advanced_analytics:
+            cc = advanced_analytics.get('cash_cow', {})
+            restok = advanced_analytics.get('prediksi_restok', [])
+            sentimen = advanced_analytics.get('korelasi_catatan', [])
+            if cc:
+                adv_text += f"\n- Cash Cow Margin Utama: {cc.get('nama')}"
+            if restok:
+                r_list = [str(r.get('nama')) for r in restok]
+                adv_text += f"\n- Alarm Restok Mendesak: {', '.join(r_list)}"
+            if sentimen:
+                s_list = [str(s.get('keyword')) for s in sentimen]
+                adv_text += f"\n- Sentimen Pasar: {', '.join(s_list)}"
 
         prompt = f"""
         Kamu adalah konsultan bisnis berpengalaman yang sedang menulis laporan untuk pemilik UMKM bernama "{nama_bisnis}".
@@ -114,7 +145,7 @@ def get_pdf_narration(nama_bisnis, skor, label_skor, total_pemasukan, total_peng
         - Peringatan aktif: {peringatan_str}
         - Proyeksi pemasukan 4 minggu ke depan: Rp {format_rp(proyeksi_pemasukan)}
         - Proyeksi saldo 4 minggu ke depan: Rp {format_rp(proyeksi_saldo)}
-        - Catatan Performa Produk: {data_produk_text}
+        - Catatan Performa Produk: {data_produk_text} {adv_text}
 
         Tulis analisis dalam TEPAT 4 paragraf pendek, masing-masing 3-4 kalimat. Gunakan bahasa yang mudah dipahami pemilik warung atau pedagang pasar — hindari istilah keuangan yang terlalu teknis. Sebut nama bisnis "{nama_bisnis}" minimal sekali. Sebut angka spesifik dari data di atas.
 
@@ -139,3 +170,36 @@ def get_pdf_narration(nama_bisnis, skor, label_skor, total_pemasukan, total_peng
         import traceback
         traceback.print_exc()
         return "Pendapatan dan pengeluaran tampaknya sudah mulai terekam dengan baik.\nTetap konsisten dalam pencatatan transaksi masuk dan keluar.\nMeskipun begitu, Anda dihimbau memeriksa saldo kas riil mingguan agar tidak kecolongan.\nSimpan sebagian laba sebagai dana darurat rutinitas."
+
+def ekstrak_struk_vision(image_bytes):
+    """
+    baca foto struk dan ekstrak isinya ke format json
+    """
+    if not model:
+        return None
+        
+    try:
+        prompt_vision = '''
+        baca struk belanja ini dan temukan barang yang terjual.
+        kalau ada banyak barang, pilih satu produk utama yang paling merepresentasikan transaksi ini atau gabungkan namanya secara padat (maks 100 karakter).
+        keluarkan data persis dengan format JSON murni ini saja, jangan ada teks pembuka atau penutup:
+        {
+            "nama_produk": "nama barang",
+            "kuantitas": jumlah angka total barang (integer),
+            "pemasukan": total harga akhir rupiah di struk (float),
+            "kategori": "Makanan & Minuman" // pilih salah satu yang paling masuk akal: Makanan & Minuman, Retail, Jasa, atau Lainnya
+        }
+        '''
+        
+        vision_part = {
+            "mime_type": "image/jpeg",
+            "data": image_bytes
+        }
+        
+        response = model.generate_content([prompt_vision, vision_part])
+        hasil_teks = response.text.replace("```json", "").replace("```", "").strip()
+        import json
+        return json.loads(hasil_teks)
+    except Exception as e:
+        print(f"gagal ekstrak visi: {e}")
+        return None

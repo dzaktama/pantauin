@@ -42,6 +42,7 @@ class TransaksiForm(FlaskForm):
     ], validators=[DataRequired("Kategori wajib dipilih.")])
     nama_produk = StringField('Nama Produk (Opsional)', validators=[Length(max=100, message="Maksimal 100 karakter.")])
     kuantitas = IntegerField('Kuantitas (Opsional)', default=0)
+    harga_modal = FloatField('Harga Modal/HPP (Per Unit)', default=0.0)
     # Menggunakan FloatField yang akan dimanipulasi di JS untuk mask rupiah
     pemasukan = FloatField('Total Pemasukan (Rp)', default=0, validators=[DataRequired("Harus mengisi pemasukan. Isi 0 jika nihil.")])
     pengeluaran = FloatField('Total Pengeluaran (Rp)', default=0, validators=[DataRequired("Harus mengisi pengeluaran. Isi 0 jika nihil.")])

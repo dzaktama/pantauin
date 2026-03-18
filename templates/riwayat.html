@@ -96,7 +96,11 @@
                 {% for row in transaksi_list %}
                 <tr>
                     <td class="text-muted fw-bold">{{ loop.index }}</td>
-                    <td class="fw-bold text-muted" style="white-space: nowrap;">{{ row.tanggal.strftime('%d %b %Y') }}
+                    <td class="fw-bold text-muted" style="white-space: nowrap;">
+                        {{ row.tanggal.strftime('%d %b %Y') }}
+                        {% if row.created_at %}
+                        <br><small class="text-black-50" style="font-size: 0.75rem;"><i class="bi bi-clock me-1"></i>{{ row.created_at.strftime('%H:%M:%S') }}</small>
+                        {% endif %}
                     </td>
                     <td class="text-start">
                         <span class="badge bg-secondary opacity-75 fw-normal">{{ row.kategori }}</span>

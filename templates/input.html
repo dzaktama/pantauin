@@ -5,8 +5,13 @@
 <div class="row g-4 justify-content-center">
     <!-- Kolom Form Input -->
     <div class="col-lg-8">
-        <h2 class="fw-bold mb-4 text-dark"><i class="bi bi-journal-plus me-2 text-primary"></i>Catat Penjualan Hari Ini
-        </h2>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="fw-bold mb-0 text-dark"><i class="bi bi-journal-plus me-2 text-primary"></i>Catat Penjualan Hari Ini</h2>
+            <button class="btn btn-warning fw-bold shadow-sm" type="button" id="btnScanStruk" onclick="document.getElementById('strukInput').click()">
+                <i class="bi bi-camera-fill me-1"></i> Scan Struk (AI)
+            </button>
+            <input type="file" id="strukInput" accept="image/*" class="d-none" onchange="uploadStruk()">
+        </div>
         <div class="card summary-card p-4">
             <form action="{{ url_for('input_transaksi') }}" method="POST" id="formTransaksi" novalidate>
                 {{ form.hidden_tag() }}
@@ -27,14 +32,22 @@
                     </div>
                 </div>
 
-                <div class="row g-3 mb-3">
-                    <div class="col-md-8">
+                <div class="row g-3 mb-4">
+                    <div class="col-md-5">
                         {{ form.nama_produk.label(class="form-label") }}
-                        {{ form.nama_produk(class="form-control form-control-lg", placeholder="Cth: Nasi Goreng Spesial") }}
+                        {{ form.nama_produk(class="form-control form-control-lg", id="nama_produk_input", placeholder="Cth: Nasi Goreng Spesial") }}
+                    </div>
+                    <div class="col-md-3">
+                        {{ form.kuantitas.label(class="form-label") }}
+                        {{ form.kuantitas(class="form-control form-control-lg", id="kuantitas_input", placeholder="0") }}
                     </div>
                     <div class="col-md-4">
-                        {{ form.kuantitas.label(class="form-label") }}
-                        {{ form.kuantitas(class="form-control form-control-lg", placeholder="0") }}
+                        {{ form.harga_modal.label(class="form-label") }}
+                        <div class="input-group input-group-lg">
+                            <span class="input-group-text rupiah-prefix">Rp</span>
+                            <input type="text" class="form-control js-format-rupiah" id="mask_harga_modal" value="0">
+                            {{ form.harga_modal(class="d-none", id="real_harga_modal") }}
+                        </div>
                     </div>
                 </div>
 
@@ -203,6 +216,7 @@
 
         attachRupiahMask("mask_pemasukan", "real_pemasukan");
         attachRupiahMask("mask_pengeluaran", "real_pengeluaran");
+        attachRupiahMask("mask_harga_modal", "real_harga_modal");
 
         window.updateCounter = function () {
             const input = document.getElementById("catatanInput");
@@ -231,5 +245,57 @@
             // Biarkan form disubmit standar, toast akan dihandle oleh Flash Messages Jinja
         });
     });
+
+    // kirim foto ke backend lalu isi form otomatis
+    window.uploadStruk = async function() {
+        let fileInput = document.getElementById('strukInput');
+        let file = fileInput.files[0];
+        if (!file) return;
+
+        let formData = new FormData();
+        formData.append("struk_img", file);
+
+        let btn = document.getElementById('btnScanStruk');
+        let oldHtml = btn.innerHTML;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Membaca...';
+        btn.disabled = true;
+
+        try {
+            let response = await fetch('/api/scan-struk', {
+                method: 'POST',
+                body: formData
+            });
+            
+            let result = await response.json();
+            if (response.ok && result) {
+                if(result.nama_produk) document.getElementById('nama_produk_input').value = result.nama_produk;
+                if(result.kuantitas) document.getElementById('kuantitas_input').value = result.kuantitas;
+                
+                if(result.pemasukan) {
+                    document.getElementById('real_pemasukan').value = result.pemasukan;
+                    let masked = document.getElementById('mask_pemasukan');
+                    if(masked) {
+                        masked.value = parseInt(result.pemasukan, 10).toLocaleString('id-ID');
+                    }
+                }
+                
+                if(result.kategori) {
+                    let radios = document.querySelectorAll('input[name="kategori"]');
+                    radios.forEach(r => {
+                        if (r.value.toLowerCase() === result.kategori.toLowerCase()) r.checked = true;
+                    });
+                }
+                alert("ai berhasil mengurai struk transaksi ini");
+            } else {
+                alert("gagal membaca struk: " + (result.error || "kesalahan internal ai"));
+            }
+        } catch(e) {
+            alert("gagal memanggil jaringan untuk ai visi");
+        } finally {
+            btn.innerHTML = oldHtml;
+            btn.disabled = false;
+            fileInput.value = "";
+        }
+    };
 </script>
 {% endblock %}

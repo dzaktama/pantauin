@@ -210,7 +210,8 @@ def create_app(config_class=Config):
                         data['skor'], data['total_pemasukan_minggu_ini'], 
                         data['total_pengeluaran_minggu_ini'], data['tren_status'],
                         data.get('catatan_mingguan', []),
-                        data.get('data_produk')
+                        data.get('data_produk'),
+                        data.get('advanced_analytics')
                     )
                 else:
                     saran_gemini = "Saran belum tersedia. Lengkapi pencatatan laporan buku ini setidaknya 14 hari."
@@ -305,6 +306,7 @@ def create_app(config_class=Config):
                     kategori=form.kategori.data,
                     nama_produk=form.nama_produk.data if form.nama_produk.data else None,
                     kuantitas=form.kuantitas.data,
+                    harga_modal=form.harga_modal.data,
                     jenis_pengeluaran=form.jenis_pengeluaran.data,
                     pemasukan=form.pemasukan.data,
                     pengeluaran=form.pengeluaran.data,
@@ -328,6 +330,31 @@ def create_app(config_class=Config):
             db.session.rollback()
             return render_template('error.html', pesan="Gagal menyimpan/memuat transaksi manual."), 500
 
+    @app.route('/api/scan-struk', methods=['POST'])
+    @login_required
+    @limiter.limit("10 per minute")
+    def api_scan_struk():
+        # terima dari web lalu scan pakai ai flash vision
+        try:
+            if 'struk_img' not in request.files:
+                return jsonify({"error": "tidak ada gambar struk yang dikirim"}), 400
+                
+            file = request.files['struk_img']
+            if file.filename == '':
+                return jsonify({"error": "gambar kosong"}), 400
+                
+            img_bytes = file.read()
+            hasil = gemini_helper.ekstrak_struk_vision(img_bytes)
+            
+            if hasil:
+                return jsonify(hasil)
+            else:
+                return jsonify({"error": "ai gagal mengekstrak teks dari gambar ini"}), 500
+        except Exception as e:
+            import traceback
+            traceback.print_exc()
+            return jsonify({"error": str(e)}), 500
+
     @app.route('/riwayat', methods=['GET'])
     @login_required
     def riwayat():
@@ -336,26 +363,25 @@ def create_app(config_class=Config):
             if not buku_kas_id: return redirect(url_for('buku_kas_manager'))
             
             q = request.args.get('q', '').strip()
-            page = request.args.get('page', 1, type=int)
             query = Transaksi.query.filter_by(buku_kas_id=buku_kas_id)
             
             if q:
                 query = query.filter(db.or_(
                     Transaksi.catatan.ilike(f"%{q}%"),
-                    Transaksi.kategori.ilike(f"%{q}%")
+                    Transaksi.kategori.ilike(f"%{q}%"),
+                    Transaksi.nama_produk.ilike(f"%{q}%")
                 ))
             
-            # Paginasi SQLite ringan (20 baris per halaman)
-            pagination = query.order_by(Transaksi.tanggal.desc()).paginate(page=page, per_page=20, error_out=False)
+            transaksi_list_tampil = query.order_by(Transaksi.tanggal.desc()).all()
 
             cache_key = f"dashboard_bk_{buku_kas_id}_30_{datetime.now().strftime('%Y%m%d')}_v3"
             data = cache.get(cache_key)
             if data is None:
-                transaksi_list = Transaksi.query.filter_by(buku_kas_id=buku_kas_id).order_by(Transaksi.tanggal.asc()).all()
-                data = hitung_health_score(transaksi_list, periode_grafik=30)
+                transaksi_list_all = Transaksi.query.filter_by(buku_kas_id=buku_kas_id).order_by(Transaksi.tanggal.asc()).all()
+                data = hitung_health_score(transaksi_list_all, periode_grafik=30)
                 cache.set(cache_key, data)
             
-            return render_template('riwayat.html', transaksi_list=transaksi_list, data=data)
+            return render_template('riwayat.html', transaksi_list=transaksi_list_tampil, data=data)
         except Exception as e:
             return render_template('error.html', pesan=f"Gagal memuat halaman master data. Detail: {str(e)}"), 500
 
@@ -434,7 +460,16 @@ def create_app(config_class=Config):
     @app.route('/simulator', methods=['GET'])
     @login_required
     def simulator():
-        return render_template('simulator.html')
+        buku_kas_id = session.get('buku_kas_id')
+        if not buku_kas_id: return redirect(url_for('buku_kas_manager'))
+        
+        cache_key = f"dashboard_bk_{buku_kas_id}_30_{datetime.now().strftime('%Y%m%d')}_v3"
+        baseline = cache.get(cache_key)
+        top_produk = []
+        if baseline and baseline.get('data_produk') and baseline['data_produk'].get('top_3_terlaris'):
+            top_produk = baseline['data_produk']['top_3_terlaris']
+            
+        return render_template('simulator.html', top_produk=top_produk)
 
     # --- API ENDPOINTS (RATE LIMITED & CSRF PROTECTED) ---
     @app.route('/api/simulator', methods=['POST'])
@@ -447,27 +482,84 @@ def create_app(config_class=Config):
             if not buku_kas_id: return jsonify({"error": "Pilih buku kas terlebih dahulu."}), 400
             
             req = request.get_json()
-            persen = float(req.get('penurunan_persen', 0)) / 100
+            persen_umum = float(req.get('penurunan_persen', 0)) / 100
+            persen_hpp = float(req.get('kenaikan_hpp', 0)) / 100
+            persen_opex = float(req.get('kenaikan_opex', 0)) / 100
             
             baseline = cache.get(f"dashboard_bk_{buku_kas_id}_30_{datetime.now().strftime('%Y%m%d')}_v3")
             if not baseline:
-                t_list = Transaksi.query.filter_by(buku_kas_id=buku_kas_id).order_by(Transaksi.tanggal.asc()).all()
-                baseline = hitung_health_score(t_list, periode_grafik=30)
+                t_list_30 = Transaksi.query.filter_by(buku_kas_id=buku_kas_id).order_by(Transaksi.tanggal.asc()).all()
+                baseline = hitung_health_score(t_list_30, periode_grafik=30)
 
-            # Kalkulasi manual cepat
-            in_baru = baseline['total_pemasukan_minggu_ini'] * (1 - persen)
-            # Asumsi default: pengeluaran sulit turun (fixed cost dominan)
-            out_baru = baseline['total_pengeluaran_minggu_ini'] 
+            # --- Kalkulasi Pendapatan ---
+            in_baru = baseline['total_pemasukan_minggu_ini'] * (1 - persen_umum)
+            
+            # --- Kalkulasi Pengeluaran Spesifik ---
+            sekarang = date.today()
+            t_minggu_ini = Transaksi.query.filter(
+                Transaksi.buku_kas_id == buku_kas_id,
+                Transaksi.tanggal >= sekarang - timedelta(days=7)
+            ).all()
+            
+            total_operasional = sum(t.pengeluaran for t in t_minggu_ini if t.jenis_pengeluaran == 'operasional')
+            total_modal = sum((t.harga_modal * t.kuantitas) for t in t_minggu_ini)
+            if total_modal == 0:  # Fallback kalau jarang isi harga_modal
+                total_modal = sum(t.pengeluaran for t in t_minggu_ini if t.jenis_pengeluaran == 'modal')
+            
+            # Jika user belum mencatat seminggu ini, fallback ke baseline
+            if (total_operasional + total_modal) == 0:
+                out_baru = baseline['total_pengeluaran_minggu_ini'] * (1 + (persen_opex + persen_hpp)/2)
+            else:
+                out_baru = (total_operasional * (1 + persen_opex)) + (total_modal * (1 + persen_hpp))
+
+            # --- Kalkulasi Stress Produk Spesifik ---
+            for k, v in req.items():
+                if k.startswith('persen_turun_produk_'):
+                    nama_produk = k.replace('persen_turun_produk_', '').lower()
+                    persen_turun = float(v) / 100
+                    
+                    pemasukan_produk = sum(t.pemasukan for t in t_minggu_ini if t.nama_produk and t.nama_produk.lower() == nama_produk)
+                    in_baru -= (pemasukan_produk * persen_turun)
+
+            # --- Hitung Indikator Kelayakan ---
+            modal_baru = total_modal * (1 + persen_hpp)
+            opex_baru = total_operasional * (1 + persen_opex)
+            
+            # Jika user belum mencatat seminggu ini, fallback pendekatan porsi
+            if (total_operasional + total_modal) == 0:
+                modal_baru = (baseline['total_pengeluaran_minggu_ini'] * 0.6) * (1 + persen_hpp)
+                opex_baru = (baseline['total_pengeluaran_minggu_ini'] * 0.4) * (1 + persen_opex)
+
+            gross_margin_baru = 0
+            if in_baru > 0:
+                gross_margin_baru = ((in_baru - modal_baru) / in_baru) * 100
+
+            rasio_opex_baru = 0
+            if in_baru > 0:
+                rasio_opex_baru = (opex_baru / in_baru) * 100
+
+            in_baru = max(0, in_baru) # Cegah minus ekstrim
             saldo_baru = in_baru - out_baru
             
-            saran = "Aman, masih ada margin untung di batas ini." if saldo_baru >= 0 else ("Awas, Anda akan rugi! Siapkan dana darurat Rp " + str(abs(int(saldo_baru))))
-            if persen == 0: saran = "Kondisi awal sesuai transaksi mingguanmu."
+            status_bisnis = "Aman"
+            if saldo_baru < 0:
+                status_bisnis = "Kritis"
+            elif gross_margin_baru < 20 or rasio_opex_baru > 70:
+                status_bisnis = "Waspada"
+            
+            from gemini_helper import format_rp
+            saran = f"Status {status_bisnis}. Masih ada margin untung di skenario ini." if saldo_baru >= 0 else ("Awas, diproyeksi RUGI! Siapkan dana darurat Rp " + format_rp(abs(int(saldo_baru))))
+            if persen_umum == 0 and persen_hpp == 0 and persen_opex == 0 and all(v == 0 for k,v in req.items() if 'produk' in k): 
+                saran = "Kondisi stabil, sesuai dengan tren mingguan asli Anda."
 
             return jsonify({
                 "pemasukan_baru": in_baru,
                 "pengeluaran_baru": out_baru,
                 "saldo_baru": saldo_baru,
-                "saran": saran
+                "saran": saran,
+                "gross_margin": round(gross_margin_baru, 1),
+                "rasio_opex": round(rasio_opex_baru, 1),
+                "status_bisnis": status_bisnis
             })
         except Exception:
             return jsonify({"error": "Gagal simulasi"}), 500
@@ -580,7 +672,8 @@ def create_app(config_class=Config):
                     profil_dict=profil_dict, # Jika None, generator akan skip bab Profil Perusahaan
                     data_produk=data.get('data_produk'),
                     risiko_dict=data.get('risiko'),
-                    rekomendasi_list=data.get('rekomendasi')
+                    rekomendasi_list=data.get('rekomendasi'),
+                    advanced_analytics=data.get('advanced_analytics')
                 )
                 action_type = request.form.get('action', 'download')
                 

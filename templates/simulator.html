@@ -16,15 +16,46 @@
     <!-- Kolom Kiri: Kontrol (Sesuai UI/UX requirement 2 kolom) -->
     <div class="col-md-5">
         <div class="card summary-card p-4 h-100">
-            <h5 class="fw-bold text-dark mb-4">Kendali Skenario Risiko</h5>
-            <div class="mb-5 text-center">
-                <label for="sliderTurun" class="form-label text-muted fw-bold d-block" style="font-size:1.2rem;">Kalau
-                    penjualan turun sebesar:</label>
-                <!-- Angka persentase besar di tengah -->
-                <div class="display-3 fw-bold mb-4" id="labelPersen" style="color: var(--primary-color);">0%</div>
-                <input type="range" class="form-range" id="sliderTurun" min="0" max="100" step="5" value="0"
-                    aria-label="Geser untuk mengatur persentase penurunan">
+            <h5 class="fw-bold text-dark mb-4"><i class="bi bi-sliders me-2"></i>Global Makro Ekonomi</h5>
+            
+            <!-- Slider Omzet Turun -->
+            <div class="mb-4 text-center pb-3 border-bottom">
+                <label for="sliderTurun" class="form-label text-muted fw-bold d-block" style="font-size:1.0rem;">Jika Total Penjualan Bisnis Turun Sebesar:</label>
+                <div class="display-3 fw-bold mb-3" id="labelPersen" style="color: var(--primary-color);">0%</div>
+                <input type="range" class="form-range" id="sliderTurun" min="0" max="100" step="5" value="0">
             </div>
+
+            <!-- Slider HPP Naik -->
+            <div class="mb-4 text-start">
+                <label for="sliderHPP" class="form-label text-muted small fw-bold d-flex justify-content-between mb-1">
+                    <span>Inflasi/Kenaikan Harga Modal (HPP):</span>
+                    <span id="labelHPP" class="text-warning fw-bold fs-5">0%</span>
+                </label>
+                <input type="range" class="form-range" id="sliderHPP" min="0" max="100" step="5" value="0">
+            </div>
+
+            <!-- Slider Opex Naik -->
+            <div class="mb-3 text-start">
+                <label for="sliderOpex" class="form-label text-muted small fw-bold d-flex justify-content-between mb-1">
+                    <span>Kenaikan Beban Operasional (Sewa, Gaji):</span>
+                    <span id="labelOpex" class="text-danger fw-bold fs-5">0%</span>
+                </label>
+                <input type="range" class="form-range" id="sliderOpex" min="0" max="100" step="5" value="0">
+            </div>
+
+            {% if top_produk %}
+            <hr class="my-4 text-muted border-2">
+            <h6 class="fw-bold text-dark mb-3"><i class="bi bi-box-seam text-primary me-2"></i>Stress Test Spesifik Produk (Top 3)</h6>
+            {% for p in top_produk %}
+            <div class="mb-3 text-start bg-light p-3 rounded border">
+                <label for="produkTurun_{{ loop.index }}" class="form-label text-muted small fw-bold d-flex justify-content-between mb-1">
+                    <span>Omzet {{ p.nama }} Anjlok:</span>
+                    <span id="lblProdukTurun_{{ loop.index }}" class="text-danger fw-bold fs-5">0%</span>
+                </label>
+                <input type="range" class="form-range prod-slider" id="produkTurun_{{ loop.index }}" data-prod="{{ p.nama }}" data-lbl="lblProdukTurun_{{ loop.index }}" min="0" max="100" step="5" value="0">
+            </div>
+            {% endfor %}
+            {% endif %}
             <button class="btn btn-outline-danger w-100 btn-lg" id="btnReset"
                 aria-label="Kembali ke kondisi normal pabrik">Reset ke Kondisi Normal</button>
         </div>
@@ -32,31 +63,50 @@
 
     <!-- Kolom Kanan: Hasil Real-time -->
     <div class="col-md-7">
-        <div class="card summary-card p-4 h-100" style="background-color: var(--primary-color); color: white;">
-            <h5 class="fw-bold mb-4">Proyeksi Hasil Mingguan</h5>
+        <div class="card summary-card p-4 h-100 shadow" style="background-color: var(--primary-color); color: white; border: 1px solid rgba(255,255,255,0.1);">
+            <h5 class="fw-bold mb-4 text-white"><i class="bi bi-graph-up-arrow me-2 text-info"></i>Proyeksi Hasil Mingguan</h5>
 
             <div class="row text-center mb-4">
                 <div class="col-sm-4 mb-3 mb-sm-0">
-                    <p class="mb-1 opacity-75 small fw-bold">Pemasukan Baru</p>
-                    <h3 class="fw-bold" id="simPemasukan">Rp 0</h3>
+                    <p class="mb-1 text-light small fw-bold">Pemasukan Baru</p>
+                    <h3 class="fw-bold text-white shadow-sm-text" id="simPemasukan">Rp 0</h3>
                 </div>
                 <div class="col-sm-4 mb-3 mb-sm-0">
-                    <p class="mb-1 opacity-75 small fw-bold">Pengeluaran Baru</p>
-                    <h3 class="fw-bold" id="simPengeluaran">Rp 0</h3>
+                    <p class="mb-1 text-light small fw-bold">Pengeluaran Baru</p>
+                    <h3 class="fw-bold text-white shadow-sm-text" id="simPengeluaran">Rp 0</h3>
                 </div>
                 <div class="col-sm-4">
-                    <p class="mb-1 opacity-75 small fw-bold border-bottom border-light pb-1">Saldo Bersih (Untung/Rugi)
-                    </p>
-                    <h3 class="fw-bold" id="simSaldo" style="color:var(--success-color);">Rp 0</h3>
+                    <p class="mb-1 text-light small fw-bold border-bottom border-light pb-1">Saldo Bersih (Untung/Rugi)</p>
+                    <h3 class="fw-bold shadow-sm-text" id="simSaldo" style="color:#2ef080;">Rp 0</h3>
+                </div>
+            </div>
+
+            <hr class="border-light opacity-25">
+            
+            <h6 class="fw-bold text-light mb-3 mt-2"><i class="bi bi-shield-check me-2 text-warning"></i>Indikator Kelayakan (Stress Test)</h6>
+            <div class="row text-center mb-4">
+                <div class="col-4 border-end border-light border-opacity-25">
+                    <p class="small text-light mb-1">Gross Margin</p>
+                    <h4 class="fw-bold text-white mb-0" id="simGrossMargin">0%</h4>
+                    <small class="text-white-50" style="font-size: 0.7rem;">Target > 30%</small>
+                </div>
+                <div class="col-4 border-end border-light border-opacity-25">
+                    <p class="small text-light mb-1">Rasio Operasional</p>
+                    <h4 class="fw-bold text-white mb-0" id="simRasioOpex">0%</h4>
+                    <small class="text-white-50" style="font-size: 0.7rem;">Target < 60%</small>
+                </div>
+                <div class="col-4">
+                    <p class="small text-light mb-1">Status Proyeksi</p>
+                    <h5 class="fw-bold mt-2 py-1 px-3 rounded d-inline-block shadow-sm" id="simStatusBisnis" style="background-color: #27AE60; color: white;">Aman</h5>
                 </div>
             </div>
 
             <div class="mt-auto pt-3 border-top border-light border-opacity-25">
                 <div class="d-flex align-items-center p-3 rounded" id="saranBox"
                     style="background: rgba(255,255,255,0.1);">
-                    <span class="fs-3 me-3">💡</span>
-                    <p class="mb-0" id="simSaran" style="font-size: 1.05rem; font-weight: 500;">
-                        Pilih persentase penurunan pada penggeser di sebelah kiri.
+                    <span class="fs-2 me-3">💡</span>
+                    <p class="mb-0 text-white" id="simSaran" style="font-size: 1.05rem; font-weight: 500;">
+                        Pilih persentase krisis pada penggeser di sebelah kiri.
                     </p>
                 </div>
             </div>
@@ -72,23 +122,51 @@
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const slider = document.getElementById("sliderTurun");
+        const sliderHPP = document.getElementById("sliderHPP");
+        const sliderOpex = document.getElementById("sliderOpex");
+        
         const lblPersen = document.getElementById("labelPersen");
+        const lblHPP = document.getElementById("labelHPP");
+        const lblOpex = document.getElementById("labelOpex");
+
         const btnReset = document.getElementById("btnReset");
         const simPemasukan = document.getElementById("simPemasukan");
         const simPengeluaran = document.getElementById("simPengeluaran");
         const simSaldo = document.getElementById("simSaldo");
+        
+        // Elemen KPI baru
+        const simGrossMargin = document.getElementById("simGrossMargin");
+        const simRasioOpex = document.getElementById("simRasioOpex");
+        const simStatusBisnis = document.getElementById("simStatusBisnis");
+
         const simSaran = document.getElementById("simSaran");
         const saranBox = document.getElementById("saranBox");
         const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
+        const prodSliders = document.querySelectorAll('.prod-slider');
         let debounceTimer;
 
-        const hitungSimulasi = async (persen) => {
+        const hitungSimulasi = async () => {
+            const valUmum = parseInt(slider.value, 10);
+            const valHpp = parseInt(sliderHPP.value, 10);
+            const valOpex = parseInt(sliderOpex.value, 10);
+            
+            let payload = { 
+                penurunan_persen: valUmum,
+                kenaikan_hpp: valHpp,
+                kenaikan_opex: valOpex
+            };
+            
+            prodSliders.forEach(sl => {
+                let name = sl.getAttribute('data-prod');
+                payload['persen_turun_produk_' + name] = parseInt(sl.value, 10);
+            });
+
             try {
                 const resp = await fetch("/api/simulator", {
                     method: "POST",
                     headers: { "Content-Type": "application/json", "X-CSRFToken": csrfToken },
-                    body: JSON.stringify({ penurunan_persen: persen })
+                    body: JSON.stringify(payload)
                 });
                 if (resp.status === 429) {
                     simSaran.innerText = "Wow, pelan-pelan. Anda menggeser terlalu cepat (Rate Limit Penuh).";
@@ -98,44 +176,81 @@
 
                 const data = await resp.json();
 
-                // Render Rupiah Hasil
-                simPemasukan.innerText = formatRupiah(data.pemasukan_baru);
-                simPengeluaran.innerText = formatRupiah(data.pengeluaran_baru);
-                simSaldo.innerText = formatRupiah(data.saldo_baru);
+                simPemasukan.innerText = window.formatRupiah(data.pemasukan_baru);
+                simPengeluaran.innerText = window.formatRupiah(data.pengeluaran_baru);
+                simSaldo.innerText = window.formatRupiah(data.saldo_baru);
+                
+                simGrossMargin.innerText = data.gross_margin + "%";
+                simRasioOpex.innerText = data.rasio_opex + "%";
+                simStatusBisnis.innerText = data.status_bisnis;
 
-                // Logika Warna
+                // Warna Indikator Saldo
                 if (data.saldo_baru >= 0) {
-                    simSaldo.style.color = "#2ef080"; // Cerah untuk dark bg
+                    simSaldo.style.color = "#2ef080"; 
                     saranBox.style.backgroundColor = "rgba(46, 240, 128, 0.15)";
                 } else {
                     simSaldo.style.color = "#ff6b6b";
                     saranBox.style.backgroundColor = "rgba(255, 107, 107, 0.15)";
                 }
 
+                // Warna Status Bisnis
+                if (data.status_bisnis === "Aman") {
+                    simStatusBisnis.style.backgroundColor = "#27AE60"; // Hijau
+                } else if (data.status_bisnis === "Waspada") {
+                    simStatusBisnis.style.backgroundColor = "#E67E22"; // Oranye
+                } else {
+                    simStatusBisnis.style.backgroundColor = "#E74C3C"; // Merah
+                }
+
                 simSaran.innerText = data.saran;
             } catch (err) {
-                console.error(err);
+                console.error("error saat simulasi", err);
             }
+        };
+
+        const debouncedHitung = () => {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(hitungSimulasi, 300);
         };
 
         slider.addEventListener("input", function () {
             const val = parseInt(this.value, 10);
             lblPersen.innerText = val + "%";
-
-            // Ubah warna label persen sebagai indikator keparahan
             lblPersen.style.color = val > 50 ? "var(--danger-color)" : (val > 25 ? "var(--warning-color)" : "var(--primary-color)");
+            debouncedHitung();
+        });
 
-            clearTimeout(debounceTimer);
-            debounceTimer = setTimeout(() => { hitungSimulasi(val); }, 300); // 300ms delay agar tidak membanjiri Rate Limiter Flask
+        sliderHPP.addEventListener("input", function () {
+            lblHPP.innerText = this.value + "%";
+            debouncedHitung();
+        });
+
+        sliderOpex.addEventListener("input", function () {
+            lblOpex.innerText = this.value + "%";
+            debouncedHitung();
+        });
+
+        prodSliders.forEach(sl => {
+            sl.addEventListener("input", function() {
+                const lbl = document.getElementById(this.getAttribute('data-lbl'));
+                lbl.innerText = this.value + "%";
+                debouncedHitung();
+            });
         });
 
         btnReset.addEventListener("click", () => {
-            slider.value = 0;
-            slider.dispatchEvent(new Event('input'));
+            slider.value = 0; slider.dispatchEvent(new Event('input'));
+            sliderHPP.value = 0; sliderHPP.dispatchEvent(new Event('input'));
+            sliderOpex.value = 0; sliderOpex.dispatchEvent(new Event('input'));
+            
+            prodSliders.forEach(sl => {
+                sl.value = 0;
+                document.getElementById(sl.getAttribute('data-lbl')).innerText = "0%";
+            });
+            debouncedHitung();
         });
 
-        // Inisialisasi panggilan pertama
-        hitungSimulasi(0);
+        hitungSimulasi();
     });
 </script>
 {% endblock %}
