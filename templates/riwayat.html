@@ -14,6 +14,54 @@
     </div>
 </div>
 
+{% if data and data.ringkasan_30_hari %}
+<div class="row g-4 mb-4">
+    <!-- Ringkasan Eksekutif 30 Hari -->
+    <div class="col-lg-12">
+        <div class="card summary-card p-4 h-100 border-start border-4 border-warning shadow-sm">
+            <h5 class="fw-bold text-dark mb-3"><i class="bi bi-journal-text text-warning me-2"></i>Ringkasan Eksekutif (30 Hari Terakhir)</h5>
+            <div class="table-responsive">
+                <table class="table table-sm table-borderless align-middle mb-0" style="font-size: 0.95rem;">
+                    <tbody>
+                        <tr>
+                            <td class="text-muted" style="width: 25%;">Total Pemasukan 30 Hari</td>
+                            <td class="fw-bold text-end js-rupiah fs-5 align-middle" data-val="{{ data.ringkasan_30_hari.total_pemasukan }}">0</td>
+                            <td style="width: 10%;"></td>
+                            <td class="text-muted" style="width: 25%;">Rata-rata Pemasukan Harian</td>
+                            <td class="fw-bold text-end js-rupiah fs-5 align-middle" data-val="{{ data.ringkasan_30_hari.rata_pemasukan }}">0</td>
+                        </tr>
+                        <tr>
+                            <td class="text-muted">Total Pengeluaran Ops</td>
+                            <td class="fw-bold text-end js-rupiah fs-5 align-middle" data-val="{{ data.ringkasan_30_hari.total_pengeluaran_op }}">0</td>
+                            <td></td>
+                            <td class="text-muted">Rata-rata Pengeluaran Harian</td>
+                            <td class="fw-bold text-end js-rupiah fs-5 align-middle" data-val="{{ data.ringkasan_30_hari.rata_pengeluaran }}">0</td>
+                        </tr>
+                        <tr>
+                            <td class="text-muted">Saldo Bersih 30 Hari</td>
+                            <td class="fw-bold text-end {% if data.ringkasan_30_hari.saldo_bersih >= 0 %}text-success{% else %}text-danger{% endif %} js-rupiah fs-5 align-middle" data-val="{{ data.ringkasan_30_hari.saldo_bersih }}">0</td>
+                            <td></td>
+                            <td class="text-muted">Gross Margin Rata-rata</td>
+                            <td class="fw-bold text-end fs-5 align-middle {% if data.ringkasan_30_hari.gross_margin >= 30 %}text-success{% else %}text-danger{% endif %}">{{ "%.1f"|format(data.ringkasan_30_hari.gross_margin) }}%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            {% if data.peringatan %}
+            <div class="alert alert-danger mt-4 mb-0 border-0 shadow-sm" style="background-color: #fdf3f2;">
+                <h6 class="fw-bold text-danger mb-2"><i class="bi bi-exclamation-triangle-fill me-2"></i>PERINGATAN AKTIF</h6>
+                <ul class="mb-0 text-danger" style="font-size: 0.9rem;">
+                    {% for p in data.peringatan %}
+                    <li>{{ p }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endif %}
+
 <div class="card summary-card p-4">
     <!-- Form Pencarian (GET) -->
     <form action="{{ url_for('riwayat') }}" method="GET" class="mb-4">

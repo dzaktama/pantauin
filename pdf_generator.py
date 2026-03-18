@@ -32,144 +32,6 @@ def _fmt_rp(nilai):
 def _tgl(dt):
     return f"{dt.day} {_bulan(dt.month)} {dt.year}"
 
-# ──────────────────────────────────────────────
-# RISK ENGINE  (pure-rules, no AI language)
-# ──────────────────────────────────────────────
-
-def _hitung_risiko(score, breakdown, val_in_30, val_op_30, val_saldo_30,
-                   avg_in, avg_out, gross_margin_pct, warnings, proy_arr):
-    """
-    Menghasilkan dict profil risiko untuk keperluan pengajuan kredit.
-    Skala risiko: 1 (Sangat Rendah) – 5 (Sangat Tinggi)
-    """
-    risiko = {}
-
-    # 1. Risiko Likuiditas
-    dana_darurat_ideal = avg_out * 14          # 2 minggu operasional
-    coverage           = val_saldo_30 / dana_darurat_ideal if dana_darurat_ideal > 0 else 0
-    if   coverage >= 2.0: r_liq = 1
-    elif coverage >= 1.0: r_liq = 2
-    elif coverage >= 0.5: r_liq = 3
-    elif coverage >= 0.0: r_liq = 4
-    else:                 r_liq = 5
-    risiko["likuiditas"] = {
-        "skor": r_liq,
-        "coverage": coverage,
-        "dana_tersedia": val_saldo_30,
-        "dana_ideal": dana_darurat_ideal,
-        "keterangan": _liq_ket(r_liq, coverage, val_saldo_30, dana_darurat_ideal)
-    }
-
-    # 2. Risiko Profitabilitas
-    rasio_op = (val_op_30 / val_in_30 * 100) if val_in_30 > 0 else 100
-    if   gross_margin_pct >= 50 and rasio_op <= 50: r_profit = 1
-    elif gross_margin_pct >= 35 and rasio_op <= 65: r_profit = 2
-    elif gross_margin_pct >= 20 and rasio_op <= 80: r_profit = 3
-    elif gross_margin_pct >= 10:                    r_profit = 4
-    else:                                           r_profit = 5
-    risiko["profitabilitas"] = {
-        "skor": r_profit,
-        "gross_margin": gross_margin_pct,
-        "rasio_operasional": rasio_op,
-        "keterangan": _profit_ket(r_profit, gross_margin_pct, rasio_op)
-    }
-
-    # 3. Risiko Arus Kas (cashflow volatility)
-    tren  = breakdown.get("tren", 0)
-    stab  = breakdown.get("stabilitas", 0)
-    kons  = breakdown.get("konsistensi", 0)
-    avg_cf = (tren + stab + kons) / 3
-    if   avg_cf >= 80: r_cf = 1
-    elif avg_cf >= 65: r_cf = 2
-    elif avg_cf >= 50: r_cf = 3
-    elif avg_cf >= 35: r_cf = 4
-    else:              r_cf = 5
-    risiko["arus_kas"] = {
-        "skor": r_cf,
-        "stabilitas": stab,
-        "tren": tren,
-        "konsistensi": kons,
-        "keterangan": _cf_ket(r_cf, avg_cf)
-    }
-
-    # 4. Risiko Proyeksi (forward-looking)
-    neg_weeks = sum(1 for (_,_,_,s) in proy_arr if s < 0)
-    if   neg_weeks == 0: r_proj = 1
-    elif neg_weeks == 1: r_proj = 2
-    elif neg_weeks == 2: r_proj = 3
-    elif neg_weeks == 3: r_proj = 4
-    else:                r_proj = 5
-    risiko["proyeksi"] = {
-        "skor": r_proj,
-        "minggu_negatif": neg_weeks,
-        "keterangan": _proj_ket(r_proj, neg_weeks)
-    }
-
-    # 5. Risiko Kepatuhan Data
-    n_warn = len(warnings)
-    if   n_warn == 0: r_data = 1
-    elif n_warn == 1: r_data = 2
-    elif n_warn <= 3: r_data = 3
-    elif n_warn <= 5: r_data = 4
-    else:             r_data = 5
-    risiko["kepatuhan"] = {
-        "skor": r_data,
-        "jumlah_peringatan": n_warn,
-        "keterangan": _data_ket(r_data, n_warn)
-    }
-
-    # ── Composite Risk Rating ──
-    bobot = {"likuiditas":0.30,"profitabilitas":0.25,"arus_kas":0.25,
-             "proyeksi":0.15,"kepatuhan":0.05}
-    composite = sum(risiko[k]["skor"] * bobot[k] for k in bobot)
-    if   composite <= 1.5: label, warna = "SANGAT RENDAH", "AAA"
-    elif composite <= 2.2: label, warna = "RENDAH",        "AA"
-    elif composite <= 3.0: label, warna = "MODERAT",       "BBB"
-    elif composite <= 3.8: label, warna = "TINGGI",        "BB"
-    else:                  label, warna = "SANGAT TINGGI", "CCC"
-
-    risiko["composite"] = {
-        "skor": round(composite, 2),
-        "label": label,
-        "rating": warna
-    }
-    return risiko
-
-
-def _liq_ket(r, cov, ada, ideal):
-    if r == 1: return f"Dana operasional sangat mencukupi ({cov:.1f}x dari kebutuhan cadangan ideal)."
-    if r == 2: return f"Dana cadangan memadai, menutup {cov:.1f}x kebutuhan operasional 2 minggu."
-    if r == 3: return f"Dana cadangan terbatas, hanya {cov:.1f}x kebutuhan minimum. Perlu penguatan."
-    if r == 4: return f"Dana cadangan di bawah standar minimum. Rentan terhadap gangguan operasional."
-    return        f"Dana cadangan tidak mencukupi. Risiko gagal bayar kewajiban jangka pendek tinggi."
-
-def _profit_ket(r, gm, ro):
-    if r == 1: return f"Profitabilitas sangat baik. Gross margin {gm:.1f}%, rasio beban operasional {ro:.1f}%."
-    if r == 2: return f"Profitabilitas baik. Gross margin {gm:.1f}%, pengendalian biaya cukup efisien."
-    if r == 3: return f"Profitabilitas moderat. Gross margin {gm:.1f}% perlu ditingkatkan agar lebih efisien."
-    if r == 4: return f"Profitabilitas rendah. Gross margin {gm:.1f}% mengindikasikan tekanan margin."
-    return        f"Profitabilitas sangat rendah. Risiko kerugian operasional berkelanjutan."
-
-def _cf_ket(r, avg):
-    if r == 1: return "Arus kas sangat stabil dan konsisten. Mencerminkan kualitas manajemen keuangan yang baik."
-    if r == 2: return "Arus kas stabil dengan variasi minor yang dapat diterima."
-    if r == 3: return "Arus kas cukup stabil namun terdapat volatilitas yang perlu dipantau."
-    if r == 4: return "Arus kas tidak stabil. Fluktuasi tinggi berisiko mengganggu kemampuan membayar kewajiban."
-    return        "Arus kas sangat tidak stabil. Risiko default jangka pendek perlu diantisipasi."
-
-def _proj_ket(r, neg):
-    if r == 1: return "Proyeksi 4 minggu ke depan seluruhnya positif. Kemampuan bayar terjaga."
-    if r == 2: return f"Proyeksi menunjukkan {neg} minggu dengan arus kas negatif. Perlu pemantauan."
-    if r == 3: return f"Proyeksi menunjukkan {neg} minggu negatif. Diperlukan penyesuaian pengeluaran."
-    if r == 4: return f"Proyeksi menunjukkan {neg} minggu negatif. Risiko likuiditas jangka dekat signifikan."
-    return        "Seluruh proyeksi menunjukkan arus kas negatif. Diperlukan intervensi segera."
-
-def _data_ket(r, n):
-    if r == 1: return "Tidak ditemukan anomali data. Laporan keuangan konsisten dan lengkap."
-    if r == 2: return f"Ditemukan {n} peringatan minor yang perlu ditindaklanjuti."
-    if r == 3: return f"Ditemukan {n} peringatan. Terdapat ketidakkonsistenan data yang perlu dijelaskan."
-    if r == 4: return f"Ditemukan {n} peringatan. Kualitas data berpengaruh terhadap akurasi penilaian."
-    return        f"Ditemukan {n} peringatan serius. Validasi ulang data keuangan sangat disarankan."
 
 
 # ──────────────────────────────────────────────
@@ -215,7 +77,7 @@ def generate_pdf_report(
     output_path, breakdown, stat_4_minggu, proyeksi, proyeksi_pengeluaran,
     tgl_cetak_dt, tgl_mulai_dt, tgl_akhir_dt,
     kustom_teks_ai=None, lampir_proyeksi=True, profil_dict=None,
-    data_produk=None
+    data_produk=None, risiko_dict=None, rekomendasi_list=None
 ):
     """
     Laporan Kesehatan Bisnis – Format Profesional (Bankable)
@@ -327,10 +189,7 @@ def generate_pdf_report(
             proy_arr.append((label, pi, po, pi-po))
 
     # Risk engine
-    risiko = _hitung_risiko(
-        score, breakdown, val_in_30, val_op_30, val_saldo_30,
-        avg_in, avg_out, gross_margin_pct, warnings, proy_arr
-    )
+    risiko = risiko_dict or {}
 
     elements = []
 
@@ -763,63 +622,12 @@ def generate_pdf_report(
     elements.append(Paragraph(f"{sec}. REKOMENDASI TINDAKAN", st_h1)); sec+=1
     elements.append(HRFlowable(width=W, thickness=1, color=C_ACCENT, spaceAfter=8))
 
-    rekomendasi = []
-    avg_weekly_expense = avg_out * 7
-    dana_darurat_ideal = avg_weekly_expense * 2
-
-    rekomendasi.append((
-        "Pengelolaan Margin",
-        f"Pertahankan gross margin di atas {gross_margin_pct:.1f}% dengan optimasi harga jual "
-        f"dan pengendalian harga pokok produksi secara berkala."
-    ))
-    rekomendasi.append((
-        "Pencatatan Keuangan",
-        "Lakukan pencatatan transaksi secara disiplin setiap hari untuk meningkatkan akurasi "
-        "analisis dan memperkuat kredibilitas laporan keuangan."
-    ))
-    if tren_penjualan < 50:
-        rekomendasi.append((
-            "Peningkatan Penjualan",
-            "Tren penjualan menunjukkan penurunan. Disarankan untuk mengimplementasikan program "
-            "promosi terstruktur atau strategi retensi pelanggan guna mendorong pertumbuhan pendapatan."
-        ))
-    if rasio_pengeluaran > 60:
-        rekomendasi.append((
-            "Efisiensi Operasional",
-            f"Rasio pengeluaran operasional sebesar {rasio_pengeluaran:.1f}% melampaui batas efisiensi "
-            f"yang disarankan (60%). Lakukan audit biaya dan identifikasi pos yang dapat dipangkas 10–15%."
-        ))
-    if gross_margin_pct < 30:
-        rekomendasi.append((
-            "Perbaikan Margin",
-            f"Gross margin {gross_margin_pct:.1f}% berada di bawah standar sektor UMKM (>30%). "
-            "Pertimbangkan penyesuaian harga jual atau negosiasi ulang harga bahan baku dengan pemasok."
-        ))
-    if val_saldo_30 < dana_darurat_ideal:
-        rekomendasi.append((
-            "Pembentukan Dana Cadangan",
-            f"Saldo bersih saat ini ({_fmt_rp(val_saldo_30)}) belum memenuhi dana cadangan operasional "
-            f"minimum 2 minggu ({_fmt_rp(dana_darurat_ideal)}). Alokasikan sebagian pemasukan untuk "
-            "pembentukan dana darurat secara bertahap."
-        ))
-    neg_in = sum(1 for (_,_,_,s) in proy_arr if s < 0)
-    if neg_in > 0:
-        rekomendasi.append((
-            "Antisipasi Cashflow Negatif",
-            f"Proyeksi menunjukkan potensi arus kas negatif dalam {neg_in} periode ke depan. "
-            "Tunda pengeluaran modal yang tidak kritis dan optimalkan penagihan piutang."
-        ))
-    if konsistensi < 60:
-        rekomendasi.append((
-            "Konsistensi Pendapatan",
-            "Fluktuasi pendapatan harian yang tinggi mengindikasikan ketidakstabilan permintaan. "
-            "Identifikasi pola penjualan dan kembangkan strategi untuk periode permintaan rendah."
-        ))
-
-    rekomendasi = rekomendasi[:7]
+    rekomendasi = rekomendasi_list or []
 
     rec_rows = [[Paragraph(h, st_tbl_head) for h in ["No.","Aspek","Rekomendasi Tindakan"]]]
-    for i, (aspek, isi) in enumerate(rekomendasi, 1):
+    for i, rek in enumerate(rekomendasi, 1):
+        aspek = rek.get("aspek", "")
+        isi = rek.get("tindakan", "")
         rec_rows.append([
             Paragraph(str(i), st_tbl_cell_c),
             Paragraph(f"<b>{aspek}</b>", S(f"as{i}", fontName="Helvetica-Bold", fontSize=9, textColor=C_NAVY)),

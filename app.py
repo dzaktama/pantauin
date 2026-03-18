@@ -347,8 +347,15 @@ def create_app(config_class=Config):
             
             # Paginasi SQLite ringan (20 baris per halaman)
             pagination = query.order_by(Transaksi.tanggal.desc()).paginate(page=page, per_page=20, error_out=False)
+
+            cache_key = f"dashboard_bk_{buku_kas_id}_30_{datetime.now().strftime('%Y%m%d')}_v3"
+            data = cache.get(cache_key)
+            if data is None:
+                transaksi_list = Transaksi.query.filter_by(buku_kas_id=buku_kas_id).order_by(Transaksi.tanggal.asc()).all()
+                data = hitung_health_score(transaksi_list, periode_grafik=30)
+                cache.set(cache_key, data)
             
-            return render_template('riwayat.html', pagination=pagination, q=q)
+            return render_template('riwayat.html', pagination=pagination, q=q, data=data)
         except Exception as e:
             return render_template('error.html', pesan=f"Gagal memuat halaman master data. Detail: {str(e)}"), 500
 
@@ -571,7 +578,9 @@ def create_app(config_class=Config):
                     kustom_teks_ai=teks_ai_diedit,
                     lampir_proyeksi=lampir_proyeksi,
                     profil_dict=profil_dict, # Jika None, generator akan skip bab Profil Perusahaan
-                    data_produk=data.get('data_produk')
+                    data_produk=data.get('data_produk'),
+                    risiko_dict=data.get('risiko'),
+                    rekomendasi_list=data.get('rekomendasi')
                 )
                 action_type = request.form.get('action', 'download')
                 

@@ -246,6 +246,15 @@ def hitung_health_score(transaksi_list, periode_grafik=30):
         skor_konsistensi
     )
 
+    ringkasan_30_hari = {
+        "total_pemasukan": val_in_30,
+        "total_pengeluaran_op": val_op_30,
+        "saldo_bersih": val_saldo_30,
+        "rata_pemasukan": round(rata_harian),
+        "rata_pengeluaran": round(np.mean([d['pengeluaran_op'] for d in data_harian]) if data_harian else 0),
+        "gross_margin": gross_margin_pct if 'gross_margin_pct' in locals() else 0,
+    }
+
     return {
         "is_cukup": True,
         "periode_grafik": periode_grafik,
@@ -253,6 +262,7 @@ def hitung_health_score(transaksi_list, periode_grafik=30):
         "risiko": risiko,
         "rekomendasi": rekomendasi,
         "proyeksi_tabel": proy_arr,
+        "ringkasan_30_hari": ringkasan_30_hari,
         "skor": skor_total,
         "label": label,
         "warna": warna,
@@ -296,6 +306,7 @@ def _fallback_empty_data(periode_grafik=30):
         "risiko": None,
         "rekomendasi": [],
         "proyeksi_tabel": [],
+        "ringkasan_30_hari": {},
         "skor": 0,
         "label": "Data Belum Cukup",
         "warna": "kuning",
