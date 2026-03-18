@@ -40,6 +40,8 @@ class Transaksi(db.Model):
     buku_kas_id = db.Column(db.Integer, db.ForeignKey('buku_kas.id', ondelete='CASCADE'), nullable=False)
     tanggal = db.Column(db.Date, nullable=False)
     kategori = db.Column(db.String(50), nullable=False)  # 'Makanan & Minuman', 'Retail', 'Jasa', 'Lainnya'
+    nama_produk = db.Column(db.String(100), nullable=True)
+    kuantitas = db.Column(db.Integer, default=0)
     jenis_pengeluaran = db.Column(db.String(50), default='operasional')
     pemasukan = db.Column(db.Float, default=0.0)
     pengeluaran = db.Column(db.Float, default=0.0)

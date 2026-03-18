@@ -27,6 +27,17 @@
                     </div>
                 </div>
 
+                <div class="row g-3 mb-3">
+                    <div class="col-md-8">
+                        {{ form.nama_produk.label(class="form-label") }}
+                        {{ form.nama_produk(class="form-control form-control-lg", placeholder="Cth: Nasi Goreng Spesial") }}
+                    </div>
+                    <div class="col-md-4">
+                        {{ form.kuantitas.label(class="form-label") }}
+                        {{ form.kuantitas(class="form-control form-control-lg", placeholder="0") }}
+                    </div>
+                </div>
+
                 <div class="mb-3">
                     {{ form.pemasukan.label(class="form-label") }}
                     <div class="input-group input-group-lg">

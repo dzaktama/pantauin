@@ -17,7 +17,7 @@ from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from flask_wtf.csrf import CSRFProtect
 
-from calculator import hitung_health_score
+from calculator import hitung_health_score, analisis_tren_produk
 import gemini_helper
 from pdf_generator import generate_pdf_report
 
@@ -204,12 +204,16 @@ def create_app(config_class=Config):
                 transaksi_list = Transaksi.query.filter_by(buku_kas_id=buku_kas_id).order_by(Transaksi.tanggal.asc()).all()
                 data = hitung_health_score(transaksi_list, periode_grafik=periode)
                 
+                t_list_30 = [t for t in transaksi_list if (date.today() - t.tanggal).days <= 30]
+                data_produk = analisis_tren_produk(t_list_30)
+
                 # Panggil Gemini jika data valid
                 if data['is_cukup']:
                     saran_gemini = gemini_helper.get_dashboard_suggestion(
                         data['skor'], data['total_pemasukan_minggu_ini'], 
                         data['total_pengeluaran_minggu_ini'], data['tren_status'],
-                        data.get('catatan_mingguan', [])
+                        data.get('catatan_mingguan', []),
+                        data_produk
                     )
                 else:
                     saran_gemini = "Saran belum tersedia. Lengkapi pencatatan laporan buku ini setidaknya 14 hari."
@@ -302,6 +306,8 @@ def create_app(config_class=Config):
                     buku_kas_id=buku_kas_id,
                     tanggal=form.tanggal.data,
                     kategori=form.kategori.data,
+                    nama_produk=form.nama_produk.data if form.nama_produk.data else None,
+                    kuantitas=form.kuantitas.data,
                     jenis_pengeluaran=form.jenis_pengeluaran.data,
                     pemasukan=form.pemasukan.data,
                     pengeluaran=form.pengeluaran.data,

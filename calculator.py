@@ -278,3 +278,22 @@ def _fallback_empty_data(periode_grafik=30):
         },
         "statistik_4_minggu": []
     }
+
+def analisis_tren_produk(transaksi_list):
+    """
+    bantu cari tahu produk mana yang paling banyak terjual dan mana yang kurang laris dari riwayat transaksi
+    """
+    produk_agregat = defaultdict(int)
+    for t in transaksi_list:
+        if getattr(t, 'nama_produk', None) and getattr(t, 'kuantitas', 0) > 0:
+            nama = str(t.nama_produk).strip().lower()
+            produk_agregat[nama] += t.kuantitas
+            
+    sorted_produk = sorted(produk_agregat.items(), key=lambda x: x[1], reverse=True)
+    top_3_terlaris = [{"nama": p[0].title(), "total": p[1]} for p in sorted_produk[:3]]
+    bottom_3_menurun = [{"nama": p[0].title(), "total": p[1]} for p in sorted_produk[-3:]] if len(sorted_produk) >= 3 else []
+    
+    return {
+        "top_3_terlaris": top_3_terlaris,
+        "bottom_3_menurun": bottom_3_menurun
+    }

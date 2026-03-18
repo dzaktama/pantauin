@@ -15,10 +15,9 @@ try:
 except Exception as e:
     model = None
 
-def get_dashboard_suggestion(health_score, total_income, total_expense, trend_status, catatan_mingguan=None):
+def get_dashboard_suggestion(health_score, total_income, total_expense, trend_status, catatan_mingguan=None, data_produk=None):
     """
-    Menghasilkan saran tingkat dashboard berdasarkan kondisi bisnis ringkas.
-    Menggunakan Gemini 1.5 Flash. Memiliki perlindungan fallback teks statis.
+    bikin saran untuk dashboard yang bahas strategi bisnis dan stok produk
     """
     if not model:
         # Fallback statis ISO 25010 (Reliability)
@@ -28,6 +27,14 @@ def get_dashboard_suggestion(health_score, total_income, total_expense, trend_st
         catatan_text = ""
         if catatan_mingguan:
             catatan_text = "Catatan 7 hari terakhir: " + ", ".join(catatan_mingguan) + "\n"
+            
+        data_produk_text = ""
+        if data_produk:
+            top_3 = ", ".join([f"{p['nama']} ({p['total']} terjual)" for p in data_produk.get('top_3_terlaris', [])])
+            bottom_3 = ", ".join([f"{p['nama']} ({p['total']} terjual)" for p in data_produk.get('bottom_3_menurun', [])])
+            if top_3 or bottom_3:
+                data_produk_text = f"Data Produk Terlaris: {top_3}. Produk Kurang Laris (Dead Stock): {bottom_3}.\n"
+                
         prompt = f"""
         Anda adalah asisten keuangan UMKM Indonesia yang bijaksana dan ramah.
         Kondisi bisnis minggu ini:
@@ -36,7 +43,9 @@ def get_dashboard_suggestion(health_score, total_income, total_expense, trend_st
         - Pengeluaran: Rp {total_expense}
         - Tren Penjualan: {trend_status}
         {catatan_text}
+        {data_produk_text}
         Berikan saran tindakan nyata dalam MAKSIMAL 3 KALIMAT singkat untuk pedagang atau pemilik warung. 
+        Berikan saran strategis penjualan, strategi harga, atau manajemen stok (dead stock) yang secara spesifik menyebut nama produk dari data produk di atas jika tersedia.
         Jangan beri sambutan, langsung pada poin saran. Gunakan Bahasa Indonesia informal namun sopan.
         """
         response = model.generate_content(prompt)
