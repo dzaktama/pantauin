@@ -1,0 +1,843 @@
+{% extends 'base.html' %}
+{% block title %}Panduan Metrik Dashboard - PANTAUIN{% endblock %}
+{% block page_heading %}Panduan Metrik{% endblock %}
+
+{% block extra_css %}
+<style>
+    .guide-hero {
+        background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 40%, #6366f1 100%);
+        color: white;
+        border-radius: 1.5rem;
+        padding: 3.5rem 2.5rem;
+        position: relative;
+        overflow: hidden;
+    }
+    .guide-hero::before {
+        content: '';
+        position: absolute;
+        top: -50%; right: -20%;
+        width: 500px; height: 500px;
+        background: radial-gradient(circle, rgba(99,102,241,0.3) 0%, transparent 70%);
+        border-radius: 50%;
+    }
+    .guide-section { scroll-margin-top: 90px; }
+    .metric-card {
+        border: none;
+        border-radius: 1.25rem;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+        overflow: hidden;
+    }
+    .metric-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 35px rgba(0,0,0,0.12);
+    }
+    .metric-card .card-header {
+        border-bottom: none;
+        font-weight: 700;
+        letter-spacing: 0.03em;
+        padding: 1rem 1.5rem;
+        --bs-card-color: #fff;
+        --bs-card-cap-color: #fff;
+        color: #fff !important;
+    }
+    .metric-card .card-header h4,
+    .metric-card .card-header h4 i {
+        color: #fff !important;
+    }
+    .range-bar {
+        height: 44px;
+        border-radius: 10px;
+        overflow: hidden;
+        display: flex;
+        font-size: 0.75rem;
+        font-weight: 700;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .range-bar > div {
+        display: flex; align-items: center; justify-content: center;
+        color: white; padding: 0 8px; white-space: nowrap;
+        text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+    }
+    .toc-link {
+        text-decoration: none;
+        color: rgba(255,255,255,0.9);
+        padding: 8px 16px;
+        border-radius: 50rem;
+        border: 1.5px solid rgba(255,255,255,0.35);
+        font-size: 0.85rem;
+        font-weight: 600;
+        transition: all 0.25s;
+        backdrop-filter: blur(4px);
+        background: rgba(255,255,255,0.08);
+    }
+    .toc-link:hover {
+        background: rgba(255,255,255,0.2);
+        color: white;
+        border-color: white;
+        transform: translateY(-1px);
+    }
+    .tier-table th, .tier-table td {
+        padding: 0.75rem 1rem;
+        vertical-align: middle;
+        font-size: 0.9rem;
+    }
+    .tier-table .badge-tier {
+        font-size: 0.85rem;
+        padding: 6px 14px;
+        border-radius: 8px;
+        font-weight: 800;
+        min-width: 55px;
+        display: inline-block;
+        text-align: center;
+        letter-spacing: 0.05em;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
+    .info-icon-box {
+        width: 56px; height: 56px;
+        border-radius: 16px;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 1.6rem;
+        flex-shrink: 0;
+    }
+    .formula-box {
+        background: linear-gradient(135deg, #f0f4ff, #f8f9fc);
+        border: 1.5px dashed #a5b4fc;
+        border-radius: 12px;
+        padding: 1rem 1.25rem;
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 0.9rem;
+        color: #1e3a8a;
+        font-weight: 600;
+    }
+    .case-good { border-left: 5px solid #10b981; background: linear-gradient(135deg, #ecfdf5, #f0fdf4); }
+    .case-bad { border-left: 5px solid #ef4444; background: linear-gradient(135deg, #fef2f2, #fff5f5); }
+    .case-metric { font-size: 1.5rem; font-weight: 800; line-height: 1; }
+    .section-number {
+        width: 36px; height: 36px;
+        border-radius: 50%; display: inline-flex; align-items: center; justify-content: center;
+        font-weight: 800; font-size: 0.9rem; color: white; flex-shrink: 0;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- HERO -->
+<div class="guide-hero mb-5">
+    <div class="row align-items-center">
+        <div class="col-lg-7">
+            <p class="text-white-50 small fw-bold text-uppercase mb-2" style="letter-spacing:0.1em"><i class="bi bi-book me-1"></i> Panduan Interaktif</p>
+            <h1 class="display-5 fw-bold mb-3">Memahami Dashboard<br>PANTAUIN</h1>
+            <p class="lead mb-4 opacity-75">Halaman ini menjelaskan arti, rumus, dan rentang nilai dari setiap metrik dan skor yang ditampilkan di Dashboard Bisnis Anda. Gunakan panduan ini sebagai referensi kapan saja.</p>
+            <div class="d-flex flex-wrap gap-2">
+                <a href="#skor-kesehatan" class="toc-link"><i class="bi bi-heart-pulse me-1"></i> Skor Kesehatan</a>
+                <a href="#credit-rating" class="toc-link"><i class="bi bi-shield-check me-1"></i> Credit Rating</a>
+                <a href="#dimensi-risiko" class="toc-link"><i class="bi bi-layers me-1"></i> Dimensi Risiko</a>
+                <a href="#indikator-vital" class="toc-link"><i class="bi bi-activity me-1"></i> Indikator Vital</a>
+                <a href="#studi-kasus" class="toc-link"><i class="bi bi-building me-1"></i> Studi Kasus UMKM</a>
+                <a href="#ringkasan-eksekutif" class="toc-link"><i class="bi bi-journal-text me-1"></i> Ringkasan Eksekutif</a>
+                <a href="#proyeksi" class="toc-link"><i class="bi bi-binoculars me-1"></i> Proyeksi</a>
+                <a href="#peringatan" class="toc-link"><i class="bi bi-exclamation-triangle me-1"></i> Peringatan</a>
+            </div>
+        </div>
+        <div class="col-lg-5 text-center d-none d-lg-block">
+            <i class="bi bi-graph-up-arrow" style="font-size: 10rem; opacity: 0.15;"></i>
+        </div>
+    </div>
+</div>
+
+<!-- ===== 1. SKOR KESEHATAN BISNIS ===== -->
+<section class="guide-section mb-5" id="skor-kesehatan">
+    <div class="metric-card card">
+        <div class="card-header bg-primary text-white py-3 px-4">
+            <h4 class="mb-0"><i class="bi bi-heart-pulse-fill me-2"></i>Skor Kesehatan Bisnis (0–100)</h4>
+        </div>
+        <div class="card-body p-4">
+            <p class="text-muted mb-3">Skor Kesehatan Bisnis adalah <strong>angka komposit 0–100</strong> yang merangkum kondisi finansial usaha Anda dalam satu angka. Semakin tinggi, semakin sehat.</p>
+
+            <h6 class="fw-bold text-dark mb-2"><i class="bi bi-calculator me-2 text-primary"></i>Komponen Pembentuk Skor</h6>
+            <div class="table-responsive mb-4">
+                <table class="table table-sm table-bordered align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th style="width:5%">#</th>
+                            <th style="width:25%">Komponen</th>
+                            <th style="width:12%">Bobot</th>
+                            <th>Penjelasan Singkat</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="text-center fw-bold">1</td>
+                            <td><i class="bi bi-cash-stack text-success me-1"></i> Stabilitas Cashflow</td>
+                            <td class="text-center fw-bold text-primary">25%</td>
+                            <td>Seberapa besar margin operasional Anda (pendapatan minus biaya ops). Ideal jika margin ≥ 20%.</td>
+                        </tr>
+                        <tr>
+                            <td class="text-center fw-bold">2</td>
+                            <td><i class="bi bi-graph-up text-info me-1"></i> Tren Penjualan</td>
+                            <td class="text-center fw-bold text-primary">25%</td>
+                            <td>Perbandingan penjualan minggu ini vs minggu lalu. Naik = skor bagus, turun drastis = skor rendah.</td>
+                        </tr>
+                        <tr>
+                            <td class="text-center fw-bold">3</td>
+                            <td><i class="bi bi-pie-chart text-danger me-1"></i> Rasio Pengeluaran Ops</td>
+                            <td class="text-center fw-bold text-primary">20%</td>
+                            <td>Proporsi biaya operasional terhadap pemasukan. Semakin rendah, semakin efisien.</td>
+                        </tr>
+                        <tr>
+                            <td class="text-center fw-bold">4</td>
+                            <td><i class="bi bi-wallet2 text-warning me-1"></i> Gross Margin</td>
+                            <td class="text-center fw-bold text-primary">20%</td>
+                            <td>Rata-rata keuntungan kotor harian Anda. Target idealnya ≥ 30%.</td>
+                        </tr>
+                        <tr>
+                            <td class="text-center fw-bold">5</td>
+                            <td><i class="bi bi-bar-chart-steps text-secondary me-1"></i> Konsistensi</td>
+                            <td class="text-center fw-bold text-primary">10%</td>
+                            <td>Seberapa stabil pemasukan harian Anda (rendah fluktuasi = skor tinggi).</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h6 class="fw-bold text-dark mb-2"><i class="bi bi-palette me-2 text-primary"></i>Rentang Skor & Artinya</h6>
+            <div class="range-bar mb-3">
+                <div style="width:20%; background: #E74C3C;">0–59<br>Kritis</div>
+                <div style="width:20%; background: #F39C12;">60–79<br>Hati-hati</div>
+                <div style="width:60%; background: #27AE60;">80–100<br>Sehat</div>
+            </div>
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <div class="d-flex align-items-start gap-3 p-3 bg-danger bg-opacity-10 rounded-3">
+                        <div class="info-icon-box bg-danger bg-opacity-25 text-danger"><i class="bi bi-emoji-frown"></i></div>
+                        <div>
+                            <h6 class="fw-bold text-danger mb-1">0 – 59: Kondisi Kritis</h6>
+                            <p class="small text-muted mb-0">Bisnis berisiko tinggi. Pemasukan rendah, pengeluaran tinggi, atau tren turun tajam. Perlu tindakan darurat.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="d-flex align-items-start gap-3 p-3 bg-warning bg-opacity-10 rounded-3">
+                        <div class="info-icon-box bg-warning bg-opacity-25 text-warning"><i class="bi bi-emoji-neutral"></i></div>
+                        <div>
+                            <h6 class="fw-bold text-warning mb-1">60 – 79: Perlu Perhatian</h6>
+                            <p class="small text-muted mb-0">Bisnis masih berjalan tetapi ada aspek yang perlu diperbaiki segera. Pantau lebih ketat.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="d-flex align-items-start gap-3 p-3 bg-success bg-opacity-10 rounded-3">
+                        <div class="info-icon-box bg-success bg-opacity-25 text-success"><i class="bi bi-emoji-smile"></i></div>
+                        <div>
+                            <h6 class="fw-bold text-success mb-1">80 – 100: Bisnis Sehat</h6>
+                            <p class="small text-muted mb-0">Performa baik. Margin sehat, tren positif, dan pengeluaran terkendali. Pertahankan!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== 2. CREDIT RATING ===== -->
+<section class="guide-section mb-5" id="credit-rating">
+    <div class="metric-card card">
+        <div class="card-header py-3 px-4 text-white" style="background: linear-gradient(135deg, #1B2A6B, #4338ca);">
+            <h4 class="mb-0"><i class="bi bi-shield-check me-2"></i>Credit Rating Komposit</h4>
+        </div>
+        <div class="card-body p-4">
+            <p class="text-muted mb-3">Credit Rating adalah <strong>penilaian kelayakan kredit</strong> usaha Anda berdasarkan 5 dimensi risiko. Mirip dengan rating lembaga pemeringkat (S&P, Moody's), tapi disesuaikan untuk UMKM.</p>
+
+            <div class="formula-box mb-4">
+                <strong>Rumus:</strong> Skor Komposit = (Likuiditas × 30%) + (Profitabilitas × 25%) + (Arus Kas × 25%) + (Proyeksi × 15%) + (Kepatuhan Data × 5%)
+            </div>
+
+            <h6 class="fw-bold text-dark mb-3"><i class="bi bi-bar-chart me-2 text-primary"></i>Tabel Peringkat</h6>
+            <div class="table-responsive">
+                <table class="table tier-table table-hover align-middle mb-0">
+                    <thead class="table-dark">
+                        <tr>
+                            <th class="text-center" style="width:12%">Rating</th>
+                            <th style="width:18%">Rentang Skor</th>
+                            <th style="width:18%">Tingkat Risiko</th>
+                            <th>Arti</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="text-center"><span class="badge-tier" style="background:#27AE60; color:white;">AAA</span></td>
+                            <td class="fw-bold">≤ 1.50</td>
+                            <td><span class="badge bg-success">SANGAT RENDAH</span></td>
+                            <td>Kondisi finansial sangat prima. Layak mendapat kepercayaan penuh dari mitra atau lembaga keuangan.</td>
+                        </tr>
+                        <tr>
+                            <td class="text-center"><span class="badge-tier" style="background:#2ECC71; color:white;">AA</span></td>
+                            <td class="fw-bold">1.51 – 2.20</td>
+                            <td><span class="badge bg-success bg-opacity-75">RENDAH</span></td>
+                            <td>Bisnis berjalan dengan baik. Ada sedikit ruang perbaikan di beberapa dimensi.</td>
+                        </tr>
+                        <tr>
+                            <td class="text-center"><span class="badge-tier" style="background:#F39C12; color:white;">BBB</span></td>
+                            <td class="fw-bold">2.21 – 3.00</td>
+                            <td><span class="badge bg-warning text-dark">MODERAT</span></td>
+                            <td>Bisnis cukup stabil namun rentan terhadap goncangan ekonomi. Perlu penguatan di beberapa area.</td>
+                        </tr>
+                        <tr>
+                            <td class="text-center"><span class="badge-tier" style="background:#E67E22; color:white;">BB</span></td>
+                            <td class="fw-bold">3.01 – 3.80</td>
+                            <td><span class="badge bg-danger bg-opacity-75">TINGGI</span></td>
+                            <td>Terdapat risiko signifikan. Arus kas tidak stabil, margin tipis, atau proyeksi negatif. Perlu aksi perbaikan serius.</td>
+                        </tr>
+                        <tr>
+                            <td class="text-center"><span class="badge-tier" style="background:#E74C3C; color:white;">CCC</span></td>
+                            <td class="fw-bold">> 3.80</td>
+                            <td><span class="badge bg-danger">SANGAT TINGGI</span></td>
+                            <td>Kondisi kritis. Risiko gagal bayar sangat besar. Butuh restrukturisasi keuangan segera.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== 3. DIMENSI RISIKO ===== -->
+<section class="guide-section mb-5" id="dimensi-risiko">
+    <div class="metric-card card">
+        <div class="card-header py-3 px-4 text-white" style="background: linear-gradient(135deg, #059669, #10b981);">
+            <h4 class="mb-0"><i class="bi bi-layers-fill me-2"></i>5 Dimensi Risiko</h4>
+        </div>
+        <div class="card-body p-4">
+            <p class="text-muted mb-4">Setiap dimensi memiliki <strong>skor 1 – 5</strong> (1 = Risiko Sangat Rendah, 5 = Risiko Sangat Tinggi).</p>
+
+            <div class="range-bar mb-4" style="font-size: 0.8rem;">
+                <div style="width:20%; background: #27AE60;">1<br>Sangat Rendah</div>
+                <div style="width:20%; background: #2ECC71;">2<br>Rendah</div>
+                <div style="width:20%; background: #F39C12;">3<br>Moderat</div>
+                <div style="width:20%; background: #E67E22;">4<br>Tinggi</div>
+                <div style="width:20%; background: #E74C3C;">5<br>Sangat Tinggi</div>
+            </div>
+
+            <!-- Likuiditas -->
+            <div class="p-3 bg-light rounded-3 mb-3 border-start border-4 border-primary">
+                <div class="d-flex align-items-center gap-3 mb-2">
+                    <div class="info-icon-box bg-primary bg-opacity-10 text-primary"><i class="bi bi-droplet-half"></i></div>
+                    <div>
+                        <h6 class="fw-bold mb-0 text-dark">1. Likuiditas <span class="text-muted fw-normal small">(Bobot 30%)</span></h6>
+                        <small class="text-muted">Kemampuan bisnis membiayai operasional tanpa pemasukan baru.</small>
+                    </div>
+                </div>
+                <div class="formula-box mt-2 mb-2">Coverage = Saldo Bersih 30 Hari / (Rata-rata Pengeluaran Harian × 14 hari)</div>
+                <div class="small text-muted">
+                    <strong>Skor 1:</strong> Coverage ≥ 2x → Dana cadangan sangat mencukupi.<br>
+                    <strong>Skor 2:</strong> Coverage ≥ 1x → Memadai, cukup untuk 2 minggu.<br>
+                    <strong>Skor 3:</strong> Coverage ≥ 0.5x → Terbatas, perlu penguatan.<br>
+                    <strong>Skor 4:</strong> Coverage ≥ 0x → Di bawah standar minimum.<br>
+                    <strong>Skor 5:</strong> Coverage < 0 → Dana tidak mencukupi, risiko gagal bayar.
+                </div>
+            </div>
+
+            <!-- Profitabilitas -->
+            <div class="p-3 bg-light rounded-3 mb-3 border-start border-4 border-success">
+                <div class="d-flex align-items-center gap-3 mb-2">
+                    <div class="info-icon-box bg-success bg-opacity-10 text-success"><i class="bi bi-currency-dollar"></i></div>
+                    <div>
+                        <h6 class="fw-bold mb-0 text-dark">2. Profitabilitas <span class="text-muted fw-normal small">(Bobot 25%)</span></h6>
+                        <small class="text-muted">Kemampuan menghasilkan keuntungan dan efisiensi biaya.</small>
+                    </div>
+                </div>
+                <div class="small text-muted mt-2">
+                    <strong>Skor 1:</strong> GM ≥ 50% & Rasio Ops ≤ 50% → Sangat menguntungkan.<br>
+                    <strong>Skor 2:</strong> GM ≥ 35% & Rasio Ops ≤ 65% → Baik, biaya cukup efisien.<br>
+                    <strong>Skor 3:</strong> GM ≥ 20% & Rasio Ops ≤ 80% → Moderat, perlu peningkatan.<br>
+                    <strong>Skor 4:</strong> GM ≥ 10% → Rendah, tekanan margin tinggi.<br>
+                    <strong>Skor 5:</strong> GM < 10% → Sangat rendah, risiko kerugian.
+                </div>
+            </div>
+
+            <!-- Arus Kas -->
+            <div class="p-3 bg-light rounded-3 mb-3 border-start border-4 border-info">
+                <div class="d-flex align-items-center gap-3 mb-2">
+                    <div class="info-icon-box bg-info bg-opacity-10 text-info"><i class="bi bi-water"></i></div>
+                    <div>
+                        <h6 class="fw-bold mb-0 text-dark">3. Arus Kas <span class="text-muted fw-normal small">(Bobot 25%)</span></h6>
+                        <small class="text-muted">Kestabilan dan konsistensi aliran uang masuk-keluar.</small>
+                    </div>
+                </div>
+                <div class="formula-box mt-2 mb-2">Rata-rata = (Skor Stabilitas + Skor Tren + Skor Konsistensi) / 3</div>
+                <div class="small text-muted">
+                    <strong>Skor 1:</strong> Rata-rata ≥ 80 → Sangat stabil & konsisten.<br>
+                    <strong>Skor 2:</strong> Rata-rata ≥ 65 → Stabil dengan variasi minor.<br>
+                    <strong>Skor 3:</strong> Rata-rata ≥ 50 → Ada volatilitas yang perlu diperhatikan.<br>
+                    <strong>Skor 4:</strong> Rata-rata ≥ 35 → Tidak stabil, berisiko.<br>
+                    <strong>Skor 5:</strong> Rata-rata < 35 → Sangat tidak stabil, risiko tinggi.
+                </div>
+            </div>
+
+            <!-- Proyeksi -->
+            <div class="p-3 bg-light rounded-3 mb-3 border-start border-4 border-warning">
+                <div class="d-flex align-items-center gap-3 mb-2">
+                    <div class="info-icon-box bg-warning bg-opacity-10 text-warning"><i class="bi bi-binoculars"></i></div>
+                    <div>
+                        <h6 class="fw-bold mb-0 text-dark">4. Proyeksi <span class="text-muted fw-normal small">(Bobot 15%)</span></h6>
+                        <small class="text-muted">Prediksi arus kas 4 minggu ke depan berdasarkan tren linear.</small>
+                    </div>
+                </div>
+                <div class="small text-muted mt-2">
+                    <strong>Skor 1:</strong> 0 minggu negatif → Seluruh proyeksi positif.<br>
+                    <strong>Skor 2:</strong> 1 minggu negatif → Perlu dinormalkan.<br>
+                    <strong>Skor 3:</strong> 2 minggu negatif → Risiko menengah.<br>
+                    <strong>Skor 4:</strong> 3 minggu negatif → Risiko signifikan.<br>
+                    <strong>Skor 5:</strong> 4 minggu negatif → Seluruh proyeksi negatif, sangat kritis.
+                </div>
+            </div>
+
+            <!-- Kepatuhan Data -->
+            <div class="p-3 bg-light rounded-3 mb-3 border-start border-4 border-secondary">
+                <div class="d-flex align-items-center gap-3 mb-2">
+                    <div class="info-icon-box bg-secondary bg-opacity-10 text-secondary"><i class="bi bi-clipboard-data"></i></div>
+                    <div>
+                        <h6 class="fw-bold mb-0 text-dark">5. Kepatuhan Data <span class="text-muted fw-normal small">(Bobot 5%)</span></h6>
+                        <small class="text-muted">Kualitas dan kelengkapan data pencatatan Anda.</small>
+                    </div>
+                </div>
+                <div class="small text-muted mt-2">
+                    <strong>Skor 1:</strong> 0 peringatan → Data bersih, tidak ada anomali.<br>
+                    <strong>Skor 2:</strong> 1 peringatan → Minor, bisa diabaikan.<br>
+                    <strong>Skor 3:</strong> 2–3 peringatan → Perlu validasi data.<br>
+                    <strong>Skor 4:</strong> 4–5 peringatan → Serius, banyak ketidaksesuaian.<br>
+                    <strong>Skor 5:</strong> > 5 peringatan → Akut, data sangat berisiko palsu.
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== 4. INDIKATOR VITAL ===== -->
+<section class="guide-section mb-5" id="indikator-vital">
+    <div class="metric-card card">
+        <div class="card-header py-3 px-4 text-white" style="background: linear-gradient(135deg, #dc2626, #ef4444);">
+            <h4 class="mb-0"><i class="bi bi-heart-pulse-fill me-2"></i>Indikator Vital Bisnis</h4>
+        </div>
+        <div class="card-body p-4">
+            <p class="text-muted mb-4">Empat metrik kunci yang langsung terlihat di dashboard, memberikan gambaran cepat tentang performa bisnis Anda.</p>
+
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="p-3 bg-light rounded-3 h-100">
+                        <h6 class="fw-bold text-dark"><i class="bi bi-wallet2 text-success me-2"></i>Gross Margin (%)</h6>
+                        <p class="small text-muted mb-2">Persentase keuntungan kotor dari setiap rupiah pemasukan setelah dikurangi biaya operasional.</p>
+                        <div class="formula-box mb-2">(Pemasukan − Biaya Ops) / Pemasukan × 100%</div>
+                        <div class="small">
+                            <span class="badge bg-success">≥ 30%</span> Target Ideal<br>
+                            <span class="badge bg-warning text-dark mt-1">15% – 29%</span> Perlu perbaikan<br>
+                            <span class="badge bg-danger mt-1">< 15%</span> Kritis
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="p-3 bg-light rounded-3 h-100">
+                        <h6 class="fw-bold text-dark"><i class="bi bi-pie-chart text-danger me-2"></i>Rasio Operasional (%)</h6>
+                        <p class="small text-muted mb-2">Seberapa besar biaya operasional menggerogoti pemasukan Anda.</p>
+                        <div class="formula-box mb-2">Biaya Ops / Pemasukan × 100%</div>
+                        <div class="small">
+                            <span class="badge bg-success">≤ 60%</span> Efisien<br>
+                            <span class="badge bg-warning text-dark mt-1">61% – 80%</span> Kurang efisien<br>
+                            <span class="badge bg-danger mt-1">> 80%</span> Berbahaya
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="p-3 bg-light rounded-3 h-100">
+                        <h6 class="fw-bold text-dark"><i class="bi bi-graph-up text-primary me-2"></i>Tren Penjualan / Growth (%)</h6>
+                        <p class="small text-muted mb-2">Perubahan pemasukan minggu ini dibandingkan minggu lalu.</p>
+                        <div class="formula-box mb-2">(Pemasukan Minggu Ini − Minggu Lalu) / Minggu Lalu × 100%</div>
+                        <div class="small">
+                            <span class="badge bg-success">> 0%</span> Tren Naik<br>
+                            <span class="badge bg-warning text-dark mt-1">0% s/d -20%</span> Penurunan wajar<br>
+                            <span class="badge bg-danger mt-1">< -20%</span> Penurunan drastis
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="p-3 bg-light rounded-3 h-100">
+                        <h6 class="fw-bold text-dark"><i class="bi bi-bar-chart-steps text-info me-2"></i>Margin Operasional</h6>
+                        <p class="small text-muted mb-2">Keuntungan bersih dari operasional setelah seluruh biaya ops dikurangi.</p>
+                        <div class="formula-box mb-2">(Pemasukan − Biaya Ops) / Pemasukan</div>
+                        <div class="small">
+                            <span class="badge bg-success">≥ 20%</span> Ideal, bisnis sangat efisien<br>
+                            <span class="badge bg-warning text-dark mt-1">10% – 19%</span> Cukup, namun bisa ditingkatkan<br>
+                            <span class="badge bg-danger mt-1">< 10%</span> Margin terlalu tipis
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== 5. RINGKASAN EKSEKUTIF ===== -->
+<section class="guide-section mb-5" id="ringkasan-eksekutif">
+    <div class="metric-card card">
+        <div class="card-header py-3 px-4 text-dark" style="background: linear-gradient(135deg, #fbbf24, #f59e0b);">
+            <h4 class="mb-0"><i class="bi bi-journal-text me-2"></i>Ringkasan Eksekutif</h4>
+        </div>
+        <div class="card-body p-4">
+            <p class="text-muted mb-3">Kartu ini menampilkan rangkuman keuangan berdasarkan periode pilihan Anda (30/60/90 hari atau semua data).</p>
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <div class="p-3 border rounded-3 h-100">
+                        <h6 class="fw-bold text-primary mb-2"><i class="bi bi-arrow-up-circle me-1"></i> Total Pemasukan</h6>
+                        <p class="small text-muted mb-0">Jumlah seluruh uang masuk dalam periode yang dipilih.</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="p-3 border rounded-3 h-100">
+                        <h6 class="fw-bold text-danger mb-2"><i class="bi bi-arrow-down-circle me-1"></i> Total Pengeluaran</h6>
+                        <p class="small text-muted mb-0">Dibagi menjadi <strong>Operasional</strong> (rutin: bahan baku, gaji) dan <strong>Modal</strong> (aset: mesin, stok besar).</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="p-3 border rounded-3 h-100">
+                        <h6 class="fw-bold text-success mb-2"><i class="bi bi-wallet me-1"></i> Saldo Bersih</h6>
+                        <p class="small text-muted mb-0">Pemasukan − Seluruh Pengeluaran. Angka hijau = untung, merah = rugi.</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="p-3 border rounded-3 h-100">
+                        <h6 class="fw-bold text-info mb-2"><i class="bi bi-calendar-day me-1"></i> Rata-rata Harian</h6>
+                        <p class="small text-muted mb-0">Pemasukan dan pengeluaran dibagi jumlah hari aktif pencatatan.</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="p-3 border rounded-3 h-100">
+                        <h6 class="fw-bold text-warning mb-2"><i class="bi bi-hash me-1"></i> Jumlah Transaksi & Hari Aktif</h6>
+                        <p class="small text-muted mb-0">Berapa banyak data transaksi dan berapa hari Anda aktif mencatat dalam periode tersebut.</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="p-3 border rounded-3 h-100">
+                        <h6 class="fw-bold text-secondary mb-2"><i class="bi bi-percent me-1"></i> Gross Margin Periode</h6>
+                        <p class="small text-muted mb-0">Gross Margin dihitung khusus untuk periode yang dipilih, menunjukkan efisiensi biaya di rentang waktu itu.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== 6. PROYEKSI ===== -->
+<section class="guide-section mb-5" id="proyeksi">
+    <div class="metric-card card">
+        <div class="card-header py-3 px-4 text-white" style="background: linear-gradient(135deg, #0891b2, #06b6d4);">
+            <h4 class="mb-0"><i class="bi bi-binoculars-fill me-2"></i>Proyeksi & Statistik 4 Minggu</h4>
+        </div>
+        <div class="card-body p-4">
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <h6 class="fw-bold text-dark mb-2"><i class="bi bi-clock-history text-secondary me-2"></i>Statistik 4 Minggu Terakhir</h6>
+                    <p class="small text-muted">Menampilkan pemasukan, pengeluaran ops, dan saldo bersih <strong>per minggu</strong> untuk 4 minggu terakhir. Disertai indikator tren naik/turun/stabil dari minggu ke minggu.</p>
+                    <div class="small">
+                        <span class="text-success fw-bold">↑ Naik</span> = penjualan naik > 5% dari minggu sebelum<br>
+                        <span class="text-danger fw-bold">↓ Turun</span> = penjualan turun > 5%<br>
+                        <span class="text-muted fw-bold">→ Stabil</span> = perubahan di antara ±5%
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <h6 class="fw-bold text-dark mb-2"><i class="bi bi-binoculars text-info me-2"></i>Proyeksi 4 Minggu Ke Depan</h6>
+                    <p class="small text-muted">Menggunakan model <strong>regresi linear (NumPy Polyfit)</strong> berdasarkan 30 hari data terakhir untuk memproyeksikan pemasukan dan pengeluaran 28 hari ke depan.</p>
+                    <div class="alert alert-info border-0 small mb-0 shadow-sm">
+                        <i class="bi bi-info-circle me-1"></i> <strong>Catatan:</strong> Proyeksi bersifat estimasi statistik, bukan jaminan. Semakin banyak dan konsisten data Anda, semakin akurat proyeksinya.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== 7. GRAFIK TREN ===== -->
+<section class="guide-section mb-5" id="grafik-tren">
+    <div class="metric-card card">
+        <div class="card-header py-3 px-4 text-white" style="background: linear-gradient(135deg, #7c3aed, #8b5cf6);">
+            <h4 class="mb-0"><i class="bi bi-graph-up me-2"></i>Garis pada Grafik Tren Bisnis</h4>
+        </div>
+        <div class="card-body p-4">
+            <p class="text-muted mb-4">Grafik garis di bagian bawah dashboard menampilkan beberapa data sekaligus:</p>
+            <div class="row g-3">
+                <div class="col-md-6 col-lg-4">
+                    <div class="d-flex align-items-center gap-2 p-2 rounded bg-light h-100">
+                        <div style="width:16px; height:16px; border-radius:4px; background:#1B2A6B; flex-shrink:0;"></div>
+                        <div class="small"><strong>Pemasukan Nyata</strong> — Data pemasukan aktual harian Anda.</div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="d-flex align-items-center gap-2 p-2 rounded bg-light h-100">
+                        <div style="width:16px; height:16px; border-radius:4px; background:#8E44AD; flex-shrink:0;"></div>
+                        <div class="small"><strong>MA 7 Hari</strong> — Rata-rata bergerak 7 hari, membuat tren lebih halus.</div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="d-flex align-items-center gap-2 p-2 rounded bg-light h-100">
+                        <div style="width:16px; height:16px; border-radius:4px; background:#1ABC9C; flex-shrink:0;"></div>
+                        <div class="small"><strong>MA 30 Hari</strong> — Rata-rata bergerak 30 hari, tren jangka panjang.</div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="d-flex align-items-center gap-2 p-2 rounded bg-light h-100">
+                        <div style="width:16px; height:16px; border-radius:4px; background:#E74C3C; flex-shrink:0;"></div>
+                        <div class="small"><strong>Pengeluaran Ops</strong> — Biaya operasional harian.</div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="d-flex align-items-center gap-2 p-2 rounded bg-light h-100">
+                        <div style="width:16px; height:16px; border-radius:4px; background:#F39C12; flex-shrink:0;"></div>
+                        <div class="small"><strong>Pengeluaran Modal</strong> — Pembelian aset/stok besar (sporadis).</div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="d-flex align-items-center gap-2 p-2 rounded bg-light h-100">
+                        <div style="width:16px; height:16px; border-radius:4px; background:#F39C12; flex-shrink:0; border: 2px dashed #F39C12; background:transparent;"></div>
+                        <div class="small"><strong>Proyeksi AI</strong> — Prediksi tren pemasukan ke depan (garis putus-putus).</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- PERINGATAN DINI -->
+<section class="guide-section mb-5" id="peringatan">
+    <div class="metric-card card">
+        <div class="card-header py-3 px-4 text-white bg-danger">
+            <h4 class="mb-0"><i class="bi bi-exclamation-triangle-fill me-2"></i>Peringatan Dini</h4>
+        </div>
+        <div class="card-body p-4">
+            <p class="text-muted mb-3">Sistem secara otomatis memunculkan peringatan jika mendeteksi pola berbahaya:</p>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <div class="p-3 bg-danger bg-opacity-10 rounded-3 h-100 border-start border-4 border-danger">
+                        <h6 class="fw-bold text-danger"><i class="bi bi-graph-down me-2"></i>Pengeluaran Ops > 85% Pemasukan</h6>
+                        <p class="small text-muted mb-0">Muncul ketika biaya operasional minggu ini melampaui 85% dari total pemasukan. Artinya margin terlalu tipis untuk bertahan hidup.</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="p-3 bg-danger bg-opacity-10 rounded-3 h-100 border-start border-4 border-danger">
+                        <h6 class="fw-bold text-danger"><i class="bi bi-arrow-down-circle me-2"></i>Penurunan Beruntun > 20%</h6>
+                        <p class="small text-muted mb-0">Muncul ketika penjualan turun > 20% dua minggu berturut-turut. Indikasi masalah serius pada strategi atau produk.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== STUDI KASUS UMKM ===== -->
+<section class="guide-section mb-5" id="studi-kasus">
+    <div class="metric-card card">
+        <div class="card-header py-3 px-4 text-white" style="background: linear-gradient(135deg, #0f172a, #334155);">
+            <h4 class="mb-0"><i class="bi bi-building me-2"></i>Studi Kasus: Perbandingan Dua UMKM Nyata</h4>
+        </div>
+        <div class="card-body p-4">
+            <p class="text-muted mb-4">Berikut contoh nyata dua usaha UMKM makanan dengan kondisi finansial yang sangat berbeda. Pelajari pola mereka agar Anda bisa meniru yang baik dan menghindari yang buruk.</p>
+
+            <div class="row g-4 mb-4">
+                <!-- USAHA SEHAT -->
+                <div class="col-lg-6">
+                    <div class="p-4 rounded-4 case-good h-100">
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            <div class="info-icon-box text-white" style="background:#10b981;"><i class="bi bi-emoji-smile-fill"></i></div>
+                            <div>
+                                <h5 class="fw-bold text-dark mb-0">☕ Kedai Kopi "Senja Brew"</h5>
+                                <span class="badge bg-success shadow-sm">BISNIS SEHAT</span>
+                            </div>
+                        </div>
+                        <p class="small text-muted mb-3">Kedai kopi kekinian yang menjual coffee-based drinks, pastry, dan snack ringan di area kampus. Berdiri 2 tahun, punya 3 karyawan tetap.</p>
+
+                        <div class="row g-2 mb-3">
+                            <div class="col-6">
+                                <div class="bg-white rounded-3 p-2 text-center shadow-sm">
+                                    <small class="text-muted d-block">Skor Kesehatan</small>
+                                    <div class="case-metric text-success">87</div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="bg-white rounded-3 p-2 text-center shadow-sm">
+                                    <small class="text-muted d-block">Credit Rating</small>
+                                    <div class="case-metric" style="color:#2ECC71;">AA</div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="bg-white rounded-3 p-2 text-center shadow-sm">
+                                    <small class="text-muted d-block">Gross Margin</small>
+                                    <div class="case-metric text-success">52%</div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="bg-white rounded-3 p-2 text-center shadow-sm">
+                                    <small class="text-muted d-block">Rasio Ops</small>
+                                    <div class="case-metric text-success">41%</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h6 class="fw-bold text-dark small"><i class="bi bi-check-circle text-success me-1"></i> Kenapa Bisnis Ini Sehat?</h6>
+                        <ul class="small text-muted mb-0" style="line-height: 1.8;">
+                            <li><strong>Margin tinggi (52%):</strong> Harga kopi rata-rata Rp 22.000, HPP bahan baku hanya Rp 7.000–9.000. Keuntungan per cup sangat besar.</li>
+                            <li><strong>Pengeluaran terkontrol (41%):</strong> Sewa tempat Rp 3jt/bulan, gaji 3 karyawan Rp 6jt total. Biaya tetap terkelola baik.</li>
+                            <li><strong>Penjualan konsisten:</strong> Area kampus menjamin traffic harian stabil. Rata-rata Rp 1.5jt/hari.</li>
+                            <li><strong>Pencatatan rutin:</strong> Owner mencatat setiap transaksi lewat PANTAUIN setiap hari sehingga data akurat.</li>
+                            <li><strong>Likuiditas kuat:</strong> Saldo bersih 30 hari = Rp 12jt, cadangan operasional 2.5 minggu tanpa pemasukan.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- USAHA BERMASALAH -->
+                <div class="col-lg-6">
+                    <div class="p-4 rounded-4 case-bad h-100">
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            <div class="info-icon-box text-white" style="background:#ef4444;"><i class="bi bi-emoji-frown-fill"></i></div>
+                            <div>
+                                <h5 class="fw-bold text-dark mb-0">🍜 Warung Makan "Pak Joko"</h5>
+                                <span class="badge bg-danger shadow-sm">KONDISI KRITIS</span>
+                            </div>
+                        </div>
+                        <p class="small text-muted mb-3">Warung makan padang di pinggir jalan raya. Menjual berbagai menu lauk pauk dan nasi. Berdiri 5 tahun, punya 2 karyawan.</p>
+
+                        <div class="row g-2 mb-3">
+                            <div class="col-6">
+                                <div class="bg-white rounded-3 p-2 text-center shadow-sm">
+                                    <small class="text-muted d-block">Skor Kesehatan</small>
+                                    <div class="case-metric text-danger">38</div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="bg-white rounded-3 p-2 text-center shadow-sm">
+                                    <small class="text-muted d-block">Credit Rating</small>
+                                    <div class="case-metric text-danger">CCC</div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="bg-white rounded-3 p-2 text-center shadow-sm">
+                                    <small class="text-muted d-block">Gross Margin</small>
+                                    <div class="case-metric text-danger">8%</div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="bg-white rounded-3 p-2 text-center shadow-sm">
+                                    <small class="text-muted d-block">Rasio Ops</small>
+                                    <div class="case-metric text-danger">92%</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h6 class="fw-bold text-dark small"><i class="bi bi-x-circle text-danger me-1"></i> Kenapa Bisnis Ini Bermasalah?</h6>
+                        <ul class="small text-muted mb-0" style="line-height: 1.8;">
+                            <li><strong>Margin sangat tipis (8%):</strong> Harga nasi lauk rata-rata Rp 15.000, tapi HPP bahan baku mencapai Rp 11.000–12.000 karena harga daging dan minyak naik.</li>
+                            <li><strong>Biaya ops meledak (92%):</strong> Sewa Rp 2.5jt + gas 3 tabung/minggu + gaji 2 orang Rp 5jt. Hampir seluruh pemasukan habis untuk biaya.</li>
+                            <li><strong>Penjualan turun beruntun:</strong> Tren -25% dua minggu berturut-turut karena ada kompetitor baru berdiskon.</li>
+                            <li><strong>Pencatatan bolong-bolong:</strong> Hanya catat 3 dari 7 hari per minggu. Data tidak akurat untuk analisis.</li>
+                            <li><strong>Likuiditas negatif:</strong> Saldo 30 hari minus Rp -2.1jt. Harus nombok dari tabungan pribadi.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabel perbandingan rinci -->
+            <h6 class="fw-bold text-dark mb-3"><i class="bi bi-table me-2 text-primary"></i>Perbandingan Metrik Rinci</h6>
+            <div class="table-responsive mb-4">
+                <table class="table table-bordered align-middle text-center mb-0" style="font-size: 0.88rem;">
+                    <thead class="table-dark">
+                        <tr>
+                            <th class="text-start" style="width:30%">Metrik</th>
+                            <th style="width:25%; background:#166534; color:white;">☕ Senja Brew</th>
+                            <th style="width:25%; background:#991b1b; color:white;">🍜 Pak Joko</th>
+                            <th style="width:20%">Target Ideal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="text-start fw-bold">Skor Kesehatan</td>
+                            <td><span class="badge bg-success fs-6">87</span></td>
+                            <td><span class="badge bg-danger fs-6">38</span></td>
+                            <td><span class="badge bg-success bg-opacity-25 text-success">≥ 80</span></td>
+                        </tr>
+                        <tr>
+                            <td class="text-start fw-bold">Credit Rating</td>
+                            <td><span class="badge-tier" style="background:#2ECC71;color:white;">AA</span></td>
+                            <td><span class="badge-tier" style="background:#E74C3C;color:white;">CCC</span></td>
+                            <td><span class="badge bg-success bg-opacity-25 text-success">AAA / AA</span></td>
+                        </tr>
+                        <tr>
+                            <td class="text-start fw-bold">Gross Margin</td>
+                            <td class="text-success fw-bold">52%</td>
+                            <td class="text-danger fw-bold">8%</td>
+                            <td>≥ 30%</td>
+                        </tr>
+                        <tr>
+                            <td class="text-start fw-bold">Rasio Operasional</td>
+                            <td class="text-success fw-bold">41%</td>
+                            <td class="text-danger fw-bold">92%</td>
+                            <td>≤ 60%</td>
+                        </tr>
+                        <tr>
+                            <td class="text-start fw-bold">Tren Penjualan</td>
+                            <td class="text-success fw-bold">+12%</td>
+                            <td class="text-danger fw-bold">-25%</td>
+                            <td>> 0%</td>
+                        </tr>
+                        <tr>
+                            <td class="text-start fw-bold">Likuiditas (Coverage)</td>
+                            <td class="text-success fw-bold">2.5x</td>
+                            <td class="text-danger fw-bold">-0.3x</td>
+                            <td>≥ 1x</td>
+                        </tr>
+                        <tr>
+                            <td class="text-start fw-bold">Konsistensi Pencatatan</td>
+                            <td class="text-success fw-bold">7/7 hari</td>
+                            <td class="text-danger fw-bold">3/7 hari</td>
+                            <td>Setiap hari</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pelajaran -->
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <div class="p-3 rounded-3 h-100" style="background: linear-gradient(135deg, #ecfdf5, #d1fae5); border: 1px solid #6ee7b7;">
+                        <h6 class="fw-bold" style="color: #065f46;"><i class="bi bi-lightbulb-fill me-2"></i>Pelajaran dari Senja Brew</h6>
+                        <ol class="small mb-0" style="color: #064e3b; line-height: 1.9;">
+                            <li>Pilih produk dengan <strong>margin tinggi</strong> — kopi punya markup 2-3x lipat dari HPP.</li>
+                            <li>Kontrol biaya tetap (sewa + gaji) agar tidak melebihi 50% pemasukan.</li>
+                            <li>Lokasi strategis = traffic alami tanpa biaya iklan besar.</li>
+                            <li>Catat transaksi <strong>setiap hari</strong> — data lengkap = keputusan lebih akurat.</li>
+                            <li>Bangun cadangan kas setara minimal 2 minggu pengeluaran ops.</li>
+                        </ol>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="p-3 rounded-3 h-100" style="background: linear-gradient(135deg, #fef2f2, #fecaca); border: 1px solid #fca5a5;">
+                        <h6 class="fw-bold" style="color: #7f1d1d;"><i class="bi bi-exclamation-diamond-fill me-2"></i>Kesalahan Fatal Pak Joko</h6>
+                        <ol class="small mb-0" style="color: #7f1d1d; line-height: 1.9;">
+                            <li>Tidak menyesuaikan harga jual saat HPP naik — margin makin menipis.</li>
+                            <li>Tidak ada strategi hadapi kompetitor baru — pelanggan langsung pindah.</li>
+                            <li>Rasio ops 92% artinya hanya sisa Rp 800 dari setiap Rp 10.000 pemasukan!</li>
+                            <li>Pencatatan tidak rutin membuat data PANTAUIN tidak akurat mengukur risiko.</li>
+                            <li>Tidak ada dana cadangan — harus pakai tabungan pribadi untuk menambal.</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<div class="text-center text-muted py-4">
+    <i class="bi bi-info-circle me-1"></i> Panduan ini bersifat edukasi. Seluruh analisis didasarkan pada data yang Anda masukkan ke sistem.
+    <br><a href="{{ url_for('dashboard') }}" class="btn btn-primary mt-3 px-4 fw-bold shadow-sm"><i class="bi bi-arrow-left me-2"></i>Kembali ke Dashboard</a>
+</div>
+
+{% endblock %}

@@ -256,6 +256,30 @@ def hitung_health_score(transaksi_list, periode_grafik=30):
         "gross_margin": gross_margin_pct if 'gross_margin_pct' in locals() else 0,
     }
 
+    # Ringkasan Kustom berdasarkan periode yang dipilih user
+    t_kustom = [t for t in transaksi_list if (sekarang - t.tanggal).days <= periode_grafik]
+    kustom_in = sum(t.pemasukan for t in t_kustom)
+    kustom_out_op = sum(t.pengeluaran for t in t_kustom if getattr(t, 'jenis_pengeluaran', 'operasional') == 'operasional')
+    kustom_out_md = sum(t.pengeluaran for t in t_kustom if getattr(t, 'jenis_pengeluaran', 'operasional') == 'modal')
+    kustom_out_total = kustom_out_op + kustom_out_md
+    kustom_saldo = kustom_in - kustom_out_total
+    hari_kustom = len({t.tanggal for t in t_kustom}) or 1
+    kustom_gm = ((kustom_in - kustom_out_op) / kustom_in * 100) if kustom_in > 0 else 0
+
+    ringkasan_kustom = {
+        "periode_hari": periode_grafik,
+        "total_pemasukan": kustom_in,
+        "total_pengeluaran_op": kustom_out_op,
+        "total_pengeluaran_md": kustom_out_md,
+        "total_pengeluaran": kustom_out_total,
+        "saldo_bersih": kustom_saldo,
+        "rata_pemasukan": round(kustom_in / hari_kustom),
+        "rata_pengeluaran": round(kustom_out_total / hari_kustom),
+        "gross_margin": round(kustom_gm, 1),
+        "jumlah_transaksi": len(t_kustom),
+        "jumlah_hari_aktif": hari_kustom,
+    }
+
     return {
         "is_cukup": True,
         "periode_grafik": periode_grafik,
@@ -265,6 +289,7 @@ def hitung_health_score(transaksi_list, periode_grafik=30):
         "rekomendasi": rekomendasi,
         "proyeksi_tabel": proy_arr,
         "ringkasan_30_hari": ringkasan_30_hari,
+        "ringkasan_kustom": ringkasan_kustom,
         "skor": skor_total,
         "label": label,
         "warna": warna,

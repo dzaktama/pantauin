@@ -81,6 +81,12 @@
                         <i class="bi bi-file-earmark-arrow-down-fill fs-5 me-3"></i> Unduh Laporan
                     </a>
                 </li>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {% if request.endpoint == 'panduan_metrik' %}active{% endif %}"
+                        href="{{ url_for('panduan_metrik') }}">
+                        <i class="bi bi-book fs-5 me-3"></i> Panduan Metrik
+                    </a>
+                </li>
             </ul>
         </div>
 

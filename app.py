@@ -135,7 +135,56 @@ def create_app(config_class=Config):
             flash(f"Buku Kas '{bk.nama_buku}' berhasil dibuat!", "success")
             return redirect(url_for('buku_kas_manager'))
             
-        return render_template('buku_kas.html', form=form)
+        # Hitung statistik untuk masing-masing buku kas
+        daftar_buku = BukuKas.query.filter_by(user_id=session['user_id']).all()
+        stats = {}
+        for bk in daftar_buku:
+            transaksi = Transaksi.query.filter_by(buku_kas_id=bk.id).all()
+            total_in = sum(t.pemasukan for t in transaksi)
+            total_out = sum(t.pengeluaran for t in transaksi)
+            margin = total_in - total_out
+            stats[bk.id] = {
+                'count': len(transaksi),
+                'pemasukan': total_in,
+                'pengeluaran': total_out,
+                'margin': margin
+            }
+            
+        return render_template('buku_kas.html', form=form, stats=stats)
+
+    @app.route('/buku-kas/edit/<int:buku_id>', methods=['POST'])
+    @login_required
+    def edit_buku_kas(buku_id):
+        bk = BukuKas.query.filter_by(id=buku_id, user_id=session['user_id']).first_or_404()
+        new_name = request.form.get('nama_buku_baru')
+        if new_name and new_name.strip():
+            bk.nama_buku = new_name.strip()
+            db.session.commit()
+            flash(f"Nama buku berhasil diubah menjadi '{bk.nama_buku}'.", "success")
+        else:
+            flash("Nama buku tidak boleh kosong.", "error")
+        return redirect(url_for('buku_kas_manager'))
+
+    @app.route('/buku-kas/delete/<int:buku_id>', methods=['POST'])
+    @login_required
+    def delete_buku_kas(buku_id):
+        bk = BukuKas.query.filter_by(id=buku_id, user_id=session['user_id']).first_or_404()
+        
+        total_buku = BukuKas.query.filter_by(user_id=session['user_id']).count()
+        if total_buku <= 1:
+            flash("Gagal: Anda harus memiliki setidaknya satu Buku Kas.", "error")
+            return redirect(url_for('buku_kas_manager'))
+            
+        nama_buku = bk.nama_buku
+        db.session.delete(bk)
+        db.session.commit()
+        
+        if session.get('buku_kas_id') == buku_id:
+            session.pop('buku_kas_id', None)
+            cache.clear()
+            
+        flash(f"Buku Kas '{nama_buku}' berhasil dihapus permanen.", "success")
+        return redirect(url_for('buku_kas_manager'))
 
     @app.route('/buku-kas/switch/<int:buku_id>', methods=['POST'])
     @login_required
@@ -177,6 +226,11 @@ def create_app(config_class=Config):
         return redirect(url_for('buku_kas_manager'))
 
     # --- CORE ROUTES ---
+    @app.route('/panduan-metrik')
+    @login_required
+    def panduan_metrik():
+        return render_template('panduan_metrik.html')
+
     @app.route('/dashboard')
     @login_required
     def dashboard():
@@ -193,7 +247,7 @@ def create_app(config_class=Config):
             
             # Filter Parameter Periode Dashboard
             periode = request.args.get('periode', 30, type=int)
-            if periode not in [30, 60, 90]:
+            if periode not in [30, 60, 90, 0]:
                 periode = 30
                 
             cache_key = f"dashboard_bk_{buku_kas_id}_{periode}_{datetime.now().strftime('%Y%m%d')}_v3"
@@ -202,7 +256,17 @@ def create_app(config_class=Config):
 
             if data is None or saran_gemini is None:
                 transaksi_list = Transaksi.query.filter_by(buku_kas_id=buku_kas_id).order_by(Transaksi.tanggal.asc()).all()
-                data = hitung_health_score(transaksi_list, periode_grafik=periode)
+                
+                # Jika periode=0 (Semua), hitung jumlah hari dari transaksi pertama ke hari ini
+                actual_periode = periode
+                if periode == 0 and transaksi_list:
+                    from datetime import date as date_cls
+                    first_date = transaksi_list[0].tanggal
+                    actual_periode = (date_cls.today() - first_date).days + 1
+                elif periode == 0:
+                    actual_periode = 30
+                    
+                data = hitung_health_score(transaksi_list, periode_grafik=actual_periode)
 
                 # Panggil Gemini jika data valid
                 if data['is_cukup']:
@@ -219,7 +283,7 @@ def create_app(config_class=Config):
                 cache.set(cache_key, data)
                 cache.set(f"saran_bk_{buku_kas_id}", saran_gemini)
 
-            return render_template('dashboard.html', data=data, saran_gemini=saran_gemini)
+            return render_template('dashboard.html', data=data, saran_gemini=saran_gemini, periode=periode)
         except Exception as e:
             import traceback
             traceback.print_exc()
@@ -255,7 +319,9 @@ def create_app(config_class=Config):
                 form.sistem_penjualan.data = dt_extr.get('sistem_penjualan', '')
                 form.komitmen.data = dt_extr.get('komitmen', '')
             except:
-                pass
+                dt_extr = {}
+        else:
+            dt_extr = {}
 
         if form.validate_on_submit():
             dt_extr = {
@@ -288,7 +354,7 @@ def create_app(config_class=Config):
             flash("Profil Perusahaan berhasil disimpan!", "success")
             return redirect(url_for('dashboard'))
             
-        return render_template('profil_perusahaan.html', form=form, nama_buku=buku_aktif.nama_buku)
+        return render_template('profil_perusahaan.html', form=form, nama_buku=buku_aktif.nama_buku, profil=profil, dt_extr=dt_extr)
 
     @app.route('/input', methods=['GET', 'POST'])
     @login_required

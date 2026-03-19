@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% block title %}Pilih Buku Kas (Proyek) - PANTAUIN{% endblock %}
+{% block page_heading %}Pilihan Buku Kas{% endblock %}
 
 {% block content %}
 <div class="row mb-5 justify-content-center">
@@ -19,79 +20,148 @@
             {% for buku in daftar_buku %}
             <div class="col-md-6">
                 <!-- Gunakan border highlight jika ini buku kas yang sedang aktif -->
-                <div
-                    class="card h-100 shadow-sm transition-hover {% if session.get('buku_kas_id') == buku.id %}border-primary border-2{% else %}border-0{% endif %}">
+                <div class="card h-100 shadow-sm transition-hover {% if session.get('buku_kas_id') == buku.id %}border-primary border-2{% else %}border-0{% endif %}">
                     <div class="card-body p-4 text-center">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div class="badge bg-light text-dark shadow-sm border fw-normal"><i class="bi bi-calendar3 me-1"></i> {{ buku.created_at.strftime('%d %b %Y') }}</div>
+                            <div class="dropdown">
+                                <button class="btn btn-sm btn-light rounded-circle border shadow-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Opsi Lainnya">
+                                    <i class="bi bi-three-dots-vertical"></i>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end shadow border-0">
+                                    <li>
+                                        <button class="dropdown-item py-2" data-bs-toggle="modal" data-bs-target="#editModal{{ buku.id }}">
+                                            <i class="bi bi-pencil-square text-primary me-2"></i> Edit Nama Buku
+                                        </button>
+                                    </li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li>
+                                        <button class="dropdown-item py-2 text-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ buku.id }}">
+                                            <i class="bi bi-trash text-danger me-2"></i> Hapus Permanen
+                                        </button>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
                         <div class="mb-3">
                             <i class="bi bi-journal-text {% if session.get('buku_kas_id') == buku.id %}text-primary{% else %}text-muted{% endif %}"
-                                style="font-size: 3rem;"></i>
+                                style="font-size: 3.5rem;"></i>
                         </div>
-                        <h5 class="fw-bold text-dark mb-1 text-truncate" title="{{ buku.nama_buku }}">{{ buku.nama_buku
-                            }}</h5>
-                        <p class="text-muted small mb-3">Dibuat: {{ buku.created_at.strftime('%d %b %Y') }}</p>
+                        <h5 class="fw-bold text-dark mb-1 text-truncate" title="{{ buku.nama_buku }}">{{ buku.nama_buku }}</h5>
+                        
+                        {% if session.get('buku_kas_id') == buku.id %}
+                        <div class="badge bg-primary px-3 py-1 mb-3 rounded-pill"><i class="bi bi-circle-fill text-success me-2" style="font-size: 0.6rem;"></i>Sedang Dibuka</div>
+                        {% else %}
+                        <div class="mb-3 opacity-0 user-select-none"><div class="badge bg-primary px-3 py-1 rounded-pill">Placeholder</div></div>
+                        {% endif %}
+
+                        <!-- STATS AREA -->
+                        {% if stats and buku.id in stats %}
+                        <div class="row g-2 mb-3 text-start bg-light rounded-3 p-3 shadow-sm border">
+                            <div class="col-6 border-end">
+                                <div class="small text-muted mb-1" style="font-size: 0.75rem;"><i class="bi bi-receipt me-1"></i>Transaksi</div>
+                                <div class="fw-bold text-dark" style="font-size: 0.95rem;">{{ stats[buku.id]['count'] }} Data</div>
+                            </div>
+                            <div class="col-6 ps-3">
+                                <div class="small text-muted mb-1" style="font-size: 0.75rem;"><i class="bi bi-wallet2 me-1"></i>Margin Kotor</div>
+                                <div class="fw-bold {% if stats[buku.id]['margin'] > 0 %}text-success{% elif stats[buku.id]['margin'] < 0 %}text-danger{% else %}text-secondary{% endif %}" style="font-size: 0.95rem;">
+                                    Rp <span title="{{ stats[buku.id]['margin'] }}">{{ "{:,.0f}".format(stats[buku.id]['margin']/1000) | replace(',', '.') }}K</span>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
 
                         <!-- Form Navigasi Pintasan Buku Kas -->
                         <form action="{{ url_for('switch_buku_kas', buku_id=buku.id) }}" method="POST"
                             class="d-flex flex-column gap-2 mb-3">
                             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
-                            {% if session.get('buku_kas_id') == buku.id %}
-                            <div class="badge bg-primary px-3 py-2 mb-2 w-100 rounded-pill"><i
-                                    class="bi bi-circle-fill text-success me-2" style="font-size: 0.6rem;"></i>Sedang
-                                Dibuka</div>
-                            {% endif %}
-
                             <button type="submit" name="destination" value="dashboard"
-                                class="btn btn-primary btn-sm w-100"><i class="bi bi-speedometer2 me-1"></i> Buka
-                                Dashboard</button>
+                                class="btn btn-primary btn-sm w-100 fw-medium shadow-sm"><i class="bi bi-speedometer2 me-1"></i> Buka Dashboard</button>
                             <div class="d-flex gap-2">
                                 <button type="submit" name="destination" value="input"
-                                    class="btn btn-outline-secondary btn-sm w-50"><i class="bi bi-plus-circle me-1"></i>
-                                    Input CSV</button>
+                                    class="btn btn-outline-secondary btn-sm w-50 fw-medium"><i class="bi bi-plus-circle me-1"></i> Input / Scan</button>
                                 <button type="submit" name="destination" value="riwayat"
-                                    class="btn btn-outline-secondary btn-sm w-50"><i
-                                        class="bi bi-clock-history me-1"></i> Riwayat</button>
+                                    class="btn btn-outline-secondary btn-sm w-50 fw-medium"><i class="bi bi-clock-history me-1"></i> Riwayat</button>
                             </div>
                         </form>
 
                         <hr class="text-muted opacity-25 my-2">
 
-                        <!-- Tombol Pemicu Modal Delete -->
-                        <button type="button" class="btn btn-link text-danger text-decoration-none btn-sm w-100 p-0"
+                        <!-- Tombol Pemicu Modal Kosongkan -->
+                        <button type="button" class="btn btn-link text-warning text-decoration-none btn-sm w-100 p-0"
                             data-bs-toggle="modal" data-bs-target="#resetModal{{ buku.id }}">
-                            <i class="bi bi-trash3 me-1"></i> Kosongkan Transaksi
+                            <i class="bi bi-eraser me-1"></i> Kosongkan Transaksi
                         </button>
 
-                        <!-- Modal Konfirmasi Hapus Data (Reset) -->
-                        <div class="modal fade" id="resetModal{{ buku.id }}" tabindex="-1"
-                            aria-labelledby="resetModalLabel{{ buku.id }}" aria-hidden="true" data-bs-backdrop="static">
+                        <!-- MODAL EDIT BUKU -->
+                        <div class="modal fade" id="editModal{{ buku.id }}" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
                             <div class="modal-dialog modal-dialog-centered text-start">
                                 <div class="modal-content border-0 shadow">
-                                    <div class="modal-header bg-danger text-white border-0">
-                                        <h5 class="modal-title fw-bold" id="resetModalLabel{{ buku.id }}"><i
-                                                class="bi bi-exclamation-triangle-fill me-2"></i> Peringatan Kritis!
-                                        </h5>
-                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                                            aria-label="Close"></button>
+                                    <div class="modal-header border-bottom-0 pb-0">
+                                        <h5 class="modal-title fw-bold text-dark"><i class="bi bi-pencil-square text-primary me-2"></i>Edit Buku Kas</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <form action="{{ url_for('edit_buku_kas', buku_id=buku.id) }}" method="POST">
+                                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                        <div class="modal-body py-4">
+                                            <label class="form-label fw-bold small text-muted">Nama Buku / Proyek</label>
+                                            <input type="text" name="nama_buku_baru" class="form-control form-control-lg rounded-3" value="{{ buku.nama_buku }}" required>
+                                        </div>
+                                        <div class="modal-footer border-top-0 pt-0">
+                                            <button type="button" class="btn btn-light rounded-3 px-4" data-bs-dismiss="modal">Batal</button>
+                                            <button type="submit" class="btn btn-primary rounded-3 px-4 fw-bold">Simpan Perubahan</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- MODAL KONFIRMASI DELETE PERMANEN -->
+                        <div class="modal fade" id="deleteModal{{ buku.id }}" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+                            <div class="modal-dialog modal-dialog-centered text-start">
+                                <div class="modal-content border-0 shadow">
+                                    <div class="modal-header bg-danger bg-gradient text-white border-0">
+                                        <h5 class="modal-title fw-bold"><i class="bi bi-trash-fill me-2"></i>Hapus Buku Kas</h5>
+                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body py-4">
-                                        <p class="mb-0">Anda akan MENGHAPUS SELURUH data <strong>Riwayat Transaksi
-                                                Harian</strong> pada buku kas <span class="fw-bold text-danger">"{{
-                                                buku.nama_buku }}"</span>.</p>
-                                        <div class="alert alert-warning mt-3 border-warning border-start border-4 border-0 rounded-0"
-                                            role="alert">
-                                            <i class="bi bi-info-circle-fill me-2"></i> Informasi: Data <em>Profil
-                                                Perusahaan</em> milik buku ini <strong>tidak akan terhapus</strong>.
-                                            Aksi ini tidak dapat dibatalkan.
+                                        <p class="mb-0">Anda yakin ingin <strong>MENGHAPUS SELURUH BUKU KAS</strong> secara permanen?</p>
+                                        <div class="alert alert-danger mt-3 mb-0 border-danger border-start border-4 border-0 rounded-0" role="alert">
+                                            <i class="bi bi-exclamation-triangle-fill me-2"></i> Peringatan: Seluruh Riwayat Transaksi dan Profil Perusahaan untuk Buku Kas <strong class="text-danger">"{{ buku.nama_buku }}"</strong> akan musnah permanen tak bersisa.
                                         </div>
                                     </div>
                                     <div class="modal-footer border-0 pt-0">
-                                        <button type="button" class="btn btn-light"
-                                            data-bs-dismiss="modal">Batal</button>
+                                        <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal">Batal</button>
+                                        <form action="{{ url_for('delete_buku_kas', buku_id=buku.id) }}" method="POST">
+                                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                            <button type="submit" class="btn btn-danger fw-bold"><i class="bi bi-trash3-fill me-1"></i> Ya, Hapus Buku</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Modal Konfirmasi Hapus Data (Reset) LAMA -->
+                        <div class="modal fade" id="resetModal{{ buku.id }}" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+                            <div class="modal-dialog modal-dialog-centered text-start">
+                                <div class="modal-content border-0 shadow">
+                                    <div class="modal-header bg-warning text-dark border-0">
+                                        <h5 class="modal-title fw-bold"><i class="bi bi-eraser-fill me-2"></i> Kosongkan Transaksi</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body py-4">
+                                        <p class="mb-0">Anda akan MENGHAPUS SELURUH data <strong>Riwayat Transaksi Harian</strong> pada buku kas <span class="fw-bold text-danger">"{{ buku.nama_buku }}"</span>.</p>
+                                        <div class="alert alert-warning mt-3 mb-0 border-warning border-start border-4 border-0 rounded-0" role="alert">
+                                            <i class="bi bi-info-circle-fill me-2"></i> Informasi: Data <em>Profil Perusahaan</em> milik buku ini <strong>tidak akan terhapus</strong>.
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer border-0 pt-0">
+                                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
                                         <form action="{{ url_for('reset_buku_kas', buku_id=buku.id) }}" method="POST">
                                             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                                            <button type="submit" class="btn btn-danger fw-bold"><i
-                                                    class="bi bi-trash3-fill me-1"></i> Ya, Kosongkan Data</button>
+                                            <button type="submit" class="btn btn-warning fw-bold"><i class="bi bi-eraser-fill me-1"></i> Ya, Kosongkan Data</button>
                                         </form>
                                     </div>
                                 </div>

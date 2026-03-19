@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% block title %}Dashboard Bisnis{% endblock %}
+{% block page_heading %}Dashboard Bisnis{% endblock %}
 
 {% block content %}
 <div class="row mb-4 align-items-center">
@@ -188,35 +189,74 @@
     </div>
 </div>
 
-<!-- Ringkasan Eksekutif 30 Hari -->
-{% if data and data.ringkasan_30_hari %}
+<!-- Ringkasan Eksekutif Dinamis -->
+{% if data and data.ringkasan_kustom %}
+{% set rk = data.ringkasan_kustom %}
 <div class="row g-4 mb-4">
     <div class="col-lg-12">
         <div class="card summary-card p-4 h-100 border-start border-4 border-warning shadow-sm">
-            <h5 class="fw-bold text-dark mb-3"><i class="bi bi-journal-text text-warning me-2"></i>Ringkasan Eksekutif (30 Hari Terakhir)</h5>
+            <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+                <h5 class="fw-bold text-dark mb-0"><i class="bi bi-journal-text text-warning me-2"></i>Ringkasan Eksekutif ({% if periode == 0 %}Semua Data{% else %}{{ rk.periode_hari }} Hari Terakhir{% endif %})</h5>
+                <div class="btn-group" role="group" aria-label="Pilih Periode Ringkasan">
+                    <a href="{{ url_for('dashboard', periode=30) }}"
+                        class="btn btn-sm btn-outline-warning shadow-sm {% if periode == 30 %}active{% endif %}">30 Hari</a>
+                    <a href="{{ url_for('dashboard', periode=60) }}"
+                        class="btn btn-sm btn-outline-warning shadow-sm {% if periode == 60 %}active{% endif %}">60 Hari</a>
+                    <a href="{{ url_for('dashboard', periode=90) }}"
+                        class="btn btn-sm btn-outline-warning shadow-sm {% if periode == 90 %}active{% endif %}">90 Hari</a>
+                    <a href="{{ url_for('dashboard', periode=0) }}"
+                        class="btn btn-sm btn-outline-warning shadow-sm {% if periode == 0 %}active{% endif %}">Semua</a>
+                </div>
+            </div>
+            <div class="row g-3 mb-3">
+                <div class="col-md-3">
+                    <div class="bg-light rounded-3 p-3 text-center h-100">
+                        <small class="text-muted d-block mb-1">Hari Aktif</small>
+                        <h5 class="fw-bold text-dark mb-0">{{ rk.jumlah_hari_aktif }} Hari</h5>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="bg-light rounded-3 p-3 text-center h-100">
+                        <small class="text-muted d-block mb-1">Jumlah Transaksi</small>
+                        <h5 class="fw-bold text-dark mb-0">{{ rk.jumlah_transaksi }} Data</h5>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="bg-light rounded-3 p-3 text-center h-100">
+                        <small class="text-muted d-block mb-1">Gross Margin</small>
+                        <h5 class="fw-bold mb-0 {% if rk.gross_margin >= 30 %}text-success{% else %}text-danger{% endif %}">{{ rk.gross_margin }}%</h5>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="bg-light rounded-3 p-3 text-center h-100">
+                        <small class="text-muted d-block mb-1">Rata-rata Harian</small>
+                        <h5 class="fw-bold text-dark mb-0 js-rupiah" data-val="{{ rk.rata_pemasukan }}">0</h5>
+                    </div>
+                </div>
+            </div>
             <div class="table-responsive">
                 <table class="table table-sm table-borderless align-middle mb-0" style="font-size: 0.95rem;">
                     <tbody>
                         <tr>
-                            <td class="text-muted" style="width: 25%;">Total Pemasukan 30 Hari</td>
-                            <td class="fw-bold text-end js-rupiah fs-5 align-middle" data-val="{{ data.ringkasan_30_hari.total_pemasukan }}">0</td>
+                            <td class="text-muted" style="width: 25%;">Total Pemasukan</td>
+                            <td class="fw-bold text-end js-rupiah fs-5 align-middle" data-val="{{ rk.total_pemasukan }}">0</td>
                             <td style="width: 10%;"></td>
-                            <td class="text-muted" style="width: 25%;">Rata-rata Pemasukan Harian</td>
-                            <td class="fw-bold text-end js-rupiah fs-5 align-middle" data-val="{{ data.ringkasan_30_hari.rata_pemasukan }}">0</td>
+                            <td class="text-muted" style="width: 25%;">Total Pengeluaran Ops</td>
+                            <td class="fw-bold text-end js-rupiah fs-5 align-middle" data-val="{{ rk.total_pengeluaran_op }}">0</td>
                         </tr>
                         <tr>
-                            <td class="text-muted">Total Pengeluaran Ops</td>
-                            <td class="fw-bold text-end js-rupiah fs-5 align-middle" data-val="{{ data.ringkasan_30_hari.total_pengeluaran_op }}">0</td>
+                            <td class="text-muted">Total Pengeluaran Modal</td>
+                            <td class="fw-bold text-end js-rupiah fs-5 align-middle" data-val="{{ rk.total_pengeluaran_md }}">0</td>
                             <td></td>
                             <td class="text-muted">Rata-rata Pengeluaran Harian</td>
-                            <td class="fw-bold text-end js-rupiah fs-5 align-middle" data-val="{{ data.ringkasan_30_hari.rata_pengeluaran }}">0</td>
+                            <td class="fw-bold text-end js-rupiah fs-5 align-middle" data-val="{{ rk.rata_pengeluaran }}">0</td>
                         </tr>
                         <tr>
-                            <td class="text-muted">Saldo Bersih 30 Hari</td>
-                            <td class="fw-bold text-end {% if data.ringkasan_30_hari.saldo_bersih >= 0 %}text-success{% else %}text-danger{% endif %} js-rupiah fs-5 align-middle" data-val="{{ data.ringkasan_30_hari.saldo_bersih }}">0</td>
+                            <td class="text-muted">Saldo Bersih</td>
+                            <td class="fw-bold text-end {% if rk.saldo_bersih >= 0 %}text-success{% else %}text-danger{% endif %} js-rupiah fs-5 align-middle" data-val="{{ rk.saldo_bersih }}">0</td>
                             <td></td>
-                            <td class="text-muted">Gross Margin Rata-rata</td>
-                            <td class="fw-bold text-end fs-5 align-middle {% if data.ringkasan_30_hari.gross_margin >= 30 %}text-success{% else %}text-danger{% endif %}">{{ "%.1f"|format(data.ringkasan_30_hari.gross_margin) }}%</td>
+                            <td class="text-muted">Total Pengeluaran Keseluruhan</td>
+                            <td class="fw-bold text-end js-rupiah fs-5 align-middle" data-val="{{ rk.total_pengeluaran }}">0</td>
                         </tr>
                     </tbody>
                 </table>
@@ -360,14 +400,16 @@
         <div class="btn-group" role="group" aria-label="Pilih range data">
             <div class="btn-group" role="group" aria-label="Pilih Periode Analisis">
                 <a href="{{ url_for('dashboard', periode=30) }}"
-                    class="btn btn-sm btn-outline-primary shadow-sm {% if request.args.get('periode', 30)|int == 30 %}active{% endif %}">30
+                    class="btn btn-sm btn-outline-primary shadow-sm {% if periode == 30 %}active{% endif %}">30
                     Hari</a>
                 <a href="{{ url_for('dashboard', periode=60) }}"
-                    class="btn btn-sm btn-outline-primary shadow-sm {% if request.args.get('periode', 30)|int == 60 %}active{% endif %}">60
+                    class="btn btn-sm btn-outline-primary shadow-sm {% if periode == 60 %}active{% endif %}">60
                     Hari</a>
                 <a href="{{ url_for('dashboard', periode=90) }}"
-                    class="btn btn-sm btn-outline-primary shadow-sm {% if request.args.get('periode', 30)|int == 90 %}active{% endif %}">90
+                    class="btn btn-sm btn-outline-primary shadow-sm {% if periode == 90 %}active{% endif %}">90
                     Hari</a>
+                <a href="{{ url_for('dashboard', periode=0) }}"
+                    class="btn btn-sm btn-outline-primary shadow-sm {% if periode == 0 %}active{% endif %}">Semua</a>
             </div>
         </div>
     </div>
