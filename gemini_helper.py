@@ -6,9 +6,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-GROQ_API_KEY = os.getenv("GROQ_API_KEY", "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")
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "AIzaSyByuFaV6qooE75R3geCbL6LqnuqsB4TR2I")
-
+GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")
 SYSTEM_INSTRUCTION = """
 Kamu adalah asisten keuangan khusus untuk UMKM Indonesia bernama PANTAUIN.
 Kamu HANYA boleh menjawab pertanyaan yang berkaitan dengan:
