@@ -534,101 +534,213 @@ def create_app(config_class=Config):
         top_produk = []
         if baseline and baseline.get('data_produk') and baseline['data_produk'].get('top_3_terlaris'):
             top_produk = baseline['data_produk']['top_3_terlaris']
+        
+        # Cari tanggal transaksi pertama
+        first_trx = Transaksi.query.filter_by(buku_kas_id=buku_kas_id).order_by(Transaksi.tanggal.asc()).first()
+        tanggal_pertama = first_trx.tanggal.strftime('%Y-%m-%d') if first_trx else None
+        
+        # Hitung jumlah transaksi total
+        jumlah_transaksi = Transaksi.query.filter_by(buku_kas_id=buku_kas_id).count()
+        
+        # Semua nama produk unik untuk autosuggest
+        all_produk_rows = db.session.query(Transaksi.nama_produk).filter(
+            Transaksi.buku_kas_id == buku_kas_id,
+            Transaksi.nama_produk.isnot(None),
+            Transaksi.nama_produk != ''
+        ).distinct().all()
+        all_produk = sorted(set(r[0].strip() for r in all_produk_rows if r[0] and r[0].strip()))
+        
+        # Baseline data untuk tampilan perbandingan
+        baseline_display = {}
+        if baseline:
+            baseline_display = {
+                'pemasukan': baseline.get('total_pemasukan_minggu_ini', 0),
+                'pengeluaran': baseline.get('total_pengeluaran_minggu_ini', 0),
+                'saldo': baseline.get('saldo_minggu_ini', 0),
+            }
             
-        return render_template('simulator.html', top_produk=top_produk)
+        return render_template('simulator.html', 
+            top_produk=top_produk, 
+            tanggal_pertama=tanggal_pertama,
+            jumlah_transaksi=jumlah_transaksi,
+            baseline_display=baseline_display,
+            all_produk=all_produk
+        )
 
     # --- API ENDPOINTS (RATE LIMITED & CSRF PROTECTED) ---
     @app.route('/api/simulator', methods=['POST'])
     @login_required
     @limiter.limit("30 per minute")
     def api_simulator():
-        """Menghitung proyeksi mingguan berdasarkan persen penurunan pemasukan."""
+        """Menghitung proyeksi berdasarkan periode & persen stress."""
         try:
             buku_kas_id = session.get('buku_kas_id')
             if not buku_kas_id: return jsonify({"error": "Pilih buku kas terlebih dahulu."}), 400
             
             req = request.get_json()
-            persen_umum = float(req.get('penurunan_persen', 0)) / 100
-            persen_hpp = float(req.get('kenaikan_hpp', 0)) / 100
-            persen_opex = float(req.get('kenaikan_opex', 0)) / 100
+            persen_umum = min(max(float(req.get('penurunan_persen', 0)), 0), 100) / 100
+            persen_hpp = min(max(float(req.get('kenaikan_hpp', 0)), 0), 100) / 100
+            persen_opex = min(max(float(req.get('kenaikan_opex', 0)), 0), 100) / 100
+            periode = int(req.get('periode', 7))
             
-            baseline = cache.get(f"dashboard_bk_{buku_kas_id}_30_{datetime.now().strftime('%Y%m%d')}_v3")
-            if not baseline:
-                t_list_30 = Transaksi.query.filter_by(buku_kas_id=buku_kas_id).order_by(Transaksi.tanggal.asc()).all()
-                baseline = hitung_health_score(t_list_30, periode_grafik=30)
-
-            # --- Kalkulasi Pendapatan ---
-            in_baru = baseline['total_pemasukan_minggu_ini'] * (1 - persen_umum)
-            
-            # --- Kalkulasi Pengeluaran Spesifik ---
+            # --- Query transaksi sesuai periode ---
             sekarang = date.today()
-            t_minggu_ini = Transaksi.query.filter(
-                Transaksi.buku_kas_id == buku_kas_id,
-                Transaksi.tanggal >= sekarang - timedelta(days=7)
-            ).all()
-            
-            total_operasional = sum(t.pengeluaran for t in t_minggu_ini if t.jenis_pengeluaran == 'operasional')
-            total_modal = sum((t.harga_modal * t.kuantitas) for t in t_minggu_ini)
-            if total_modal == 0:  # Fallback kalau jarang isi harga_modal
-                total_modal = sum(t.pengeluaran for t in t_minggu_ini if t.jenis_pengeluaran == 'modal')
-            
-            # Jika user belum mencatat seminggu ini, fallback ke baseline
-            if (total_operasional + total_modal) == 0:
-                out_baru = baseline['total_pengeluaran_minggu_ini'] * (1 + (persen_opex + persen_hpp)/2)
+            if periode <= 0:
+                # Semua transaksi
+                t_periode = Transaksi.query.filter_by(buku_kas_id=buku_kas_id).all()
+                first_trx = Transaksi.query.filter_by(buku_kas_id=buku_kas_id).order_by(Transaksi.tanggal.asc()).first()
+                actual_days = (sekarang - first_trx.tanggal).days + 1 if first_trx else 1
             else:
-                out_baru = (total_operasional * (1 + persen_opex)) + (total_modal * (1 + persen_hpp))
+                start_date = sekarang - timedelta(days=periode)
+                t_periode = Transaksi.query.filter(
+                    Transaksi.buku_kas_id == buku_kas_id,
+                    Transaksi.tanggal >= start_date
+                ).all()
+                actual_days = periode
+            
+            hari_aktif = len({t.tanggal for t in t_periode}) or 1
+            jumlah_trx = len(t_periode)
+            
+            # --- Warning data terlalu sedikit ---
+            warning = None
+            if jumlah_trx == 0:
+                return jsonify({
+                    "pemasukan_baru": 0, "pengeluaran_baru": 0, "saldo_baru": 0,
+                    "pemasukan_asli": 0, "pengeluaran_asli": 0, "saldo_asli": 0,
+                    "gross_margin": 0, "rasio_opex": 0, "status_bisnis": "Tidak Ada Data",
+                    "bep_persen": 0, "hari_bertahan": 0, "selisih_saldo": 0,
+                    "hari_aktif": 0, "jumlah_trx": 0, "periode_hari": actual_days,
+                    "saran": "Belum ada transaksi pada periode ini. Coba pilih periode yang lebih panjang.",
+                    "warning": "Tidak ada data transaksi dalam periode yang dipilih."
+                })
+            if hari_aktif < 3:
+                warning = f"Hanya {hari_aktif} hari data aktif. Hasil simulasi kurang akurat."
+            
+            # --- Hitung baseline asli ---
+            total_pemasukan = sum(t.pemasukan for t in t_periode)
+            total_operasional = sum(t.pengeluaran for t in t_periode if getattr(t, 'jenis_pengeluaran', 'operasional') == 'operasional')
+            total_modal_hpp = sum((getattr(t, 'harga_modal', 0) or 0) * (t.kuantitas or 0) for t in t_periode)
+            total_modal_pengeluaran = sum(t.pengeluaran for t in t_periode if getattr(t, 'jenis_pengeluaran', 'operasional') == 'modal')
+            total_modal = total_modal_hpp if total_modal_hpp > 0 else total_modal_pengeluaran
+            total_pengeluaran = total_operasional + total_modal
+            saldo_asli = total_pemasukan - total_pengeluaran
+            
+            # Rata-rata per hari untuk kalkulasi bertahan
+            avg_pengeluaran_harian = total_pengeluaran / hari_aktif if hari_aktif > 0 else 0
 
-            # --- Kalkulasi Stress Produk Spesifik ---
+            # --- Kalkulasi Stress ---
+            in_baru = total_pemasukan * (1 - persen_umum)
+            
+            # Stress per produk
             for k, v in req.items():
                 if k.startswith('persen_turun_produk_'):
                     nama_produk = k.replace('persen_turun_produk_', '').lower()
                     persen_turun = float(v) / 100
-                    
-                    pemasukan_produk = sum(t.pemasukan for t in t_minggu_ini if t.nama_produk and t.nama_produk.lower() == nama_produk)
+                    pemasukan_produk = sum(t.pemasukan for t in t_periode if t.nama_produk and t.nama_produk.lower() == nama_produk)
                     in_baru -= (pemasukan_produk * persen_turun)
-
-            # --- Hitung Indikator Kelayakan ---
+            
+            in_baru = max(0, in_baru)
+            
             modal_baru = total_modal * (1 + persen_hpp)
             opex_baru = total_operasional * (1 + persen_opex)
             
-            # Jika user belum mencatat seminggu ini, fallback pendekatan porsi
-            if (total_operasional + total_modal) == 0:
-                modal_baru = (baseline['total_pengeluaran_minggu_ini'] * 0.6) * (1 + persen_hpp)
-                opex_baru = (baseline['total_pengeluaran_minggu_ini'] * 0.4) * (1 + persen_opex)
-
-            gross_margin_baru = 0
-            if in_baru > 0:
-                gross_margin_baru = ((in_baru - modal_baru) / in_baru) * 100
-
-            rasio_opex_baru = 0
-            if in_baru > 0:
-                rasio_opex_baru = (opex_baru / in_baru) * 100
-
-            in_baru = max(0, in_baru) # Cegah minus ekstrim
+            if total_pengeluaran == 0:
+                out_baru = 0
+            else:
+                out_baru = modal_baru + opex_baru
+            
             saldo_baru = in_baru - out_baru
             
+            # --- Indikator Kelayakan ---
+            gross_margin_baru = ((in_baru - modal_baru) / in_baru * 100) if in_baru > 0 else 0
+            rasio_opex_baru = (opex_baru / in_baru * 100) if in_baru > 0 else (100 if opex_baru > 0 else 0)
+            
+            # BEP: berapa persen kapasitas penjualan yang harus dijual agar impas
+            bep_persen = (out_baru / total_pemasukan * 100) if total_pemasukan > 0 else 0
+            
+            # Hari bertahan: jika pemasukan = 0
+            avg_out_harian_baru = out_baru / hari_aktif if hari_aktif > 0 else 0
+            hari_bertahan = int(max(0, saldo_asli) / avg_out_harian_baru) if avg_out_harian_baru > 0 else 999
+            
+            # Selisih vs normal
+            selisih_saldo = saldo_baru - saldo_asli
+            
+            # --- Status ---
             status_bisnis = "Aman"
             if saldo_baru < 0:
                 status_bisnis = "Kritis"
             elif gross_margin_baru < 20 or rasio_opex_baru > 70:
                 status_bisnis = "Waspada"
             
-            from gemini_helper import format_rp
-            saran = f"Status {status_bisnis}. Masih ada margin untung di skenario ini." if saldo_baru >= 0 else ("Awas, diproyeksi RUGI! Siapkan dana darurat Rp " + format_rp(abs(int(saldo_baru))))
-            if persen_umum == 0 and persen_hpp == 0 and persen_opex == 0 and all(v == 0 for k,v in req.items() if 'produk' in k): 
-                saran = "Kondisi stabil, sesuai dengan tren mingguan asli Anda."
-
-            return jsonify({
-                "pemasukan_baru": in_baru,
-                "pengeluaran_baru": out_baru,
-                "saldo_baru": saldo_baru,
-                "saran": saran,
+            # --- Saran Kontekstual ---
+            is_default = persen_umum == 0 and persen_hpp == 0 and persen_opex == 0 and all(
+                float(v) == 0 for k, v in req.items() if 'produk' in k
+            )
+            if is_default:
+                saran = f"Kondisi stabil berdasarkan {jumlah_trx} transaksi ({hari_aktif} hari aktif)."
+            elif persen_umum >= 1.0:
+                saran = "Anda mensimulasikan SHUTDOWN total penjualan. Tidak ada pemasukan sama sekali."
+            elif saldo_baru >= 0:
+                saran = f"Status {status_bisnis}. Masih ada margin untung Rp {int(saldo_baru):,}. BEP di {bep_persen:.0f}% kapasitas.".replace(',', '.')
+            else:
+                saran = f"RUGI Rp {int(abs(saldo_baru)):,}! Dana cadangan bertahan ±{hari_bertahan} hari.".replace(',', '.')
+            
+            result = {
+                "pemasukan_baru": round(in_baru),
+                "pengeluaran_baru": round(out_baru),
+                "saldo_baru": round(saldo_baru),
+                "pemasukan_asli": round(total_pemasukan),
+                "pengeluaran_asli": round(total_pengeluaran),
+                "saldo_asli": round(saldo_asli),
                 "gross_margin": round(gross_margin_baru, 1),
                 "rasio_opex": round(rasio_opex_baru, 1),
-                "status_bisnis": status_bisnis
-            })
+                "status_bisnis": status_bisnis,
+                "bep_persen": round(min(bep_persen, 999), 1),
+                "hari_bertahan": min(hari_bertahan, 999),
+                "selisih_saldo": round(selisih_saldo),
+                "hari_aktif": hari_aktif,
+                "jumlah_trx": jumlah_trx,
+                "periode_hari": actual_days,
+                "saran": saran
+            }
+            if warning:
+                result["warning"] = warning
+            return jsonify(result)
         except Exception:
+            import traceback
+            traceback.print_exc()
             return jsonify({"error": "Gagal simulasi"}), 500
+
+    @app.route('/api/simulator-ai', methods=['POST'])
+    @login_required
+    @limiter.limit("5 per minute")
+    def api_simulator_ai():
+        """Generate AI analysis for current stress test scenario."""
+        try:
+            req = request.get_json()
+            data = req.get('data', {})
+            
+            prompt = f"""Analisis singkat stress test bisnis UMKM ini dalam 3-4 kalimat:
+- Skenario: Penjualan turun {req.get('penurunan', 0)}%, HPP naik {req.get('hpp_naik', 0)}%, Opex naik {req.get('opex_naik', 0)}%
+- Pemasukan asli: Rp {int(data.get('pemasukan_asli', 0)):,}
+- Pemasukan setelah stress: Rp {int(data.get('pemasukan_baru', 0)):,}
+- Saldo setelah stress: Rp {int(data.get('saldo_baru', 0)):,}
+- Gross Margin: {data.get('gross_margin', 0)}%
+- BEP: {data.get('bep_persen', 0)}%
+- Hari bertahan: {data.get('hari_bertahan', 0)} hari
+- Status: {data.get('status_bisnis', '-')}
+
+Berikan analisis risiko dan 1-2 saran tindakan konkret. Bahasa Indonesia singkat, padat, langsung ke inti.
+""".replace(',', '.')
+            
+            from gemini_helper import _chat, groq_client
+            if not groq_client:
+                return jsonify({"analisis": "AI tidak tersedia. Pastikan API key Groq telah dikonfigurasi."})
+            
+            analisis = _chat(prompt, max_tokens=300)
+            return jsonify({"analisis": analisis})
+        except Exception as e:
+            return jsonify({"analisis": f"Gagal menganalisis: {str(e)}"}), 500
 
     @app.route('/api/chatbot', methods=['POST'])
     @login_required

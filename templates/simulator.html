@@ -2,11 +2,49 @@
 {% block title %}Simulator Bisnis{% endblock %}
 {% block page_heading %}Simulator Bisnis{% endblock %}
 
+{% block extra_css %}
+<style>
+    .preset-btn { font-size: 0.78rem; font-weight: 700; border-radius: 10px; padding: 8px 14px; transition: all 0.2s; border: 2px solid transparent; }
+    .preset-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+    .preset-btn.active { box-shadow: 0 0 0 3px rgba(99,102,241,0.4); }
+    .period-btn { font-size: 0.8rem; font-weight: 600; border-radius: 50rem; padding: 6px 16px; border: 1.5px solid #dee2e6; background: white; color: #495057; transition: all 0.2s; }
+    .period-btn:hover { border-color: var(--primary-color); color: var(--primary-color); }
+    .period-btn.active { background: var(--primary-color); color: white; border-color: var(--primary-color); }
+    .kpi-mini { text-align: center; padding: 12px 8px; }
+    .kpi-mini .kpi-val { font-size: 1.5rem; font-weight: 800; line-height: 1.1; }
+    .kpi-mini .kpi-label { font-size: 0.7rem; opacity: 0.7; margin-bottom: 2px; }
+    .kpi-mini .kpi-target { font-size: 0.65rem; opacity: 0.5; }
+    .sim-warning { background: rgba(245,158,11,0.15); border: 1px solid rgba(245,158,11,0.4); border-radius: 10px; padding: 10px 16px; font-size: 0.85rem; color: #f59e0b; }
+    
+    /* Product Search Autosuggest */
+    .product-search-wrap { position: relative; }
+    .product-search-wrap input { border-radius: 50rem; padding: 10px 16px 10px 38px; font-size: 0.9rem; border: 2px solid #dee2e6; transition: border 0.2s; }
+    .product-search-wrap input:focus { border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(99,102,241,0.15); }
+    .product-search-wrap .search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #adb5bd; font-size: 0.9rem; pointer-events: none; }
+    .suggest-dropdown { position: absolute; top: 100%; left: 0; right: 0; background: white; border: 1px solid #dee2e6; border-radius: 12px; max-height: 200px; overflow-y: auto; z-index: 10; display: none; box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
+    .suggest-dropdown.show { display: block; }
+    .suggest-item { padding: 10px 16px; cursor: pointer; font-size: 0.88rem; transition: background 0.15s; border-bottom: 1px solid #f0f0f0; }
+    .suggest-item:last-child { border-bottom: none; }
+    .suggest-item:hover, .suggest-item.active { background: #f0f4ff; color: var(--primary-color); }
+    .suggest-item .highlight { font-weight: 700; color: var(--primary-color); }
+    .added-prod-slider { animation: slideIn 0.3s ease; }
+    @keyframes slideIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+    .remove-prod-btn { cursor: pointer; opacity: 0.5; transition: opacity 0.2s; }
+    .remove-prod-btn:hover { opacity: 1; }
+    
+    /* AI Analysis */
+    .ai-box { background: linear-gradient(135deg, rgba(99,102,241,0.15), rgba(168,85,247,0.10)); border: 1px solid rgba(99,102,241,0.25); border-radius: 12px; padding: 16px; }
+    .ai-box .ai-text { font-size: 0.92rem; line-height: 1.6; }
+    .ai-loading { display: inline-block; width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 0.6s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="row align-items-center mb-4">
     <div class="col-md-8">
         <h1 class="h3 fw-bold mb-1 text-dark">Business Stress Simulator</h1>
-        <p class="text-muted">Simulasikan dampak risiko ekonomi terhadap dompet usahamu.</p>
+        <p class="text-muted mb-0">Simulasikan dampak risiko ekonomi terhadap dompet usahamu.</p>
     </div>
     <div class="col-md-4 text-md-end">
         <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary">← Kembali ke Dashboard</a>
@@ -14,11 +52,38 @@
 </div>
 
 <div class="row g-4">
-    <!-- Kolom Kiri: Kontrol (Sesuai UI/UX requirement 2 kolom) -->
+    <!-- Kolom Kiri: Kontrol -->
     <div class="col-md-5">
         <div class="card summary-card p-4 h-100">
-            <h5 class="fw-bold text-dark mb-4"><i class="bi bi-sliders me-2"></i>Global Makro Ekonomi</h5>
+            <!-- Period Selector -->
+            <div class="mb-4 pb-3 border-bottom">
+                <h6 class="fw-bold text-dark mb-2"><i class="bi bi-calendar-range me-2 text-primary"></i>Periode Data</h6>
+                <div class="d-flex flex-wrap gap-2 mb-2" id="periodButtons">
+                    <button class="period-btn" data-periode="7">7 Hari</button>
+                    <button class="period-btn" data-periode="14">14 Hari</button>
+                    <button class="period-btn active" data-periode="30">30 Hari</button>
+                    <button class="period-btn" data-periode="0">Semua</button>
+                </div>
+                <small class="text-muted d-block" id="periodeInfo">
+                    <i class="bi bi-info-circle me-1"></i>
+                    {% if tanggal_pertama %}
+                        Data tersedia sejak <strong>{{ tanggal_pertama }}</strong> • {{ jumlah_transaksi }} transaksi
+                    {% else %}
+                        Belum ada transaksi tercatat.
+                    {% endif %}
+                </small>
+            </div>
+
+            <h5 class="fw-bold text-dark mb-3"><i class="bi bi-sliders me-2"></i>Global Makro Ekonomi</h5>
             
+            <!-- Scenario Presets -->
+            <div class="d-flex flex-wrap gap-2 mb-4">
+                <button class="preset-btn btn btn-outline-success" data-turun="0" data-hpp="0" data-opex="0" title="Kondisi normal tanpa stress">🟢 Normal</button>
+                <button class="preset-btn btn btn-outline-warning" data-turun="15" data-hpp="10" data-opex="5" title="Perlambatan ekonomi ringan">🟡 Resesi</button>
+                <button class="preset-btn btn btn-outline-danger" data-turun="5" data-hpp="30" data-opex="20" title="Harga bahan naik tajam">🟠 Inflasi</button>
+                <button class="preset-btn btn btn-outline-dark" data-turun="50" data-hpp="25" data-opex="15" title="Kehilangan separuh pasar">🔴 Krisis</button>
+            </div>
+
             <!-- Slider Omzet Turun -->
             <div class="mb-4 text-center pb-3 border-bottom">
                 <label for="sliderTurun" class="form-label text-muted fw-bold d-block" style="font-size:1.0rem;">Jika Total Penjualan Bisnis Turun Sebesar:</label>
@@ -44,19 +109,39 @@
                 <input type="range" class="form-range" id="sliderOpex" min="0" max="100" step="5" value="0">
             </div>
 
-            {% if top_produk %}
             <hr class="my-4 text-muted border-2">
-            <h6 class="fw-bold text-dark mb-3"><i class="bi bi-box-seam text-primary me-2"></i>Stress Test Spesifik Produk (Top 3)</h6>
-            {% for p in top_produk %}
-            <div class="mb-3 text-start bg-light p-3 rounded border">
-                <label for="produkTurun_{{ loop.index }}" class="form-label text-muted small fw-bold d-flex justify-content-between mb-1">
-                    <span>Omzet {{ p.nama }} Anjlok:</span>
-                    <span id="lblProdukTurun_{{ loop.index }}" class="text-danger fw-bold fs-5">0%</span>
-                </label>
-                <input type="range" class="form-range prod-slider" id="produkTurun_{{ loop.index }}" data-prod="{{ p.nama }}" data-lbl="lblProdukTurun_{{ loop.index }}" min="0" max="100" step="5" value="0">
+            
+            <!-- Stress Test Spesifik Produk -->
+            <h6 class="fw-bold text-dark mb-3"><i class="bi bi-box-seam text-primary me-2"></i>Stress Test Produk</h6>
+            
+            <!-- Auto-suggest search -->
+            <div class="product-search-wrap mb-3">
+                <i class="bi bi-search search-icon"></i>
+                <input type="text" class="form-control" id="produkSearch" placeholder="Cari produk untuk di-stress test..." autocomplete="off">
+                <div class="suggest-dropdown" id="suggestDropdown"></div>
             </div>
-            {% endfor %}
-            {% endif %}
+
+            <!-- Top 3 (preloaded) -->
+            <div id="produkSliderContainer">
+                {% if top_produk %}
+                {% for p in top_produk %}
+                <div class="mb-3 text-start bg-light p-3 rounded border added-prod-slider" data-prodname="{{ p.nama|lower }}">
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                        <label class="form-label text-muted small fw-bold mb-0 d-flex justify-content-between w-100">
+                            <span><i class="bi bi-tag-fill me-1 text-primary"></i>{{ p.nama }}</span>
+                            <span class="prod-lbl text-danger fw-bold fs-5">0%</span>
+                        </label>
+                        <i class="bi bi-x-circle-fill text-muted remove-prod-btn ms-2" title="Hapus" onclick="removeProdSlider(this)"></i>
+                    </div>
+                    <input type="range" class="form-range prod-slider" data-prod="{{ p.nama }}" min="0" max="100" step="5" value="0">
+                    <small class="text-muted" style="font-size:0.7rem;">Terjual <strong>{{ p.total }}</strong> unit (Top 3)</small>
+                </div>
+                {% endfor %}
+                {% endif %}
+            </div>
+            
+            <small class="text-muted d-block mb-3" style="font-size:0.75rem;"><i class="bi bi-lightbulb me-1"></i>Ketik nama produk di atas untuk menambah slider stress test individual.</small>
+            
             <button class="btn btn-outline-danger w-100 btn-lg" id="btnReset"
                 aria-label="Kembali ke kondisi normal pabrik">Reset ke Kondisi Normal</button>
         </div>
@@ -64,51 +149,95 @@
 
     <!-- Kolom Kanan: Hasil Real-time -->
     <div class="col-md-7">
-        <div class="card summary-card p-4 h-100 shadow" style="background-color: var(--primary-color); color: white; border: 1px solid rgba(255,255,255,0.1);">
-            <h5 class="fw-bold mb-4 text-white"><i class="bi bi-graph-up-arrow me-2 text-info"></i>Proyeksi Hasil Mingguan</h5>
+        <div class="card summary-card p-4 shadow" style="background-color: var(--primary-color); color: white; border: 1px solid rgba(255,255,255,0.1);">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="fw-bold mb-0 text-white"><i class="bi bi-graph-up-arrow me-2 text-info"></i>Proyeksi Hasil Simulasi</h5>
+                <span class="badge bg-light text-dark" id="badgePeriodResult" style="font-size:0.75rem;">30 Hari</span>
+            </div>
 
-            <div class="row text-center mb-4">
+            <!-- Warning banner -->
+            <div class="sim-warning mb-3 d-none" id="warningBanner">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i><span id="warningText"></span>
+            </div>
+
+            <!-- Header KPIs: Pemasukan, Pengeluaran, Saldo -->
+            <div class="row text-center mb-3">
                 <div class="col-sm-4 mb-3 mb-sm-0">
                     <p class="mb-1 text-light small fw-bold">Pemasukan Baru</p>
                     <h3 class="fw-bold text-white shadow-sm-text" id="simPemasukan">Rp 0</h3>
+                    <small class="text-white-50" id="lblPemasukanAsli" style="font-size:0.7rem;">Asli: -</small>
                 </div>
                 <div class="col-sm-4 mb-3 mb-sm-0">
                     <p class="mb-1 text-light small fw-bold">Pengeluaran Baru</p>
                     <h3 class="fw-bold text-white shadow-sm-text" id="simPengeluaran">Rp 0</h3>
+                    <small class="text-white-50" id="lblPengeluaranAsli" style="font-size:0.7rem;">Asli: -</small>
                 </div>
                 <div class="col-sm-4">
                     <p class="mb-1 text-light small fw-bold border-bottom border-light pb-1">Saldo Bersih (Untung/Rugi)</p>
                     <h3 class="fw-bold shadow-sm-text" id="simSaldo" style="color:#2ef080;">Rp 0</h3>
+                    <small class="text-white-50" id="lblSelisih" style="font-size:0.7rem;">Selisih: -</small>
                 </div>
             </div>
 
             <hr class="border-light opacity-25">
             
             <h6 class="fw-bold text-light mb-3 mt-2"><i class="bi bi-shield-check me-2 text-warning"></i>Indikator Kelayakan (Stress Test)</h6>
-            <div class="row text-center mb-4">
-                <div class="col-4 border-end border-light border-opacity-25">
-                    <p class="small text-light mb-1">Gross Margin</p>
-                    <h4 class="fw-bold text-white mb-0" id="simGrossMargin">0%</h4>
-                    <small class="text-white-50" style="font-size: 0.7rem;">Target > 30%</small>
+            <div class="row text-center mb-3">
+                <div class="col border-end border-light border-opacity-25 kpi-mini">
+                    <p class="kpi-label text-light">Gross Margin</p>
+                    <div class="kpi-val text-white" id="simGrossMargin">0%</div>
+                    <small class="kpi-target text-white-50">Target > 30%</small>
                 </div>
-                <div class="col-4 border-end border-light border-opacity-25">
-                    <p class="small text-light mb-1">Rasio Operasional</p>
-                    <h4 class="fw-bold text-white mb-0" id="simRasioOpex">0%</h4>
-                    <small class="text-white-50" style="font-size: 0.7rem;">Target < 60%</small>
+                <div class="col border-end border-light border-opacity-25 kpi-mini">
+                    <p class="kpi-label text-light">Rasio Operasional</p>
+                    <div class="kpi-val text-white" id="simRasioOpex">0%</div>
+                    <small class="kpi-target text-white-50">Target < 60%</small>
                 </div>
-                <div class="col-4">
-                    <p class="small text-light mb-1">Status Proyeksi</p>
-                    <h5 class="fw-bold mt-2 py-1 px-3 rounded d-inline-block shadow-sm" id="simStatusBisnis" style="background-color: #27AE60; color: white;">Aman</h5>
+                <div class="col border-end border-light border-opacity-25 kpi-mini">
+                    <p class="kpi-label text-light">BEP Kapasitas</p>
+                    <div class="kpi-val text-white" id="simBEP">0%</div>
+                    <small class="kpi-target text-white-50">Target < 80%</small>
+                </div>
+                <div class="col border-end border-light border-opacity-25 kpi-mini">
+                    <p class="kpi-label text-light">Hari Bertahan</p>
+                    <div class="kpi-val text-white" id="simHariBertahan">0</div>
+                    <small class="kpi-target text-white-50">Jika income = 0</small>
+                </div>
+                <div class="col kpi-mini">
+                    <p class="kpi-label text-light">Status</p>
+                    <h5 class="fw-bold mt-1 py-1 px-3 rounded d-inline-block shadow-sm" id="simStatusBisnis" style="background-color: #27AE60; color: white; font-size: 0.9rem;">Aman</h5>
                 </div>
             </div>
 
-            <div class="mt-auto pt-3 border-top border-light border-opacity-25">
+            <!-- Info meta -->
+            <div class="d-flex justify-content-center gap-4 mb-3" style="font-size: 0.75rem; opacity: 0.6;">
+                <span><i class="bi bi-calendar3 me-1"></i><span id="metaHariAktif">0</span> hari aktif</span>
+                <span><i class="bi bi-receipt me-1"></i><span id="metaJumlahTrx">0</span> transaksi</span>
+            </div>
+
+            <!-- Saran Box -->
+            <div class="pt-3 border-top border-light border-opacity-25">
                 <div class="d-flex align-items-center p-3 rounded" id="saranBox"
                     style="background: rgba(255,255,255,0.1);">
                     <span class="fs-2 me-3">💡</span>
                     <p class="mb-0 text-white" id="simSaran" style="font-size: 1.05rem; font-weight: 500;">
                         Pilih persentase krisis pada penggeser di sebelah kiri.
                     </p>
+                </div>
+            </div>
+
+            <!-- AI Analysis Box -->
+            <div class="mt-3">
+                <button class="btn btn-sm w-100 fw-bold" id="btnAiAnalysis" 
+                    style="background: linear-gradient(135deg, #6366f1, #a855f7); color: white; border: none; border-radius: 10px; padding: 10px;">
+                    <i class="bi bi-robot me-2"></i>Minta Analisis AI Terhadap Skenario Ini
+                </button>
+                <div class="ai-box mt-2 d-none" id="aiBox">
+                    <div class="d-flex align-items-center mb-2">
+                        <i class="bi bi-robot fs-5 me-2" style="color: #a855f7;"></i>
+                        <strong style="color: #a855f7; font-size: 0.85rem;">Analisis AI</strong>
+                    </div>
+                    <p class="ai-text text-white mb-0" id="aiText"></p>
                 </div>
             </div>
         </div>
@@ -122,6 +251,9 @@
 {% block extra_js %}
 <script>
     document.addEventListener("DOMContentLoaded", function () {
+        // All product names for autosuggest
+        const allProduk = {{ all_produk | tojson }};
+        
         const slider = document.getElementById("sliderTurun");
         const sliderHPP = document.getElementById("sliderHPP");
         const sliderOpex = document.getElementById("sliderOpex");
@@ -135,18 +267,156 @@
         const simPengeluaran = document.getElementById("simPengeluaran");
         const simSaldo = document.getElementById("simSaldo");
         
-        // Elemen KPI baru
         const simGrossMargin = document.getElementById("simGrossMargin");
         const simRasioOpex = document.getElementById("simRasioOpex");
         const simStatusBisnis = document.getElementById("simStatusBisnis");
+        const simBEP = document.getElementById("simBEP");
+        const simHariBertahan = document.getElementById("simHariBertahan");
+        
+        const lblPemasukanAsli = document.getElementById("lblPemasukanAsli");
+        const lblPengeluaranAsli = document.getElementById("lblPengeluaranAsli");
+        const lblSelisih = document.getElementById("lblSelisih");
+        const metaHariAktif = document.getElementById("metaHariAktif");
+        const metaJumlahTrx = document.getElementById("metaJumlahTrx");
+        const badgePeriod = document.getElementById("badgePeriodResult");
+        const warningBanner = document.getElementById("warningBanner");
+        const warningText = document.getElementById("warningText");
 
         const simSaran = document.getElementById("simSaran");
         const saranBox = document.getElementById("saranBox");
         const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-        const prodSliders = document.querySelectorAll('.prod-slider');
+        const produkContainer = document.getElementById("produkSliderContainer");
         let debounceTimer;
-
+        let currentPeriode = 30;
+        let lastSimData = null; // Store last simulation result for AI
+        
+        // ==========================================
+        // PRODUCT AUTOSUGGEST
+        // ==========================================
+        const searchInput = document.getElementById("produkSearch");
+        const dropdown = document.getElementById("suggestDropdown");
+        let suggestIndex = -1;
+        
+        function getAddedProdNames() {
+            return Array.from(produkContainer.querySelectorAll('.added-prod-slider'))
+                .map(el => el.getAttribute('data-prodname'));
+        }
+        
+        searchInput.addEventListener("input", function() {
+            const query = this.value.trim().toLowerCase();
+            dropdown.innerHTML = '';
+            suggestIndex = -1;
+            
+            if (query.length < 1) { dropdown.classList.remove('show'); return; }
+            
+            const added = getAddedProdNames();
+            const matches = allProduk.filter(p => 
+                p.toLowerCase().includes(query) && !added.includes(p.toLowerCase())
+            ).slice(0, 8);
+            
+            if (matches.length === 0) {
+                dropdown.innerHTML = '<div class="suggest-item text-muted"><i class="bi bi-emoji-frown me-1"></i>Tidak ditemukan</div>';
+                dropdown.classList.add('show');
+                return;
+            }
+            
+            matches.forEach((name, i) => {
+                const div = document.createElement('div');
+                div.className = 'suggest-item';
+                // Highlight matched text
+                const idx = name.toLowerCase().indexOf(query);
+                if (idx >= 0) {
+                    div.innerHTML = name.substring(0, idx) + '<span class="highlight">' + name.substring(idx, idx + query.length) + '</span>' + name.substring(idx + query.length);
+                } else {
+                    div.textContent = name;
+                }
+                div.addEventListener('click', () => addProdSlider(name));
+                dropdown.appendChild(div);
+            });
+            dropdown.classList.add('show');
+        });
+        
+        // Keyboard navigation
+        searchInput.addEventListener("keydown", function(e) {
+            const items = dropdown.querySelectorAll('.suggest-item:not(.text-muted)');
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                suggestIndex = Math.min(suggestIndex + 1, items.length - 1);
+                items.forEach((el, i) => el.classList.toggle('active', i === suggestIndex));
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                suggestIndex = Math.max(suggestIndex - 1, 0);
+                items.forEach((el, i) => el.classList.toggle('active', i === suggestIndex));
+            } else if (e.key === 'Enter') {
+                e.preventDefault();
+                if (suggestIndex >= 0 && items[suggestIndex]) {
+                    // Get the text content (without HTML tags)
+                    const name = items[suggestIndex].textContent;
+                    addProdSlider(name);
+                }
+            } else if (e.key === 'Escape') {
+                dropdown.classList.remove('show');
+            }
+        });
+        
+        // Close dropdown on outside click
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.product-search-wrap')) {
+                dropdown.classList.remove('show');
+            }
+        });
+        
+        function addProdSlider(name) {
+            // Check if already added
+            if (getAddedProdNames().includes(name.toLowerCase())) return;
+            
+            const wrapper = document.createElement('div');
+            wrapper.className = 'mb-3 text-start bg-light p-3 rounded border added-prod-slider';
+            wrapper.setAttribute('data-prodname', name.toLowerCase());
+            wrapper.innerHTML = `
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                    <label class="form-label text-muted small fw-bold mb-0 d-flex justify-content-between w-100">
+                        <span><i class="bi bi-tag-fill me-1 text-info"></i>${name}</span>
+                        <span class="prod-lbl text-danger fw-bold fs-5">0%</span>
+                    </label>
+                    <i class="bi bi-x-circle-fill text-muted remove-prod-btn ms-2" title="Hapus" onclick="removeProdSlider(this)"></i>
+                </div>
+                <input type="range" class="form-range prod-slider" data-prod="${name}" min="0" max="100" step="5" value="0">
+                <small class="text-muted" style="font-size:0.7rem;"><i class="bi bi-search me-1"></i>Ditambahkan via pencarian</small>
+            `;
+            
+            produkContainer.appendChild(wrapper);
+            
+            // Attach events to new slider
+            const newSlider = wrapper.querySelector('.prod-slider');
+            const newLbl = wrapper.querySelector('.prod-lbl');
+            newSlider.addEventListener('input', function() {
+                newLbl.innerText = this.value + "%";
+                debouncedHitung();
+            });
+            
+            // Clear search
+            searchInput.value = '';
+            dropdown.classList.remove('show');
+            suggestIndex = -1;
+            
+            // Flash
+            wrapper.style.borderColor = 'var(--primary-color)';
+            setTimeout(() => wrapper.style.borderColor = '', 1500);
+        }
+        
+        window.removeProdSlider = function(el) {
+            const wrapper = el.closest('.added-prod-slider');
+            wrapper.style.opacity = '0';
+            wrapper.style.transform = 'translateY(-8px)';
+            wrapper.style.transition = 'all 0.25s';
+            setTimeout(() => { wrapper.remove(); debouncedHitung(); }, 250);
+        };
+        
+        // ==========================================
+        // SIMULATION ENGINE
+        // ==========================================
         const hitungSimulasi = async () => {
             const valUmum = parseInt(slider.value, 10);
             const valHpp = parseInt(sliderHPP.value, 10);
@@ -155,10 +425,12 @@
             let payload = { 
                 penurunan_persen: valUmum,
                 kenaikan_hpp: valHpp,
-                kenaikan_opex: valOpex
+                kenaikan_opex: valOpex,
+                periode: currentPeriode
             };
             
-            prodSliders.forEach(sl => {
+            // Collect all product sliders (both preloaded and search-added)
+            produkContainer.querySelectorAll('.prod-slider').forEach(sl => {
                 let name = sl.getAttribute('data-prod');
                 payload['persen_turun_produk_' + name] = parseInt(sl.value, 10);
             });
@@ -170,22 +442,49 @@
                     body: JSON.stringify(payload)
                 });
                 if (resp.status === 429) {
-                    simSaran.innerText = "Wow, pelan-pelan. Anda menggeser terlalu cepat (Rate Limit Penuh).";
+                    simSaran.innerText = "Pelan-pelan, Anda menggeser terlalu cepat (Rate Limit).";
                     return;
                 }
                 if (!resp.ok) throw new Error("Gagal komputasi");
 
                 const data = await resp.json();
+                lastSimData = { data, penurunan: valUmum, hpp_naik: valHpp, opex_naik: valOpex };
+
+                // Warning banner
+                if (data.warning) {
+                    warningBanner.classList.remove('d-none');
+                    warningText.innerText = data.warning;
+                } else {
+                    warningBanner.classList.add('d-none');
+                }
 
                 simPemasukan.innerText = window.formatRupiah(data.pemasukan_baru);
                 simPengeluaran.innerText = window.formatRupiah(data.pengeluaran_baru);
                 simSaldo.innerText = window.formatRupiah(data.saldo_baru);
                 
+                // Baseline comparison
+                lblPemasukanAsli.innerText = "Asli: " + window.formatRupiah(data.pemasukan_asli);
+                lblPengeluaranAsli.innerText = "Asli: " + window.formatRupiah(data.pengeluaran_asli);
+                const selisih = data.selisih_saldo;
+                lblSelisih.innerText = (selisih >= 0 ? "+" : "") + window.formatRupiah(selisih);
+                lblSelisih.style.color = selisih >= 0 ? "#2ef080" : "#ff6b6b";
+
                 simGrossMargin.innerText = data.gross_margin + "%";
                 simRasioOpex.innerText = data.rasio_opex + "%";
                 simStatusBisnis.innerText = data.status_bisnis;
+                simBEP.innerText = data.bep_persen + "%";
+                simHariBertahan.innerText = data.hari_bertahan >= 999 ? "∞" : data.hari_bertahan + " hr";
+                
+                // Meta info
+                metaHariAktif.innerText = data.hari_aktif;
+                metaJumlahTrx.innerText = data.jumlah_trx;
 
-                // Warna Indikator Saldo
+                // Color coding
+                simGrossMargin.style.color = data.gross_margin >= 30 ? "#2ef080" : (data.gross_margin >= 15 ? "#f59e0b" : "#ff6b6b");
+                simRasioOpex.style.color = data.rasio_opex <= 60 ? "#2ef080" : (data.rasio_opex <= 80 ? "#f59e0b" : "#ff6b6b");
+                simBEP.style.color = data.bep_persen <= 80 ? "#2ef080" : (data.bep_persen <= 100 ? "#f59e0b" : "#ff6b6b");
+                simHariBertahan.style.color = data.hari_bertahan >= 30 ? "#2ef080" : (data.hari_bertahan >= 14 ? "#f59e0b" : "#ff6b6b");
+
                 if (data.saldo_baru >= 0) {
                     simSaldo.style.color = "#2ef080"; 
                     saranBox.style.backgroundColor = "rgba(46, 240, 128, 0.15)";
@@ -194,16 +493,18 @@
                     saranBox.style.backgroundColor = "rgba(255, 107, 107, 0.15)";
                 }
 
-                // Warna Status Bisnis
                 if (data.status_bisnis === "Aman") {
-                    simStatusBisnis.style.backgroundColor = "#27AE60"; // Hijau
+                    simStatusBisnis.style.backgroundColor = "#27AE60";
                 } else if (data.status_bisnis === "Waspada") {
-                    simStatusBisnis.style.backgroundColor = "#E67E22"; // Oranye
+                    simStatusBisnis.style.backgroundColor = "#E67E22";
                 } else {
-                    simStatusBisnis.style.backgroundColor = "#E74C3C"; // Merah
+                    simStatusBisnis.style.backgroundColor = "#E74C3C";
                 }
 
                 simSaran.innerText = data.saran;
+                
+                // Hide AI box on new calculation
+                document.getElementById('aiBox').classList.add('d-none');
             } catch (err) {
                 console.error("error saat simulasi", err);
             }
@@ -214,26 +515,61 @@
             debounceTimer = setTimeout(hitungSimulasi, 300);
         };
 
+        // --- Period buttons ---
+        document.querySelectorAll('.period-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.period-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                currentPeriode = parseInt(this.getAttribute('data-periode'), 10);
+                const labels = {0: 'Semua', 7: '7 Hari', 14: '14 Hari', 30: '30 Hari'};
+                badgePeriod.innerText = labels[currentPeriode] || currentPeriode + ' Hari';
+                debouncedHitung();
+            });
+        });
+
+        // --- Preset buttons ---
+        document.querySelectorAll('.preset-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                const turun = parseInt(this.getAttribute('data-turun'), 10);
+                const hpp = parseInt(this.getAttribute('data-hpp'), 10);
+                const opex = parseInt(this.getAttribute('data-opex'), 10);
+                
+                slider.value = turun; lblPersen.innerText = turun + "%";
+                lblPersen.style.color = turun > 50 ? "var(--danger-color)" : (turun > 25 ? "var(--warning-color)" : "var(--primary-color)");
+                sliderHPP.value = hpp; lblHPP.innerText = hpp + "%";
+                sliderOpex.value = opex; lblOpex.innerText = opex + "%";
+                
+                debouncedHitung();
+            });
+        });
+
         slider.addEventListener("input", function () {
             const val = parseInt(this.value, 10);
             lblPersen.innerText = val + "%";
             lblPersen.style.color = val > 50 ? "var(--danger-color)" : (val > 25 ? "var(--warning-color)" : "var(--primary-color)");
+            document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
             debouncedHitung();
         });
 
         sliderHPP.addEventListener("input", function () {
             lblHPP.innerText = this.value + "%";
+            document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
             debouncedHitung();
         });
 
         sliderOpex.addEventListener("input", function () {
             lblOpex.innerText = this.value + "%";
+            document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
             debouncedHitung();
         });
 
-        prodSliders.forEach(sl => {
+        // Attach events to preloaded product sliders
+        produkContainer.querySelectorAll('.prod-slider').forEach(sl => {
+            const lbl = sl.closest('.added-prod-slider').querySelector('.prod-lbl');
             sl.addEventListener("input", function() {
-                const lbl = document.getElementById(this.getAttribute('data-lbl'));
                 lbl.innerText = this.value + "%";
                 debouncedHitung();
             });
@@ -244,11 +580,47 @@
             sliderHPP.value = 0; sliderHPP.dispatchEvent(new Event('input'));
             sliderOpex.value = 0; sliderOpex.dispatchEvent(new Event('input'));
             
-            prodSliders.forEach(sl => {
+            produkContainer.querySelectorAll('.prod-slider').forEach(sl => {
                 sl.value = 0;
-                document.getElementById(sl.getAttribute('data-lbl')).innerText = "0%";
+                const lbl = sl.closest('.added-prod-slider').querySelector('.prod-lbl');
+                if (lbl) lbl.innerText = "0%";
             });
+            document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
             debouncedHitung();
+        });
+
+        // ==========================================
+        // AI ANALYSIS
+        // ==========================================
+        document.getElementById('btnAiAnalysis').addEventListener('click', async function() {
+            if (!lastSimData) {
+                alert('Jalankan simulasi terlebih dahulu.');
+                return;
+            }
+            
+            const btn = this;
+            const aiBox = document.getElementById('aiBox');
+            const aiText = document.getElementById('aiText');
+            
+            btn.disabled = true;
+            btn.innerHTML = '<span class="ai-loading me-2"></span>AI sedang menganalisis...';
+            aiBox.classList.remove('d-none');
+            aiText.innerText = 'Menunggu respon AI...';
+            
+            try {
+                const resp = await fetch('/api/simulator-ai', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'X-CSRFToken': csrfToken },
+                    body: JSON.stringify(lastSimData)
+                });
+                const result = await resp.json();
+                aiText.innerText = result.analisis || 'Tidak ada respon.';
+            } catch (e) {
+                aiText.innerText = 'Gagal menghubungi AI. Coba lagi nanti.';
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="bi bi-robot me-2"></i>Minta Analisis AI Terhadap Skenario Ini';
+            }
         });
 
         hitungSimulasi();

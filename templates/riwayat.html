@@ -86,8 +86,11 @@
                     <th class="py-3">Tanggal</th>
                     <th class="py-3 text-start">Kategori</th>
                     <th class="py-3 text-start">Produk (Qty)</th>
+                    <th class="py-3 text-info">HPP</th>
                     <th class="py-3 text-success">(+) Masuk</th>
                     <th class="py-3 text-danger">(-) Keluar</th>
+                    <th class="py-3" style="color:#8b5cf6;">Laba Kotor</th>
+                    <th class="py-3" style="color:#f59e0b;">Margin%</th>
                     <th class="py-3" title="Jumlah Pelanggan"><i class="bi bi-people-fill"></i></th>
                     <th class="py-3 text-start">Catatan</th>
                 </tr>
@@ -116,8 +119,26 @@
                             -
                         {% endif %}
                     </td>
+                    <td class="text-info">
+                        {% if row.harga_modal and row.harga_modal > 0 %}
+                            <small class="text-muted d-block" style="font-size:0.72rem;">@<span class="js-rupiah" data-val="{{ row.harga_modal }}">0</span></small>
+                            <span class="fw-bold js-rupiah" data-val="{{ row.harga_modal * row.kuantitas }}">0</span>
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
                     <td class="fw-bold text-success js-rupiah" data-val="{{ row.pemasukan }}">0</td>
                     <td class="fw-bold text-danger js-rupiah" data-val="{{ row.pengeluaran }}">0</td>
+                    {% set hpp_total = (row.harga_modal or 0) * (row.kuantitas or 0) %}
+                    {% set laba_kotor = row.pemasukan - hpp_total %}
+                    <td class="fw-bold js-rupiah" data-val="{{ laba_kotor }}" style="color:#8b5cf6;">0</td>
+                    <td class="fw-bold" style="color:#f59e0b;">
+                        {% if row.pemasukan > 0 %}
+                            {{ "%.0f"|format(laba_kotor / row.pemasukan * 100) }}%
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
                     <td class="text-muted">{{ row.jumlah_pelanggan if row.jumlah_pelanggan > 0 else '-' }}</td>
                     <td class="text-start text-muted small" style="min-width: 250px;">
                         {{ row.catatan if row.catatan else '-' }}
@@ -125,14 +146,14 @@
                 </tr>
                 {% endfor %}
                 <tr id="emptyRow" style="display: none;">
-                    <td colspan="8" class="py-5 text-muted">
+                    <td colspan="11" class="py-5 text-muted">
                         <i class="bi bi-search fs-1 d-block mb-3 opacity-50"></i>
                         Tidak ada transaksi yang cocok dengan kata pencarian ini.
                     </td>
                 </tr>
                 {% else %}
                 <tr>
-                    <td colspan="8" class="py-5 text-muted">
+                    <td colspan="11" class="py-5 text-muted">
                         <i class="bi bi-file-earmark-x fs-1 d-block mb-3 opacity-50"></i>
                         Belum ada riwayat transaksi pada buku ini.
                     </td>
