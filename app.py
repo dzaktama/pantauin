@@ -722,7 +722,6 @@ def create_app(config_class=Config):
             
             prompt = f"""Analisis singkat stress test bisnis UMKM ini dalam 3-4 kalimat:
 - Skenario: Penjualan turun {req.get('penurunan', 0)}%, HPP naik {req.get('hpp_naik', 0)}%, Opex naik {req.get('opex_naik', 0)}%
-- Pemasukan asli: Rp {int(data.get('pemasukan_asli', 0)):,}
 - Pemasukan setelah stress: Rp {int(data.get('pemasukan_baru', 0)):,}
 - Saldo setelah stress: Rp {int(data.get('saldo_baru', 0)):,}
 - Gross Margin: {data.get('gross_margin', 0)}%

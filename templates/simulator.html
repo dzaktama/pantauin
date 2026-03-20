@@ -15,6 +15,8 @@
     .kpi-mini .kpi-label { font-size: 0.7rem; opacity: 0.7; margin-bottom: 2px; }
     .kpi-mini .kpi-target { font-size: 0.65rem; opacity: 0.5; }
     .sim-warning { background: rgba(245,158,11,0.15); border: 1px solid rgba(245,158,11,0.4); border-radius: 10px; padding: 10px 16px; font-size: 0.85rem; color: #f59e0b; }
+    .info-tip { color: #adb5bd; cursor: help; font-size: 0.75rem; margin-left: 4px; transition: color 0.2s; }
+    .info-tip:hover { color: var(--primary-color); }
     
     /* Product Search Autosuggest */
     .product-search-wrap { position: relative; }
@@ -33,8 +35,15 @@
     .remove-prod-btn:hover { opacity: 1; }
     
     /* AI Analysis */
-    .ai-box { background: linear-gradient(135deg, rgba(99,102,241,0.15), rgba(168,85,247,0.10)); border: 1px solid rgba(99,102,241,0.25); border-radius: 12px; padding: 16px; }
-    .ai-box .ai-text { font-size: 0.92rem; line-height: 1.6; }
+    .ai-box { background: linear-gradient(135deg, rgba(99,102,241,0.12), rgba(168,85,247,0.08)); border: 1px solid rgba(99,102,241,0.25); border-radius: 12px; padding: 20px; }
+    .ai-box h6 { color: #c4b5fd; margin-top: 12px; margin-bottom: 8px; font-size: 0.95rem; }
+    .ai-box h6:first-child { margin-top: 0; }
+    .ai-box p, .ai-box li { font-size: 0.88rem; line-height: 1.65; color: rgba(255,255,255,0.9); }
+    .ai-box ol, .ai-box ul { padding-left: 18px; margin-bottom: 8px; }
+    .ai-box li { margin-bottom: 4px; }
+    .ai-box table { border-color: rgba(255,255,255,0.15) !important; }
+    .ai-box table th { background: rgba(99,102,241,0.25) !important; color: #c4b5fd !important; font-size: 0.8rem; font-weight: 700; padding: 6px 10px !important; }
+    .ai-box table td { background: rgba(255,255,255,0.04) !important; color: rgba(255,255,255,0.85) !important; font-size: 0.82rem; padding: 5px 10px !important; }
     .ai-loading { display: inline-block; width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 0.6s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
 </style>
@@ -44,7 +53,9 @@
 <div class="row align-items-center mb-4">
     <div class="col-md-8">
         <h1 class="h3 fw-bold mb-1 text-dark">Business Stress Simulator</h1>
-        <p class="text-muted mb-0">Simulasikan dampak risiko ekonomi terhadap dompet usahamu.</p>
+        <p class="text-muted mb-0">Simulasikan dampak risiko ekonomi terhadap dompet usahamu.
+            <i class="bi bi-info-circle info-tip" data-bs-toggle="tooltip" data-bs-placement="right" title="Simulator ini memproyeksikan bagaimana perubahan kondisi ekonomi (penurunan penjualan, kenaikan harga bahan, dll) berdampak pada keuangan usahamu berdasarkan data transaksi asli."></i>
+        </p>
     </div>
     <div class="col-md-4 text-md-end">
         <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary">← Kembali ke Dashboard</a>
@@ -57,14 +68,17 @@
         <div class="card summary-card p-4 h-100">
             <!-- Period Selector -->
             <div class="mb-4 pb-3 border-bottom">
-                <h6 class="fw-bold text-dark mb-2"><i class="bi bi-calendar-range me-2 text-primary"></i>Periode Data</h6>
+                <h6 class="fw-bold text-dark mb-2">
+                    <i class="bi bi-calendar-range me-2 text-primary"></i>Periode Data
+                    <i class="bi bi-info-circle info-tip" data-bs-toggle="tooltip" title="Tentukan rentang waktu data transaksi yang digunakan sebagai dasar simulasi. Semakin panjang periode, semakin akurat baseline-nya."></i>
+                </h6>
                 <div class="d-flex flex-wrap gap-2 mb-2" id="periodButtons">
                     <button class="period-btn" data-periode="7">7 Hari</button>
                     <button class="period-btn" data-periode="14">14 Hari</button>
                     <button class="period-btn active" data-periode="30">30 Hari</button>
                     <button class="period-btn" data-periode="0">Semua</button>
                 </div>
-                <small class="text-muted d-block" id="periodeInfo">
+                <small class="text-muted d-block">
                     <i class="bi bi-info-circle me-1"></i>
                     {% if tanggal_pertama %}
                         Data tersedia sejak <strong>{{ tanggal_pertama }}</strong> • {{ jumlah_transaksi }} transaksi
@@ -74,19 +88,26 @@
                 </small>
             </div>
 
-            <h5 class="fw-bold text-dark mb-3"><i class="bi bi-sliders me-2"></i>Global Makro Ekonomi</h5>
+            <h5 class="fw-bold text-dark mb-3">
+                <i class="bi bi-sliders me-2"></i>Global Makro Ekonomi
+                <i class="bi bi-info-circle info-tip" data-bs-toggle="tooltip" title="Simulasikan dampak perubahan kondisi ekonomi makro (resesi, inflasi, dll) terhadap seluruh lini usaha secara bersamaan."></i>
+            </h5>
             
             <!-- Scenario Presets -->
             <div class="d-flex flex-wrap gap-2 mb-4">
                 <button class="preset-btn btn btn-outline-success" data-turun="0" data-hpp="0" data-opex="0" title="Kondisi normal tanpa stress">🟢 Normal</button>
-                <button class="preset-btn btn btn-outline-warning" data-turun="15" data-hpp="10" data-opex="5" title="Perlambatan ekonomi ringan">🟡 Resesi</button>
-                <button class="preset-btn btn btn-outline-danger" data-turun="5" data-hpp="30" data-opex="20" title="Harga bahan naik tajam">🟠 Inflasi</button>
-                <button class="preset-btn btn btn-outline-dark" data-turun="50" data-hpp="25" data-opex="15" title="Kehilangan separuh pasar">🔴 Krisis</button>
+                <button class="preset-btn btn btn-outline-warning" data-turun="15" data-hpp="10" data-opex="5" title="Perlambatan ekonomi ringan: penjualan turun 15%, HPP naik 10%, opex naik 5%">🟡 Resesi</button>
+                <button class="preset-btn btn btn-outline-danger" data-turun="5" data-hpp="30" data-opex="20" title="Inflasi berat: harga bahan naik tajam 30%, opex naik 20%, penjualan turun sedikit 5%">🟠 Inflasi</button>
+                <button class="preset-btn btn btn-outline-dark" data-turun="50" data-hpp="25" data-opex="15" title="Krisis parah: kehilangan separuh pasar, harga naik 25%, opex naik 15%">🔴 Krisis</button>
+                <i class="bi bi-info-circle info-tip align-self-center" data-bs-toggle="tooltip" title="Preset skenario ekonomi umum. Klik untuk langsung mengisi slider sesuai skenario yang sudah terkalibrasi."></i>
             </div>
 
             <!-- Slider Omzet Turun -->
             <div class="mb-4 text-center pb-3 border-bottom">
-                <label for="sliderTurun" class="form-label text-muted fw-bold d-block" style="font-size:1.0rem;">Jika Total Penjualan Bisnis Turun Sebesar:</label>
+                <label for="sliderTurun" class="form-label text-muted fw-bold d-block" style="font-size:1.0rem;">
+                    Jika Total Penjualan Bisnis Turun Sebesar:
+                    <i class="bi bi-info-circle info-tip" data-bs-toggle="tooltip" title="Mensimulasikan penurunan total omzet/pemasukan usaha. Misalnya 30% = pemasukan berkurang 30% dari kondisi asli."></i>
+                </label>
                 <div class="display-3 fw-bold mb-3" id="labelPersen" style="color: var(--primary-color);">0%</div>
                 <input type="range" class="form-range" id="sliderTurun" min="0" max="100" step="5" value="0">
             </div>
@@ -94,7 +115,9 @@
             <!-- Slider HPP Naik -->
             <div class="mb-4 text-start">
                 <label for="sliderHPP" class="form-label text-muted small fw-bold d-flex justify-content-between mb-1">
-                    <span>Inflasi/Kenaikan Harga Modal (HPP):</span>
+                    <span>Inflasi/Kenaikan Harga Modal (HPP):
+                        <i class="bi bi-info-circle info-tip" data-bs-toggle="tooltip" title="HPP = Harga Pokok Penjualan (biaya bahan baku per produk). Kenaikan HPP terjadi saat harga bahan baku naik akibat inflasi, kelangkaan, atau kenaikan harga supplier."></i>
+                    </span>
                     <span id="labelHPP" class="text-warning fw-bold fs-5">0%</span>
                 </label>
                 <input type="range" class="form-range" id="sliderHPP" min="0" max="100" step="5" value="0">
@@ -103,7 +126,9 @@
             <!-- Slider Opex Naik -->
             <div class="mb-3 text-start">
                 <label for="sliderOpex" class="form-label text-muted small fw-bold d-flex justify-content-between mb-1">
-                    <span>Kenaikan Beban Operasional (Sewa, Gaji):</span>
+                    <span>Kenaikan Beban Operasional (Sewa, Gaji):
+                        <i class="bi bi-info-circle info-tip" data-bs-toggle="tooltip" title="Beban operasional = biaya rutin harian (sewa tempat, gaji karyawan, listrik, transportasi). Kenaikan opex biasanya terjadi saat inflasi atau ekspansi usaha."></i>
+                    </span>
                     <span id="labelOpex" class="text-danger fw-bold fs-5">0%</span>
                 </label>
                 <input type="range" class="form-range" id="sliderOpex" min="0" max="100" step="5" value="0">
@@ -112,7 +137,13 @@
             <hr class="my-4 text-muted border-2">
             
             <!-- Stress Test Spesifik Produk -->
-            <h6 class="fw-bold text-dark mb-3"><i class="bi bi-box-seam text-primary me-2"></i>Stress Test Produk</h6>
+            <h6 class="fw-bold text-dark mb-2">
+                <i class="bi bi-box-seam text-primary me-2"></i>Stress Test Produk
+                <i class="bi bi-info-circle info-tip" data-bs-toggle="tooltip" title="Simulasikan penurunan omzet per produk secara individual. Berguna untuk melihat dampak jika produk tertentu kehilangan penjualan (misalnya kompetitor muncul, bahan habis, atau tren berubah)."></i>
+            </h6>
+            <small class="text-muted d-block mb-3" style="font-size:0.75rem;">
+                <i class="bi bi-lightbulb me-1"></i>Ketik nama produk di kotak pencarian untuk menambah slider stress individual per produk.
+            </small>
             
             <!-- Auto-suggest search -->
             <div class="product-search-wrap mb-3">
@@ -121,17 +152,19 @@
                 <div class="suggest-dropdown" id="suggestDropdown"></div>
             </div>
 
-            <!-- Top 3 (preloaded) -->
+            <!-- Product Sliders -->
             <div id="produkSliderContainer">
                 {% if top_produk %}
                 {% for p in top_produk %}
                 <div class="mb-3 text-start bg-light p-3 rounded border added-prod-slider" data-prodname="{{ p.nama|lower }}">
                     <div class="d-flex justify-content-between align-items-center mb-1">
                         <label class="form-label text-muted small fw-bold mb-0 d-flex justify-content-between w-100">
-                            <span><i class="bi bi-tag-fill me-1 text-primary"></i>{{ p.nama }}</span>
+                            <span><i class="bi bi-tag-fill me-1 text-primary"></i>{{ p.nama }}
+                                <i class="bi bi-info-circle info-tip" data-bs-toggle="tooltip" title="Simulasikan penurunan omzet produk '{{ p.nama }}'. Geser ke kanan untuk melihat dampak jika produk ini kehilangan penjualan."></i>
+                            </span>
                             <span class="prod-lbl text-danger fw-bold fs-5">0%</span>
                         </label>
-                        <i class="bi bi-x-circle-fill text-muted remove-prod-btn ms-2" title="Hapus" onclick="removeProdSlider(this)"></i>
+                        <i class="bi bi-x-circle-fill text-muted remove-prod-btn ms-2" title="Hapus dari stress test" onclick="removeProdSlider(this)"></i>
                     </div>
                     <input type="range" class="form-range prod-slider" data-prod="{{ p.nama }}" min="0" max="100" step="5" value="0">
                     <small class="text-muted" style="font-size:0.7rem;">Terjual <strong>{{ p.total }}</strong> unit (Top 3)</small>
@@ -139,8 +172,6 @@
                 {% endfor %}
                 {% endif %}
             </div>
-            
-            <small class="text-muted d-block mb-3" style="font-size:0.75rem;"><i class="bi bi-lightbulb me-1"></i>Ketik nama produk di atas untuk menambah slider stress test individual.</small>
             
             <button class="btn btn-outline-danger w-100 btn-lg" id="btnReset"
                 aria-label="Kembali ke kondisi normal pabrik">Reset ke Kondisi Normal</button>
@@ -151,7 +182,10 @@
     <div class="col-md-7">
         <div class="card summary-card p-4 shadow" style="background-color: var(--primary-color); color: white; border: 1px solid rgba(255,255,255,0.1);">
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h5 class="fw-bold mb-0 text-white"><i class="bi bi-graph-up-arrow me-2 text-info"></i>Proyeksi Hasil Simulasi</h5>
+                <h5 class="fw-bold mb-0 text-white">
+                    <i class="bi bi-graph-up-arrow me-2 text-info"></i>Proyeksi Hasil Simulasi
+                    <i class="bi bi-info-circle" style="font-size:0.7rem; opacity:0.6; cursor:help;" data-bs-toggle="tooltip" title="Angka-angka ini menunjukkan proyeksi keuangan usaha berdasarkan skenario stress yang Anda atur di panel kiri."></i>
+                </h5>
                 <span class="badge bg-light text-dark" id="badgePeriodResult" style="font-size:0.75rem;">30 Hari</span>
             </div>
 
@@ -160,20 +194,26 @@
                 <i class="bi bi-exclamation-triangle-fill me-2"></i><span id="warningText"></span>
             </div>
 
-            <!-- Header KPIs: Pemasukan, Pengeluaran, Saldo -->
+            <!-- Header KPIs -->
             <div class="row text-center mb-3">
                 <div class="col-sm-4 mb-3 mb-sm-0">
-                    <p class="mb-1 text-light small fw-bold">Pemasukan Baru</p>
+                    <p class="mb-1 text-light small fw-bold">Pemasukan Baru
+                        <i class="bi bi-info-circle" style="font-size:0.6rem; opacity:0.5; cursor:help;" data-bs-toggle="tooltip" title="Total pemasukan setelah diterapkan penurunan penjualan global dan per-produk."></i>
+                    </p>
                     <h3 class="fw-bold text-white shadow-sm-text" id="simPemasukan">Rp 0</h3>
                     <small class="text-white-50" id="lblPemasukanAsli" style="font-size:0.7rem;">Asli: -</small>
                 </div>
                 <div class="col-sm-4 mb-3 mb-sm-0">
-                    <p class="mb-1 text-light small fw-bold">Pengeluaran Baru</p>
+                    <p class="mb-1 text-light small fw-bold">Pengeluaran Baru
+                        <i class="bi bi-info-circle" style="font-size:0.6rem; opacity:0.5; cursor:help;" data-bs-toggle="tooltip" title="Total pengeluaran setelah dikenaikan HPP dan beban operasional sesuai skenario."></i>
+                    </p>
                     <h3 class="fw-bold text-white shadow-sm-text" id="simPengeluaran">Rp 0</h3>
                     <small class="text-white-50" id="lblPengeluaranAsli" style="font-size:0.7rem;">Asli: -</small>
                 </div>
                 <div class="col-sm-4">
-                    <p class="mb-1 text-light small fw-bold border-bottom border-light pb-1">Saldo Bersih (Untung/Rugi)</p>
+                    <p class="mb-1 text-light small fw-bold border-bottom border-light pb-1">Saldo Bersih
+                        <i class="bi bi-info-circle" style="font-size:0.6rem; opacity:0.5; cursor:help;" data-bs-toggle="tooltip" title="Pemasukan Baru dikurangi Pengeluaran Baru. Hijau = untung, Merah = rugi."></i>
+                    </p>
                     <h3 class="fw-bold shadow-sm-text" id="simSaldo" style="color:#2ef080;">Rp 0</h3>
                     <small class="text-white-50" id="lblSelisih" style="font-size:0.7rem;">Selisih: -</small>
                 </div>
@@ -181,25 +221,36 @@
 
             <hr class="border-light opacity-25">
             
-            <h6 class="fw-bold text-light mb-3 mt-2"><i class="bi bi-shield-check me-2 text-warning"></i>Indikator Kelayakan (Stress Test)</h6>
+            <h6 class="fw-bold text-light mb-3 mt-2">
+                <i class="bi bi-shield-check me-2 text-warning"></i>Indikator Kelayakan
+                <i class="bi bi-info-circle" style="font-size:0.65rem; opacity:0.5; cursor:help;" data-bs-toggle="tooltip" title="Indikator-indikator kunci untuk menilai apakah usaha masih layak bertahan dalam skenario stress ini."></i>
+            </h6>
             <div class="row text-center mb-3">
                 <div class="col border-end border-light border-opacity-25 kpi-mini">
-                    <p class="kpi-label text-light">Gross Margin</p>
+                    <p class="kpi-label text-light">Gross Margin
+                        <i class="bi bi-info-circle" style="font-size:0.55rem; opacity:0.4; cursor:help;" data-bs-toggle="tooltip" title="Persentase keuntungan kotor setelah dikurangi HPP. Di bawah 30% = margin tipis, berbahaya."></i>
+                    </p>
                     <div class="kpi-val text-white" id="simGrossMargin">0%</div>
                     <small class="kpi-target text-white-50">Target > 30%</small>
                 </div>
                 <div class="col border-end border-light border-opacity-25 kpi-mini">
-                    <p class="kpi-label text-light">Rasio Operasional</p>
+                    <p class="kpi-label text-light">Rasio Opex
+                        <i class="bi bi-info-circle" style="font-size:0.55rem; opacity:0.4; cursor:help;" data-bs-toggle="tooltip" title="Persentase pengeluaran operasional terhadap pemasukan. Di atas 60% = biaya terlalu besar, butuh efisiensi."></i>
+                    </p>
                     <div class="kpi-val text-white" id="simRasioOpex">0%</div>
                     <small class="kpi-target text-white-50">Target < 60%</small>
                 </div>
                 <div class="col border-end border-light border-opacity-25 kpi-mini">
-                    <p class="kpi-label text-light">BEP Kapasitas</p>
+                    <p class="kpi-label text-light">BEP
+                        <i class="bi bi-info-circle" style="font-size:0.55rem; opacity:0.4; cursor:help;" data-bs-toggle="tooltip" title="Break-Even Point: berapa % kapasitas penjualan yang harus dicapai agar impas (tidak rugi). Di atas 100% = pasti rugi."></i>
+                    </p>
                     <div class="kpi-val text-white" id="simBEP">0%</div>
                     <small class="kpi-target text-white-50">Target < 80%</small>
                 </div>
                 <div class="col border-end border-light border-opacity-25 kpi-mini">
-                    <p class="kpi-label text-light">Hari Bertahan</p>
+                    <p class="kpi-label text-light">Bertahan
+                        <i class="bi bi-info-circle" style="font-size:0.55rem; opacity:0.4; cursor:help;" data-bs-toggle="tooltip" title="Berapa hari usaha bisa bertahan hanya dengan dana cadangan jika pemasukan berhenti total (income = 0)."></i>
+                    </p>
                     <div class="kpi-val text-white" id="simHariBertahan">0</div>
                     <small class="kpi-target text-white-50">Jika income = 0</small>
                 </div>
@@ -230,27 +281,32 @@
             <div class="mt-3">
                 <button class="btn btn-sm w-100 fw-bold" id="btnAiAnalysis" 
                     style="background: linear-gradient(135deg, #6366f1, #a855f7); color: white; border: none; border-radius: 10px; padding: 10px;">
-                    <i class="bi bi-robot me-2"></i>Minta Analisis AI Terhadap Skenario Ini
+                    <i class="bi bi-robot me-2"></i>Minta Analisis AI
+                    <i class="bi bi-info-circle ms-1" style="font-size:0.7rem; opacity:0.7;" data-bs-toggle="tooltip" title="AI akan menganalisis skenario stress test Anda dan memberikan saran singkat."></i>
                 </button>
                 <div class="ai-box mt-2 d-none" id="aiBox">
                     <div class="d-flex align-items-center mb-2">
                         <i class="bi bi-robot fs-5 me-2" style="color: #a855f7;"></i>
-                        <strong style="color: #a855f7; font-size: 0.85rem;">Analisis AI</strong>
+                        <strong style="color: #c4b5fd; font-size: 0.9rem;">Analisis AI</strong>
                     </div>
-                    <p class="ai-text text-white mb-0" id="aiText"></p>
+                    <p class="mb-0" id="aiContent" style="font-size:0.9rem; line-height:1.65; color:rgba(255,255,255,0.9);"></p>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Token CSRF Meta Untuk Rate-Limited AJAX -->
+<!-- Token CSRF Meta -->
 <meta name="csrf-token" content="{{ csrf_token() }}">
 {% endblock %}
 
 {% block extra_js %}
 <script>
     document.addEventListener("DOMContentLoaded", function () {
+        // Initialize Bootstrap tooltips
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+        tooltipTriggerList.forEach(el => new bootstrap.Tooltip(el));
+        
         // All product names for autosuggest
         const allProduk = {{ all_produk | tojson }};
         
@@ -289,7 +345,7 @@
         const produkContainer = document.getElementById("produkSliderContainer");
         let debounceTimer;
         let currentPeriode = 30;
-        let lastSimData = null; // Store last simulation result for AI
+        let lastSimData = null;
         
         // ==========================================
         // PRODUCT AUTOSUGGEST
@@ -324,7 +380,6 @@
             matches.forEach((name, i) => {
                 const div = document.createElement('div');
                 div.className = 'suggest-item';
-                // Highlight matched text
                 const idx = name.toLowerCase().indexOf(query);
                 if (idx >= 0) {
                     div.innerHTML = name.substring(0, idx) + '<span class="highlight">' + name.substring(idx, idx + query.length) + '</span>' + name.substring(idx + query.length);
@@ -337,7 +392,6 @@
             dropdown.classList.add('show');
         });
         
-        // Keyboard navigation
         searchInput.addEventListener("keydown", function(e) {
             const items = dropdown.querySelectorAll('.suggest-item:not(.text-muted)');
             if (e.key === 'ArrowDown') {
@@ -351,16 +405,13 @@
             } else if (e.key === 'Enter') {
                 e.preventDefault();
                 if (suggestIndex >= 0 && items[suggestIndex]) {
-                    // Get the text content (without HTML tags)
-                    const name = items[suggestIndex].textContent;
-                    addProdSlider(name);
+                    addProdSlider(items[suggestIndex].textContent);
                 }
             } else if (e.key === 'Escape') {
                 dropdown.classList.remove('show');
             }
         });
         
-        // Close dropdown on outside click
         document.addEventListener('click', function(e) {
             if (!e.target.closest('.product-search-wrap')) {
                 dropdown.classList.remove('show');
@@ -368,7 +419,6 @@
         });
         
         function addProdSlider(name) {
-            // Check if already added
             if (getAddedProdNames().includes(name.toLowerCase())) return;
             
             const wrapper = document.createElement('div');
@@ -380,7 +430,7 @@
                         <span><i class="bi bi-tag-fill me-1 text-info"></i>${name}</span>
                         <span class="prod-lbl text-danger fw-bold fs-5">0%</span>
                     </label>
-                    <i class="bi bi-x-circle-fill text-muted remove-prod-btn ms-2" title="Hapus" onclick="removeProdSlider(this)"></i>
+                    <i class="bi bi-x-circle-fill text-muted remove-prod-btn ms-2" title="Hapus dari stress test" onclick="removeProdSlider(this)"></i>
                 </div>
                 <input type="range" class="form-range prod-slider" data-prod="${name}" min="0" max="100" step="5" value="0">
                 <small class="text-muted" style="font-size:0.7rem;"><i class="bi bi-search me-1"></i>Ditambahkan via pencarian</small>
@@ -388,7 +438,6 @@
             
             produkContainer.appendChild(wrapper);
             
-            // Attach events to new slider
             const newSlider = wrapper.querySelector('.prod-slider');
             const newLbl = wrapper.querySelector('.prod-lbl');
             newSlider.addEventListener('input', function() {
@@ -396,12 +445,10 @@
                 debouncedHitung();
             });
             
-            // Clear search
             searchInput.value = '';
             dropdown.classList.remove('show');
             suggestIndex = -1;
             
-            // Flash
             wrapper.style.borderColor = 'var(--primary-color)';
             setTimeout(() => wrapper.style.borderColor = '', 1500);
         }
@@ -417,6 +464,16 @@
         // ==========================================
         // SIMULATION ENGINE
         // ==========================================
+        function getProdukStressData() {
+            const data = {};
+            produkContainer.querySelectorAll('.prod-slider').forEach(sl => {
+                const name = sl.getAttribute('data-prod');
+                const val = parseInt(sl.value, 10);
+                if (val > 0) data[name] = val;
+            });
+            return data;
+        }
+        
         const hitungSimulasi = async () => {
             const valUmum = parseInt(slider.value, 10);
             const valHpp = parseInt(sliderHPP.value, 10);
@@ -429,7 +486,6 @@
                 periode: currentPeriode
             };
             
-            // Collect all product sliders (both preloaded and search-added)
             produkContainer.querySelectorAll('.prod-slider').forEach(sl => {
                 let name = sl.getAttribute('data-prod');
                 payload['persen_turun_produk_' + name] = parseInt(sl.value, 10);
@@ -448,9 +504,15 @@
                 if (!resp.ok) throw new Error("Gagal komputasi");
 
                 const data = await resp.json();
-                lastSimData = { data, penurunan: valUmum, hpp_naik: valHpp, opex_naik: valOpex };
+                lastSimData = { 
+                    data, 
+                    penurunan: valUmum, 
+                    hpp_naik: valHpp, 
+                    opex_naik: valOpex,
+                    produk_stress: getProdukStressData()
+                };
 
-                // Warning banner
+                // Warning
                 if (data.warning) {
                     warningBanner.classList.remove('d-none');
                     warningText.innerText = data.warning;
@@ -462,7 +524,6 @@
                 simPengeluaran.innerText = window.formatRupiah(data.pengeluaran_baru);
                 simSaldo.innerText = window.formatRupiah(data.saldo_baru);
                 
-                // Baseline comparison
                 lblPemasukanAsli.innerText = "Asli: " + window.formatRupiah(data.pemasukan_asli);
                 lblPengeluaranAsli.innerText = "Asli: " + window.formatRupiah(data.pengeluaran_asli);
                 const selisih = data.selisih_saldo;
@@ -475,7 +536,6 @@
                 simBEP.innerText = data.bep_persen + "%";
                 simHariBertahan.innerText = data.hari_bertahan >= 999 ? "∞" : data.hari_bertahan + " hr";
                 
-                // Meta info
                 metaHariAktif.innerText = data.hari_aktif;
                 metaJumlahTrx.innerText = data.jumlah_trx;
 
@@ -493,17 +553,12 @@
                     saranBox.style.backgroundColor = "rgba(255, 107, 107, 0.15)";
                 }
 
-                if (data.status_bisnis === "Aman") {
-                    simStatusBisnis.style.backgroundColor = "#27AE60";
-                } else if (data.status_bisnis === "Waspada") {
-                    simStatusBisnis.style.backgroundColor = "#E67E22";
-                } else {
-                    simStatusBisnis.style.backgroundColor = "#E74C3C";
-                }
+                if (data.status_bisnis === "Aman") simStatusBisnis.style.backgroundColor = "#27AE60";
+                else if (data.status_bisnis === "Waspada") simStatusBisnis.style.backgroundColor = "#E67E22";
+                else simStatusBisnis.style.backgroundColor = "#E74C3C";
 
                 simSaran.innerText = data.saran;
                 
-                // Hide AI box on new calculation
                 document.getElementById('aiBox').classList.add('d-none');
             } catch (err) {
                 console.error("error saat simulasi", err);
@@ -532,16 +587,13 @@
             btn.addEventListener('click', function() {
                 document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
                 this.classList.add('active');
-                
                 const turun = parseInt(this.getAttribute('data-turun'), 10);
                 const hpp = parseInt(this.getAttribute('data-hpp'), 10);
                 const opex = parseInt(this.getAttribute('data-opex'), 10);
-                
                 slider.value = turun; lblPersen.innerText = turun + "%";
                 lblPersen.style.color = turun > 50 ? "var(--danger-color)" : (turun > 25 ? "var(--warning-color)" : "var(--primary-color)");
                 sliderHPP.value = hpp; lblHPP.innerText = hpp + "%";
                 sliderOpex.value = opex; lblOpex.innerText = opex + "%";
-                
                 debouncedHitung();
             });
         });
@@ -566,7 +618,6 @@
             debouncedHitung();
         });
 
-        // Attach events to preloaded product sliders
         produkContainer.querySelectorAll('.prod-slider').forEach(sl => {
             const lbl = sl.closest('.added-prod-slider').querySelector('.prod-lbl');
             sl.addEventListener("input", function() {
@@ -579,7 +630,6 @@
             slider.value = 0; slider.dispatchEvent(new Event('input'));
             sliderHPP.value = 0; sliderHPP.dispatchEvent(new Event('input'));
             sliderOpex.value = 0; sliderOpex.dispatchEvent(new Event('input'));
-            
             produkContainer.querySelectorAll('.prod-slider').forEach(sl => {
                 sl.value = 0;
                 const lbl = sl.closest('.added-prod-slider').querySelector('.prod-lbl');
@@ -600,12 +650,12 @@
             
             const btn = this;
             const aiBox = document.getElementById('aiBox');
-            const aiText = document.getElementById('aiText');
+            const aiContent = document.getElementById('aiContent');
             
             btn.disabled = true;
-            btn.innerHTML = '<span class="ai-loading me-2"></span>AI sedang menganalisis...';
+            btn.innerHTML = '<span class="ai-loading me-2"></span>AI sedang menganalisis skenario...';
             aiBox.classList.remove('d-none');
-            aiText.innerText = 'Menunggu respon AI...';
+            aiContent.innerHTML = '<p class="text-white-50" style="font-size:0.85rem;"><i class="bi bi-hourglass-split me-1"></i>Sedang menganalisis risiko dan menyusun rekomendasi...</p>';
             
             try {
                 const resp = await fetch('/api/simulator-ai', {
@@ -614,12 +664,12 @@
                     body: JSON.stringify(lastSimData)
                 });
                 const result = await resp.json();
-                aiText.innerText = result.analisis || 'Tidak ada respon.';
+                aiContent.innerText = result.analisis || 'Tidak ada respon.';
             } catch (e) {
-                aiText.innerText = 'Gagal menghubungi AI. Coba lagi nanti.';
+                aiContent.innerText = 'Gagal menghubungi AI. Coba lagi nanti.';
             } finally {
                 btn.disabled = false;
-                btn.innerHTML = '<i class="bi bi-robot me-2"></i>Minta Analisis AI Terhadap Skenario Ini';
+                btn.innerHTML = '<i class="bi bi-robot me-2"></i>Minta Analisis AI';
             }
         });
 
