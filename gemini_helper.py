@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 
 SYSTEM_INSTRUCTION = """
 Kamu adalah asisten keuangan khusus untuk UMKM Indonesia bernama PANTAUIN.
@@ -25,35 +26,51 @@ Gunakan Bahasa Indonesia yang ramah dan mudah dipahami pedagang atau pemilik war
 GROQ_MODEL = "llama-3.3-70b-versatile"
 
 # Inisialisasi Groq (chat & analisis)
-try:
-    groq_client = Groq(api_key=GROQ_API_KEY)
-    print("✅ Groq berhasil diinisialisasi")
-except Exception as e:
-    print(f"❌ Gagal inisialisasi Groq: {e}")
+if GROQ_API_KEY:
+    try:
+        groq_client = Groq(api_key=GROQ_API_KEY)
+        print("✅ Groq berhasil diinisialisasi")
+    except Exception as e:
+        print(f"❌ Gagal inisialisasi Groq: {e}")
+        groq_client = None
+else:
+    print("⚠️ GROQ_API_KEY tidak ditemukan di .env, fitur AI chat dinonaktifkan.")
     groq_client = None
 
 # Inisialisasi Gemini (khusus vision/scan struk)
-try:
-    genai.configure(api_key=GROQ_API_KEY)
-    gemini_vision = genai.GenerativeModel("gemini-1.5-flash")
-    print("✅ Gemini Vision berhasil diinisialisasi")
-except Exception as e:
-    print(f"❌ Gagal inisialisasi Gemini Vision: {e}")
+if GOOGLE_API_KEY:
+    try:
+        genai.configure(api_key=GOOGLE_API_KEY)
+        gemini_vision = genai.GenerativeModel("gemini-1.5-flash")
+        print("✅ Gemini Vision berhasil diinisialisasi")
+    except Exception as e:
+        print(f"❌ Gagal inisialisasi Gemini Vision: {e}")
+        gemini_vision = None
+else:
+    print("⚠️ GOOGLE_API_KEY tidak ditemukan di .env, fitur scan struk dinonaktifkan.")
     gemini_vision = None
 
 
 def _chat(prompt: str, max_tokens: int = 512) -> str:
     """Helper internal: kirim prompt ke Groq."""
-    response = groq_client.chat.completions.create(
-        model=GROQ_MODEL,
-        messages=[
-            {"role": "system", "content": SYSTEM_INSTRUCTION},
-            {"role": "user", "content": prompt},
-        ],
-        max_tokens=max_tokens,
-        temperature=0.7,
-    )
-    return response.choices[0].message.content.strip()
+    if not groq_client:
+        return "Fitur AI belum tersedia. Pastikan GROQ_API_KEY sudah dikonfigurasi di file .env."
+    try:
+        response = groq_client.chat.completions.create(
+            model=GROQ_MODEL,
+            messages=[
+                {"role": "system", "content": SYSTEM_INSTRUCTION},
+                {"role": "user", "content": prompt},
+            ],
+            max_tokens=max_tokens,
+            temperature=0.7,
+        )
+        return response.choices[0].message.content.strip()
+    except Exception as e:
+        error_str = str(e)
+        if '401' in error_str or 'invalid_api_key' in error_str or 'Invalid API Key' in error_str:
+            return "API Key Groq tidak valid atau sudah kadaluarsa. Silakan perbarui GROQ_API_KEY di file .env."
+        raise
 
 
 def format_rp(nilai):
