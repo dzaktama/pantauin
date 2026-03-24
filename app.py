@@ -476,7 +476,10 @@ def create_app(config_class=Config):
                         continue
 
                     # Penggabungan Multiple CSV: Tidak Menghapus Transaksi Lama
+                    gagal = []
+                    baris_ke = 1
                     for row in reader:
+                        baris_ke += 1
                         # Lewati baris kosong
                         if not row['tanggal']: continue
                         try:
@@ -497,15 +500,20 @@ def create_app(config_class=Config):
                                 t.jenis_pengeluaran = 'operasional'
                             db.session.add(t)
                             sukses += 1
-                        except ValueError:
-                            pass # Skip baris malformed
+                        except (ValueError, KeyError, TypeError):
+                            # tampung baris yang datanya gak valid
+                            gagal.append(str(baris_ke))
                         
                 db.session.commit()
                 cache.delete(f"dashboard_bk_{buku_kas_id}_30_{datetime.now().strftime('%Y%m%d')}_v3")
                 cache.delete(f"dashboard_bk_{buku_kas_id}_60_{datetime.now().strftime('%Y%m%d')}_v3")
                 cache.delete(f"dashboard_bk_{buku_kas_id}_90_{datetime.now().strftime('%Y%m%d')}_v3")
                 cache.delete(f"saran_bk_{buku_kas_id}")
-                flash(f"Berhasil menggabungkan {sukses} baris transaksi ke Buku Kas ini.", "success")
+                
+                if gagal:
+                    flash(f"Berhasil memuat {sukses} baris. Gagal pada baris: {', '.join(gagal)}", "warning")
+                else:
+                    flash(f"Berhasil menggabungkan {sukses} baris transaksi ke Buku Kas ini.", "success")
                 return redirect(url_for('dashboard'))
 
             return render_template('upload.html', form=form)
@@ -568,6 +576,15 @@ def create_app(config_class=Config):
         )
 
     # --- API ENDPOINTS (RATE LIMITED & CSRF PROTECTED) ---
+    def _safe_float(val, default=0.0):
+        # amankan float parsing dari error kalau inputnya aneh
+        if val is None or val == '':
+            return default
+        try:
+            return float(val)
+        except (ValueError, TypeError):
+            return default
+
     @app.route('/api/simulator', methods=['POST'])
     @login_required
     @limiter.limit("30 per minute")
@@ -578,10 +595,10 @@ def create_app(config_class=Config):
             if not buku_kas_id: return jsonify({"error": "Pilih buku kas terlebih dahulu."}), 400
             
             req = request.get_json()
-            persen_umum = min(max(float(req.get('penurunan_persen', 0)), 0), 100) / 100
-            persen_hpp = min(max(float(req.get('kenaikan_hpp', 0)), 0), 100) / 100
-            persen_opex = min(max(float(req.get('kenaikan_opex', 0)), 0), 100) / 100
-            periode = int(req.get('periode', 7))
+            persen_umum = min(max(_safe_float(req.get('penurunan_persen', 0)), 0), 100) / 100
+            persen_hpp = min(max(_safe_float(req.get('kenaikan_hpp', 0)), 0), 100) / 100
+            persen_opex = min(max(_safe_float(req.get('kenaikan_opex', 0)), 0), 100) / 100
+            periode = int(_safe_float(req.get('periode', 7)))
             
             # --- Query transaksi sesuai periode ---
             sekarang = date.today()
@@ -729,7 +746,8 @@ def create_app(config_class=Config):
 - Hari bertahan: {data.get('hari_bertahan', 0)} hari
 - Status: {data.get('status_bisnis', '-')}
 
-Berikan analisis risiko dan 1-2 saran tindakan konkret. Bahasa Indonesia singkat, padat, langsung ke inti.
+Berikan analisis risiko singkat dan sarankan strategi taktis.
+PENTING: Buatlah khusus dalam bentuk tabel evaluasi taktis (Kolom 1: Area Fokus, Kolom 2: Kondisi Saat Ini, Kolom 3: Solusi Konkret). Format harus pakai syntax Tabel Markdown yang rapi.
 """.replace(',', '.')
             
             from gemini_helper import _chat, groq_client
@@ -740,6 +758,24 @@ Berikan analisis risiko dan 1-2 saran tindakan konkret. Bahasa Indonesia singkat
             return jsonify({"analisis": analisis})
         except Exception as e:
             return jsonify({"analisis": f"Gagal menganalisis: {str(e)}"}), 500
+
+    @app.route('/api/simulator-chat', methods=['POST'])
+    @login_required
+    @limiter.limit("15 per minute")
+    def api_simulator_chat():
+        # rute khusus follow up dari tampilan simulator
+        try:
+            req = request.get_json()
+            pesan_user = req.get('pesan_user', '')
+            konteks = req.get('konteks_simulasi', {})
+            
+            from gemini_helper import get_simulator_chat_response
+            reply = get_simulator_chat_response(pesan_user, konteks)
+            return jsonify({"reply": reply})
+        except Exception as e:
+            import traceback
+            traceback.print_exc()
+            return jsonify({"reply": f"wah error pas ngambil obrolan, ditunggu ya: {str(e)}"}), 500
 
     @app.route('/api/chatbot', methods=['POST'])
     @login_required

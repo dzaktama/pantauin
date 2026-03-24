@@ -1,0 +1,201 @@
+tanggal,kategori,nama_produk,kuantitas,harga_modal,pemasukan,pengeluaran,jenis_pengeluaran,jumlah_pelanggan,catatan
+2025-09-20,Lainnya,Pulsa Elektrik,5,0,95935,23917,operasional,4,Stok gas habis siang
+2025-09-21,Jasa,Laundry Kiloan,3,3022,21636,4882552,modal,2,Beli mesin cuci baru
+2025-09-22,Retail,Tas Selempang,1,32132,73967,20307,operasional,1,Promo beli 2 gratis 1
+2025-09-23,Lainnya,Gas Elpiji 3kg,17,15654,369273,124383,operasional,10,Stok gas habis siang
+2025-09-24,Makanan & Minuman,Jus Alpukat,5,5202,51138,11229,operasional,2,Ramai sekali hari ini
+2025-09-25,Jasa,Cuci Mobil,5,13894,224354,70523,operasional,4,
+2025-09-26,Lainnya,Rokok Eceran,5,2648,14188,6294,operasional,3,Hari biasa
+2025-09-27,Jasa,Jahit Baju,2,15597,104537,2153356,modal,1,Service mesin utama
+2025-09-28,Retail,Tas Selempang,15,36925,1166756,458442,operasional,14,Normal penjualan
+2025-09-29,Makanan & Minuman,Indomie Telur,6,3495,45337,2265237,modal,5,Beli freezer bekas
+2025-09-30,Retail,Topi Snapback,2,20242,84678,22227,operasional,1,
+2025-10-01,Jasa,Laundry Kiloan,7,2916,41653,18926,operasional,4,
+2025-10-02,Jasa,Service HP,8,30726,879819,204109,operasional,6,
+2025-10-03,Jasa,Service Motor Ringan,8,24172,667666,160772,operasional,4,Pelanggan baru datang
+2025-10-04,Jasa,Cuci Motor,5,5030,98373,23545,operasional,4,Banyak service hari ini
+2025-10-05,Lainnya,Bensin Eceran,10,8389,108376,35241,operasional,6,
+2025-10-06,Lainnya,Rokok Eceran,16,2483,50259,22712,operasional,10,
+2025-10-07,Jasa,Service HP,8,31684,755260,194501,operasional,6,
+2025-10-08,Jasa,Jahit Baju,9,16227,479920,165236,operasional,6,Repeat order dari langganan
+2025-10-09,Retail,Tas Selempang,10,33586,827881,3767629,modal,9,Beli mannequin display
+2025-10-10,Jasa,Service HP,10,32325,1000918,272822,operasional,8,Banyak service hari ini
+2025-10-11,Retail,Topi Snapback,13,21510,520803,218430,operasional,11,Sepi hari kerja
+2025-10-12,Retail,Kaus Sablon Custom,11,24559,640115,140263,operasional,9,Stok model baru datang
+2025-10-13,Lainnya,Pulsa Elektrik,13,0,157972,4650067,modal,11,Beli etalase kecil
+2025-10-14,Makanan & Minuman,Pisang Goreng Keju,23,2790,182485,67387,operasional,15,Orderan GoFood membludak
+2025-10-15,Lainnya,Bensin Eceran,16,8041,139724,30301,operasional,11,
+2025-10-16,Makanan & Minuman,Indomie Telur,39,3247,310325,2308645,modal,24,Beli freezer bekas
+2025-10-17,Retail,Sandal Jepit Premium,9,12985,194733,73388,operasional,5,Promo beli 2 gratis 1
+2025-10-18,Lainnya,Pulsa Elektrik,8,0,72703,14809,operasional,4,Normal seperti biasa
+2025-10-19,Makanan & Minuman,Gorengan Campur,9,1822,41277,11025,operasional,5,Ramai sekali hari ini
+2025-10-20,Makanan & Minuman,Jus Alpukat,22,5405,291773,3949748,modal,19,Beli freezer bekas
+2025-10-21,Lainnya,Pulsa Elektrik,4,0,195743,78079,operasional,3,Stok gas habis siang
+2025-10-22,Retail,Sandal Jepit Premium,5,12954,134782,45258,operasional,3,
+2025-10-23,Lainnya,Bensin Eceran,6,8809,68841,27295,operasional,4,
+2025-10-24,Makanan & Minuman,Roti Bakar Coklat,35,4378,356536,92646,operasional,21,
+2025-10-25,Jasa,Jahit Baju,1,15641,53614,20323,operasional,1,
+2025-10-26,Retail,Celana Jeans,6,60171,774870,279257,operasional,3,Normal penjualan
+2025-10-27,Retail,Masker Kain 3 Ply,15,3496,160506,34948,operasional,8,Pelanggan banyak tanya online
+2025-10-28,Jasa,Print Dokumen,6,2148,31825,12920,operasional,5,Repeat order dari langganan
+2025-10-29,Makanan & Minuman,Indomie Telur,7,3299,62649,22580,operasional,5,
+2025-10-30,Lainnya,Bensin Eceran,12,7874,127241,38974,operasional,7,
+2025-10-31,Lainnya,Rokok Eceran,18,2323,62065,30020,operasional,16,Banyak yang beli pulsa
+2025-11-01,Makanan & Minuman,Es Jeruk Segar,42,2288,329230,137699,operasional,34,Sepi karena hujan deras
+2025-11-02,Retail,Celana Jeans,8,60657,1000420,466925,operasional,4,Sepi hari kerja
+2025-11-03,Jasa,Service Motor Ringan,10,23370,777204,292050,operasional,9,Repeat order dari langganan
+2025-11-04,Makanan & Minuman,Nasi Goreng Spesial,30,8214,496003,140508,operasional,29,Ada acara kantor pesan banyak
+2025-11-05,Lainnya,Bensin Eceran,11,8172,94232,33096,operasional,7,
+2025-11-06,Lainnya,Gas Elpiji 3kg,19,17511,349754,3805969,modal,16,Modal tambahan pulsa
+2025-11-07,Retail,Kaus Polos,8,18601,256145,107724,operasional,5,
+2025-11-08,Lainnya,Token Listrik,4,0,157216,45588,operasional,2,
+2025-11-09,Makanan & Minuman,Pisang Goreng Keju,48,2792,437908,212247,operasional,38,Sepi karena hujan deras
+2025-11-10,Lainnya,Bensin Eceran,20,9340,176336,51430,operasional,10,Banyak yang beli pulsa
+2025-11-11,Makanan & Minuman,Gorengan Campur,7,2008,37333,2407567,modal,3,Beli blender baru
+2025-11-12,Jasa,Potong Rambut Pria,9,5392,202608,92046,operasional,5,Pelanggan baru datang
+2025-11-13,Lainnya,Rokok Eceran,4,2356,10892,4794,operasional,2,Banyak yang beli pulsa
+2025-11-14,Lainnya,Pulsa Elektrik,4,0,191896,94823,operasional,3,
+2025-11-15,Jasa,Jahit Baju,7,14449,373843,159309,operasional,6,
+2025-11-16,Retail,Kaus Polos,8,16253,308854,108962,operasional,4,Pelanggan banyak tanya online
+2025-11-17,Lainnya,Isi Ulang Air Galon,2,3046,12885,5049,operasional,1,
+2025-11-18,Makanan & Minuman,Gorengan Campur,50,1869,286715,126819,operasional,49,Ada acara kantor pesan banyak
+2025-11-19,Lainnya,Isi Ulang Air Galon,5,3260,26373,11135,operasional,3,
+2025-11-20,Lainnya,Pulsa Elektrik,6,0,170754,81456,operasional,3,Banyak yang beli pulsa
+2025-11-21,Retail,Masker Kain 3 Ply,6,3818,58560,28015,operasional,5,Weekend laku keras
+2025-11-22,Jasa,Cuci Motor,6,5139,130854,38981,operasional,5,Pelanggan baru datang
+2025-11-23,Makanan & Minuman,Es Teh Manis,49,1601,235329,4368846,modal,46,Service kompor gas
+2025-11-24,Makanan & Minuman,Kopi Susu Gula Aren,29,6369,548492,239302,operasional,16,Banyak anak sekolah beli
+2025-11-25,Lainnya,Pulsa Elektrik,14,0,216222,47717,operasional,7,Stok gas habis siang
+2025-11-26,Jasa,Print Dokumen,9,2015,47158,9998,operasional,4,
+2025-11-27,Lainnya,Rokok Eceran,14,2388,37703,9553,operasional,9,
+2025-11-28,Jasa,Jahit Baju,6,15877,335226,154036,operasional,4,
+2025-11-29,Retail,Sandal Jepit Premium,6,11082,158827,70092,operasional,3,Weekend laku keras
+2025-11-30,Jasa,Cuci Mobil,7,15265,377020,188496,operasional,6,
+2025-12-01,Jasa,Potong Rambut Pria,6,4893,166031,38951,operasional,5,Hujan jadi sepi
+2025-12-02,Jasa,Print Dokumen,8,1870,41796,12723,operasional,7,
+2025-12-03,Lainnya,Pulsa Elektrik,15,0,83216,4881985,modal,13,Beli stok gas sebulan
+2025-12-04,Makanan & Minuman,Indomie Telur,10,3663,72355,32668,operasional,8,Normal seperti biasa
+2025-12-05,Retail,Sandal Jepit Premium,10,10945,214178,50293,operasional,7,Pelanggan banyak tanya online
+2025-12-06,Makanan & Minuman,Gorengan Campur,24,1888,129293,3778077,modal,16,Beli freezer bekas
+2025-12-07,Jasa,Reparasi AC,7,51012,1188124,579152,operasional,4,
+2025-12-08,Jasa,Service HP,3,31954,276563,74391,operasional,1,Normal biasa
+2025-12-09,Jasa,Cuci Motor,3,5327,64147,30956,operasional,2,Repeat order dari langganan
+2025-12-10,Jasa,Service HP,2,29264,199459,49139,operasional,1,
+2025-12-11,Lainnya,Token Listrik,4,0,61280,18750,operasional,3,Stok gas habis siang
+2025-12-12,Jasa,Fotocopy,10,207,4412,2041,operasional,6,Repeat order dari langganan
+2025-12-13,Jasa,Service HP,9,31423,997122,343485,operasional,5,Banyak service hari ini
+2025-12-14,Jasa,Laundry Kiloan,4,3182,27570,8629,operasional,2,Pelanggan baru datang
+2025-12-15,Makanan & Minuman,Es Jeruk Segar,32,2730,247236,97919,operasional,18,Sepi karena hujan deras
+2025-12-16,Retail,Kaus Polos,14,18973,545148,195585,operasional,9,
+2025-12-17,Jasa,Service HP,3,32495,324896,161805,operasional,2,Weekend ramai sekali
+2025-12-18,Retail,Kaus Sablon Custom,15,24124,855867,334821,operasional,13,Promo beli 2 gratis 1
+2025-12-19,Jasa,Cuci Motor,3,4881,67382,27136,operasional,1,Normal biasa
+2025-12-20,Makanan & Minuman,Indomie Telur,28,3364,238821,78875,operasional,20,Normal seperti biasa
+2025-12-21,Jasa,Jahit Baju,10,15760,526967,2821223,modal,9,Beli mesin cuci baru
+2025-12-22,Lainnya,Isi Ulang Air Galon,13,3230,68652,25625,operasional,12,
+2025-12-23,Jasa,Print Dokumen,1,1854,4761,1378,operasional,1,
+2025-12-24,Retail,Topi Snapback,14,21256,641374,169902,operasional,10,Weekend laku keras
+2025-12-25,Lainnya,Rokok Eceran,6,2704,19082,6548,operasional,3,Stok gas habis siang
+2025-12-26,Jasa,Potong Rambut Pria,6,4964,144631,38301,operasional,3,Weekend ramai sekali
+2025-12-27,Lainnya,Token Listrik,6,0,214375,49021,operasional,4,
+2025-12-28,Jasa,Service Motor Ringan,7,25296,548642,167798,operasional,4,Weekend ramai sekali
+2025-12-29,Jasa,Potong Rambut Pria,8,4791,206962,57040,operasional,4,Pelanggan baru datang
+2025-12-30,Lainnya,Pulsa Elektrik,11,0,291020,61159,operasional,8,
+2025-12-31,Lainnya,Pulsa Elektrik,20,0,69472,26122,operasional,18,Banyak yang beli pulsa
+2026-01-01,Lainnya,Pulsa Elektrik,20,0,211253,4700682,modal,15,Beli stok gas sebulan
+2026-01-02,Retail,Kaus Polos,5,19552,190829,94799,operasional,3,
+2026-01-03,Lainnya,Gas Elpiji 3kg,15,15146,318011,106959,operasional,14,
+2026-01-04,Jasa,Cuci Mobil,2,14058,89265,22908,operasional,1,Banyak service hari ini
+2026-01-05,Lainnya,Token Listrik,3,0,92758,1480381,modal,2,Beli stok gas sebulan
+2026-01-06,Lainnya,Rokok Eceran,2,2694,5710,1255,operasional,1,Hari biasa
+2026-01-07,Retail,Sarung Tangan Motor,7,15249,191835,41007,operasional,4,Weekend laku keras
+2026-01-08,Makanan & Minuman,Kopi Susu Gula Aren,16,7476,273536,60838,operasional,11,
+2026-01-09,Jasa,Reparasi AC,4,49629,531584,219850,operasional,3,
+2026-01-10,Jasa,Service Motor Ringan,1,24551,68494,17983,operasional,1,Hujan jadi sepi
+2026-01-11,Makanan & Minuman,Kopi Susu Gula Aren,16,6780,297056,137151,operasional,11,Normal seperti biasa
+2026-01-12,Makanan & Minuman,Indomie Telur,17,3540,146808,48017,operasional,16,
+2026-01-13,Jasa,Laundry Kiloan,5,2812,33792,4436834,modal,4,Service mesin utama
+2026-01-14,Retail,Kaos Kaki Panjang,10,5607,148767,50442,operasional,9,Normal penjualan
+2026-01-15,Lainnya,Token Listrik,20,0,228550,93478,operasional,13,
+2026-01-16,Jasa,Jahit Baju,2,13521,102612,47071,operasional,1,Normal biasa
+2026-01-17,Makanan & Minuman,Pisang Goreng Keju,46,3198,361077,120852,operasional,27,Ada acara kantor pesan banyak
+2026-01-18,Jasa,Potong Rambut Pria,10,4935,276140,122119,operasional,7,Ada promo khusus member
+2026-01-19,Retail,Tas Selempang,3,36278,243971,979204,modal,1,Beli stok grosir Tanah Abang
+2026-01-20,Jasa,Jahit Baju,3,16059,150968,2329221,modal,2,Upgrade peralatan
+2026-01-21,Jasa,Print Dokumen,6,1982,32253,7399,operasional,3,Normal biasa
+2026-01-22,Lainnya,Rokok Eceran,2,2694,5144,2157,operasional,1,Banyak yang beli pulsa
+2026-01-23,Lainnya,Isi Ulang Air Galon,6,2711,31243,10807,operasional,5,Hari biasa
+2026-01-24,Retail,Kaus Polos,6,18518,193108,71446,operasional,3,Normal penjualan
+2026-01-25,Lainnya,Rokok Eceran,10,2340,33830,7919,operasional,6,Hari biasa
+2026-01-26,Jasa,Fotocopy,4,184,1808,787,operasional,3,Ada promo khusus member
+2026-01-27,Lainnya,Pulsa Elektrik,20,0,269668,115651,operasional,19,
+2026-01-28,Retail,Dompet Kulit Sintetis,15,20719,839955,275665,operasional,10,Stok model baru datang
+2026-01-29,Lainnya,Pulsa Elektrik,13,0,129346,59554,operasional,8,Banyak yang beli pulsa
+2026-01-30,Makanan & Minuman,Ayam Geprek,15,7315,208538,75186,operasional,7,Sepi karena hujan deras
+2026-01-31,Lainnya,Isi Ulang Air Galon,20,2820,118783,3054753,modal,19,Beli stok gas sebulan
+2026-02-01,Jasa,Cuci Mobil,8,14037,343505,101368,operasional,4,Hujan jadi sepi
+2026-02-02,Jasa,Service Motor Ringan,2,24320,143487,2278862,modal,1,Perpanjang sewa tempat
+2026-02-03,Lainnya,Gas Elpiji 3kg,2,14728,35794,15304,operasional,1,Banyak yang beli pulsa
+2026-02-04,Lainnya,Rokok Eceran,15,2299,40308,9344,operasional,8,
+2026-02-05,Lainnya,Gas Elpiji 3kg,2,15748,43793,17264,operasional,1,Banyak yang beli pulsa
+2026-02-06,Lainnya,Rokok Eceran,8,2499,24996,11194,operasional,5,
+2026-02-07,Jasa,Cuci Mobil,4,14845,212476,46847,operasional,3,Banyak service hari ini
+2026-02-08,Makanan & Minuman,Ayam Geprek,50,8190,640549,262758,operasional,40,
+2026-02-09,Jasa,Service Motor Ringan,2,24277,139883,44999,operasional,1,
+2026-02-10,Makanan & Minuman,Ayam Geprek,32,7842,533486,214976,operasional,31,
+2026-02-11,Retail,Kaos Kaki Panjang,5,5483,67946,3648903,modal,4,Beli mannequin display
+2026-02-12,Lainnya,Pulsa Elektrik,20,0,245509,1118509,modal,15,Beli stok gas sebulan
+2026-02-13,Makanan & Minuman,Bakso Urat,46,7533,660527,243035,operasional,36,Cuaca cerah pelanggan ramai
+2026-02-14,Jasa,Potong Rambut Pria,3,4828,79683,20071,operasional,2,Banyak service hari ini
+2026-02-15,Makanan & Minuman,Gorengan Campur,41,1991,195862,2890715,modal,38,Beli stok bahan sebulan
+2026-02-16,Jasa,Print Dokumen,6,2005,30078,10854,operasional,3,
+2026-02-17,Retail,Sarung Tangan Motor,6,14009,190559,2463792,modal,3,Modal iklan Instagram
+2026-02-18,Jasa,Laundry Kiloan,3,3129,20329,7904,operasional,1,Ada promo khusus member
+2026-02-19,Makanan & Minuman,Soto Ayam,47,6697,605870,150835,operasional,28,Banyak anak sekolah beli
+2026-02-20,Lainnya,Pulsa Elektrik,8,0,290044,110935,operasional,6,Stok gas habis siang
+2026-02-21,Makanan & Minuman,Indomie Telur,30,3740,249574,629030,modal,27,Beli stok bahan sebulan
+2026-02-22,Jasa,Print Dokumen,9,1999,39977,10279,operasional,6,
+2026-02-23,Jasa,Service Motor Ringan,4,23811,267675,80429,operasional,2,Ada promo khusus member
+2026-02-24,Lainnya,Gas Elpiji 3kg,18,17184,407367,199969,operasional,12,
+2026-02-25,Retail,Sandal Jepit Premium,3,11389,83492,37150,operasional,2,Weekend laku keras
+2026-02-26,Lainnya,Isi Ulang Air Galon,8,3086,52840,13224,operasional,4,Normal seperti biasa
+2026-02-27,Lainnya,Token Listrik,19,0,238373,1174858,modal,11,Modal tambahan pulsa
+2026-02-28,Retail,Sandal Jepit Premium,11,12098,274728,94762,operasional,10,
+2026-03-01,Makanan & Minuman,Es Teh Manis,14,1502,60952,29308,operasional,7,Ramai sekali hari ini
+2026-03-02,Jasa,Cuci Motor,9,4629,180579,61359,operasional,4,Banyak service hari ini
+2026-03-03,Makanan & Minuman,Es Teh Manis,7,1523,37280,9913,operasional,3,Normal seperti biasa
+2026-03-04,Retail,Sandal Jepit Premium,5,12757,138865,56308,operasional,4,Ada bazaar kampus
+2026-03-05,Lainnya,Isi Ulang Air Galon,7,2716,47837,22991,operasional,4,Banyak yang beli pulsa
+2026-03-06,Makanan & Minuman,Roti Bakar Coklat,14,3615,154910,76435,operasional,10,Normal seperti biasa
+2026-03-07,Makanan & Minuman,Soto Ayam,13,7016,170415,79027,operasional,7,
+2026-03-08,Jasa,Reparasi AC,10,45262,1517299,309955,operasional,8,Hujan jadi sepi
+2026-03-09,Makanan & Minuman,Pisang Goreng Keju,8,2775,66866,32010,operasional,7,Cuaca cerah pelanggan ramai
+2026-03-10,Jasa,Cuci Motor,8,4642,165302,50735,operasional,7,
+2026-03-11,Makanan & Minuman,Pisang Goreng Keju,46,3222,369703,167335,operasional,40,
+2026-03-12,Lainnya,Isi Ulang Air Galon,3,2851,20523,2536778,modal,2,Beli etalase kecil
+2026-03-13,Lainnya,Bensin Eceran,19,7718,199437,43654,operasional,16,
+2026-03-14,Retail,Dompet Kulit Sintetis,3,22386,146949,65901,operasional,1,Normal penjualan
+2026-03-15,Makanan & Minuman,Kopi Susu Gula Aren,25,7482,466079,142077,operasional,22,Orderan GoFood membludak
+2026-03-16,Retail,Masker Kain 3 Ply,13,3316,114878,3320934,modal,10,Beli rak display
+2026-03-17,Makanan & Minuman,Nasi Goreng Spesial,47,7596,658471,209041,operasional,26,Banyak anak sekolah beli
+2026-03-18,Jasa,Jahit Baju,7,16365,375295,1244983,modal,5,Beli alat service baru
+2026-03-19,Jasa,Cuci Motor,3,4827,65115,18320,operasional,2,Repeat order dari langganan
+2026-03-20,Makanan & Minuman,Es Jeruk Segar,36,2745,232716,60706,operasional,19,Sepi karena hujan deras
+2026-03-21,Lainnya,Rokok Eceran,12,2612,38954,16696,operasional,11,
+2026-03-22,Retail,Masker Kain 3 Ply,8,3479,90468,38855,operasional,4,
+2026-03-23,Jasa,Reparasi AC,6,52169,835007,261042,operasional,3,
+2026-03-24,Makanan & Minuman,Soto Ayam,7,6806,90558,27594,operasional,5,Normal seperti biasa
+2026-03-25,Jasa,Fotocopy,8,202,3995,1544,operasional,6,
+2026-03-26,Lainnya,Pulsa Elektrik,8,0,275893,134920,operasional,7,
+2026-03-27,Makanan & Minuman,Roti Bakar Coklat,40,3994,451909,1530564,modal,30,Beli etalase baru
+2026-03-28,Retail,Kaos Kaki Panjang,2,6279,26189,715848,modal,1,Sewa lapak baru di pasar
+2026-03-29,Lainnya,Rokok Eceran,19,2370,57032,21335,operasional,14,Banyak yang beli pulsa
+2026-03-30,Lainnya,Pulsa Elektrik,5,0,164707,57263,operasional,2,Normal seperti biasa
+2026-03-31,Retail,Sarung Tangan Motor,12,14011,333574,88378,operasional,10,Sepi hari kerja
+2026-04-01,Lainnya,Token Listrik,11,0,92410,4534142,modal,9,Modal tambahan pulsa
+2026-04-02,Makanan & Minuman,Es Teh Manis,42,1548,207107,84066,operasional,35,Orderan GoFood membludak
+2026-04-03,Makanan & Minuman,Es Teh Manis,43,1581,214695,47572,operasional,22,Ada acara kantor pesan banyak
+2026-04-04,Lainnya,Bensin Eceran,15,7833,153252,49106,operasional,14,Hari biasa
+2026-04-05,Makanan & Minuman,Indomie Telur,47,3324,410661,2411351,modal,37,Service kompor gas
+2026-04-06,Makanan & Minuman,Indomie Telur,17,3203,126862,42954,operasional,14,Orderan GoFood membludak
+2026-04-07,Lainnya,Gas Elpiji 3kg,12,15924,222004,105750,operasional,8,Stok gas habis siang

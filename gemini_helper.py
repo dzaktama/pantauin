@@ -18,9 +18,10 @@ Kamu HANYA boleh menjawab pertanyaan yang berkaitan dengan:
 - Analisis laporan keuangan sederhana
 - Saran operasional untuk usaha kecil/menengah
 
-Jika pengguna bertanya di luar topik tersebut (misalnya politik, hiburan, teknologi umum, dll),
-tolak dengan sopan dan arahkan kembali ke topik bisnis UMKM.
-Gunakan Bahasa Indonesia yang ramah dan mudah dipahami pedagang atau pemilik warung.
+Jika pengguna meminta saran strategi, analisis risiko, atau rekomendasi taktis bisnis, kamu WAJIB menyajikannya dalam format Tabel Markdown yang rapi. Gunakan struktur tabel: Kolom 1 (Area Fokus / Masalah), Kolom 2 (Kondisi Saat Ini), Kolom 3 (Solusi Taktis / Tindakan).
+Jika obrolan hanya berupa sapaan atau tanya jawab ringan, jawab dengan teks biasa.
+
+Gunakan bahasa Indonesia yang santai sehari-hari ala ngobrol bareng partner bisnis. HINDARI bahasa kaku atau baku.
 """
 
 GROQ_MODEL = "llama-3.3-70b-versatile"
@@ -29,12 +30,12 @@ GROQ_MODEL = "llama-3.3-70b-versatile"
 if GROQ_API_KEY:
     try:
         groq_client = Groq(api_key=GROQ_API_KEY)
-        print("✅ Groq berhasil diinisialisasi")
+        print("Groq berhasil diinisialisasi")
     except Exception as e:
         print(f"❌ Gagal inisialisasi Groq: {e}")
         groq_client = None
 else:
-    print("⚠️ GROQ_API_KEY tidak ditemukan di .env, fitur AI chat dinonaktifkan.")
+    print(" GROQ_API_KEY tidak ditemukan di .env, fitur AI chat dinonaktifkan.")
     groq_client = None
 
 # Inisialisasi Gemini (khusus vision/scan struk)
@@ -42,12 +43,12 @@ if GOOGLE_API_KEY:
     try:
         genai.configure(api_key=GOOGLE_API_KEY)
         gemini_vision = genai.GenerativeModel("gemini-1.5-flash")
-        print("✅ Gemini Vision berhasil diinisialisasi")
+        print("Gemini Vision berhasil diinisialisasi")
     except Exception as e:
-        print(f"❌ Gagal inisialisasi Gemini Vision: {e}")
+        print(f"Gagal inisialisasi Gemini Vision: {e}")
         gemini_vision = None
 else:
-    print("⚠️ GOOGLE_API_KEY tidak ditemukan di .env, fitur scan struk dinonaktifkan.")
+    print(" GOOGLE_API_KEY tidak ditemukan di .env, fitur scan struk dinonaktifkan.")
     gemini_vision = None
 
 
@@ -204,7 +205,16 @@ Bahasa sederhana, jangan bullet point, maksimal 250 kata.
         teks_keluar = _chat(prompt, max_tokens=600)
         teks_keluar = teks_keluar.replace('*', '').strip()
         if teks_keluar.count("\n\n") < 3:
-            teks_keluar = "\n\n".join(teks_keluar.split('. ', 3))
+            # potong teks pakai spasi baris biar singkatan berakhiran titik aman
+            kalimat = teks_keluar.split('\n')
+            kalimat = [k.strip() for k in kalimat if k.strip()]
+            chunks = []
+            for k in kalimat:
+                if len(chunks) < 4:
+                    chunks.append(k)
+                else:
+                    chunks[-1] += ' ' + k
+            teks_keluar = "\n\n".join(chunks)
         return teks_keluar
     except Exception as e:
         import traceback
@@ -218,7 +228,7 @@ Bahasa sederhana, jangan bullet point, maksimal 250 kata.
 def ekstrak_struk_vision(image_bytes):
     """Baca foto struk pakai Gemini Vision dan ekstrak ke format JSON."""
     if not gemini_vision:
-        print("⚠️ Gemini Vision tidak tersedia.")
+        print(" Gemini Vision tidak tersedia.")
         return None
     try:
         prompt_vision = '''
@@ -236,8 +246,37 @@ Pilihan kategori: Makanan & Minuman, Retail, Jasa, atau Lainnya.
         '''
         vision_part = {"mime_type": "image/jpeg", "data": image_bytes}
         response = gemini_vision.generate_content([prompt_vision, vision_part])
-        hasil_teks = response.text.replace("```json", "").replace("```", "").strip()
-        return json.loads(hasil_teks)
+        
+        import re
+        raw = response.text
+        match = re.search(r"\{.*\}", raw, re.DOTALL)
+        if not match:
+            # jaga-jaga kalau gemini ngga ngerespon format json sama sekali
+            return None
+        return json.loads(match.group())
     except Exception as e:
-        print(f"❌ Gagal ekstrak struk vision: {e}")
+        print(f"Gagal ekstrak struk vision: {e}")
         return None
+
+def get_simulator_chat_response(pesan_user, data):
+    # buat nanggepin chat lanjutan dari user soal risiko bisnis
+    if not groq_client:
+        return "maaf ya, sistem ai nya belum aktif karena kuncinya belum dipasang"
+    try:
+        prompt = f"""
+Jawab pertanyaan lanjutan dari user ini berdasarkan hasil simulasi skenario risiko berikut:
+- Skenario Stress: Penjualan turun {data.get('penurunan', 0)}%, HPP naik {data.get('hpp_naik', 0)}%, Opex naik {data.get('opex_naik', 0)}%
+- Pemasukan Baru: Rp {format_rp(data.get('data', {}).get('pemasukan_baru', 0))}
+- Pengeluaran Baru: Rp {format_rp(data.get('data', {}).get('pengeluaran_baru', 0))}
+- Saldo Baru: Rp {format_rp(data.get('data', {}).get('saldo_baru', 0))}
+- Status Bisnis: {data.get('data', {}).get('status_bisnis', '-')}
+- Gross Margin: {data.get('data', {}).get('gross_margin', 0)}%
+- Ketahanan: {data.get('data', {}).get('hari_bertahan', 0)} hari
+
+Pertanyaan user: "{pesan_user}"
+
+PENTING: Jika pengguna meminta saran atau strategi kelanjutan, sajikan dalam format Tabel Markdown dengan 3 kolom: Area Fokus, Kondisi Saat Ini, dan Solusi Taktis.
+        """
+        return _chat(prompt, max_tokens=600)
+    except Exception as e:
+        return "aduh server lagi pusing ngeproses pertanyaannya, sabar sebentar ya"

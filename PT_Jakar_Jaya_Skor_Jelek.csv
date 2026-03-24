@@ -1,0 +1,194 @@
+tanggal,kategori,nama_produk,kuantitas,harga_modal,pemasukan,pengeluaran,jenis_pengeluaran,jumlah_pelanggan,catatan
+2025-12-24,E-Commerce,Olah Balado,15,120000,375000,0,,1,Sales E-Commerce
+2025-12-24,Pesanan Grosir,Olah Original,2,15000,40000,0,,2,Sales E-Commerce
+2025-12-24,Penjualan B2C,Olah Balado,4,32000,100000,0,,3,Sales E-Commerce
+2025-12-24,E-Commerce,Olah Original,15,112500,300000,0,,3,Sales E-Commerce
+2025-12-26,E-Commerce,Olah Balado,12,96000,300000,0,,1,Sales E-Commerce
+2025-12-26,Penjualan B2C,Olah Balado,3,24000,75000,0,,1,Beli Langsung
+2025-12-26,Pesanan Grosir,Olah Balado,5,40000,125000,0,,1,Beli Langsung
+2025-12-26,Penjualan B2C,Olah Original,5,37500,100000,0,,2,Sales E-Commerce
+2025-12-26,Lainnya,,0,0,0,301580,lainnya,0,Bayar Lainnya
+2025-12-27,Pesanan Grosir,Olah Balado,5,40000,125000,0,,2,Beli Langsung
+2025-12-28,Penjualan B2C,Olah Balado,4,32000,100000,0,,2,Beli Langsung
+2025-12-28,Pesanan Grosir,Olah Original,8,60000,160000,0,,2,Beli Langsung
+2025-12-29,Penjualan B2C,Olah Original,8,60000,160000,0,,2,Beli Langsung
+2025-12-31,Listrik & Air,,0,0,0,337434,operasional,0,Bayar Listrik & Air
+2026-01-01,E-Commerce,Olah Balado,4,32000,100000,0,,3,Sales E-Commerce
+2026-01-01,Listrik & Air,,0,0,0,453712,operasional,0,Bayar Listrik & Air
+2026-01-02,Penjualan B2C,Olah Balado,3,24000,75000,0,,3,Sales E-Commerce
+2026-01-02,Pesanan Grosir,Olah Original,2,15000,40000,0,,1,Sales E-Commerce
+2026-01-02,E-Commerce,Olah Balado,4,32000,100000,0,,3,Sales E-Commerce
+2026-01-03,Pesanan Grosir,Olah Balado,6,48000,150000,0,,3,Beli Langsung
+2026-01-03,Pesanan Grosir,Olah Balado,1,8000,25000,0,,2,Sales E-Commerce
+2026-01-03,Pesanan Grosir,Olah Original,1,7500,20000,0,,3,Beli Langsung
+2026-01-04,Pesanan Grosir,Olah Original,5,37500,100000,0,,3,Sales E-Commerce
+2026-01-04,Pesanan Grosir,Olah Original,3,22500,60000,0,,3,Sales E-Commerce
+2026-01-04,E-Commerce,Olah Balado,5,40000,125000,0,,1,Sales E-Commerce
+2026-01-06,Penjualan B2C,Olah Original,3,22500,60000,0,,2,Beli Langsung
+2026-01-06,E-Commerce,Olah Balado,6,48000,150000,0,,1,Beli Langsung
+2026-01-06,E-Commerce,Olah Balado,12,96000,300000,0,,2,Sales E-Commerce
+2026-01-06,Penjualan B2C,Olah Balado,4,32000,100000,0,,3,Sales E-Commerce
+2026-01-06,Pesanan Grosir,Olah Original,2,15000,40000,0,,1,Sales E-Commerce
+2026-01-07,E-Commerce,Olah Balado,3,24000,75000,0,,3,Beli Langsung
+2026-01-07,E-Commerce,Olah Original,4,30000,80000,0,,2,Beli Langsung
+2026-01-07,Penjualan B2C,Olah Balado,9,72000,225000,0,,2,Sales E-Commerce
+2026-01-07,Pesanan Grosir,Olah Balado,12,96000,300000,0,,1,Beli Langsung
+2026-01-07,Iklan Olahh,,0,0,0,272625,operasional,0,Bayar Iklan Olahh
+2026-01-08,E-Commerce,Olah Balado,9,72000,225000,0,,2,Sales E-Commerce
+2026-01-08,E-Commerce,Olah Balado,2,16000,50000,0,,3,Beli Langsung
+2026-01-08,Penjualan B2C,Olah Balado,6,48000,150000,0,,1,Beli Langsung
+2026-01-08,Penjualan B2C,Olah Original,3,22500,60000,0,,2,Sales E-Commerce
+2026-01-09,E-Commerce,Olah Original,1,7500,20000,0,,1,Beli Langsung
+2026-01-09,Penjualan B2C,Olah Balado,15,120000,375000,0,,2,Beli Langsung
+2026-01-09,Iklan Olahh,,0,0,0,420406,operasional,0,Bayar Iklan Olahh
+2026-01-10,Pesanan Grosir,Olah Balado,3,24000,75000,0,,3,Beli Langsung
+2026-01-10,Pesanan Grosir,Olah Balado,6,48000,150000,0,,2,Beli Langsung
+2026-01-10,Penjualan B2C,Olah Original,8,60000,160000,0,,1,Sales E-Commerce
+2026-01-10,Pesanan Grosir,Olah Balado,10,80000,250000,0,,1,Sales E-Commerce
+2026-01-10,Pesanan Grosir,Olah Original,9,67500,180000,0,,3,Beli Langsung
+2026-01-10,Bahan Kemasan (Pouch),,0,0,0,358062,modal,0,Restok Bahan Kemasan (Pouch)
+2026-01-12,E-Commerce,Olah Original,9,67500,180000,0,,3,Sales E-Commerce
+2026-01-12,Penjualan B2C,Olah Original,6,45000,120000,0,,2,Beli Langsung
+2026-01-12,E-Commerce,Olah Original,6,45000,120000,0,,2,Beli Langsung
+2026-01-12,Penjualan B2C,Olah Balado,3,24000,75000,0,,2,Sales E-Commerce
+2026-01-12,Bahan Baku (Bogor),,0,0,0,346377,operasional,0,Bayar Bahan Baku (Bogor)
+2026-01-13,Pesanan Grosir,Olah Balado,1,8000,25000,0,,2,Beli Langsung
+2026-01-13,Pesanan Grosir,Olah Balado,4,32000,100000,0,,1,Sales E-Commerce
+2026-01-13,Iklan Olahh,,0,0,0,567534,operasional,0,Bayar Iklan Olahh
+2026-01-14,Penjualan B2C,Olah Balado,15,120000,375000,0,,3,Sales E-Commerce
+2026-01-14,Pesanan Grosir,Olah Original,2,15000,40000,0,,3,Sales E-Commerce
+2026-01-14,Penjualan B2C,Olah Balado,15,120000,375000,0,,1,Beli Langsung
+2026-01-14,E-Commerce,Olah Balado,3,24000,75000,0,,3,Beli Langsung
+2026-01-14,Gaji Pegawai,,0,0,0,417112,operasional,0,Bayar Gaji Pegawai
+2026-01-15,Pesanan Grosir,Olah Original,12,90000,240000,0,,1,Sales E-Commerce
+2026-01-15,Penjualan B2C,Olah Balado,9,72000,225000,0,,3,Beli Langsung
+2026-01-15,Penjualan B2C,Olah Original,12,90000,240000,0,,3,Sales E-Commerce
+2026-01-15,Bahan Kemasan (Pouch),,0,0,0,490338,modal,0,Restok Bahan Kemasan (Pouch)
+2026-01-16,Penjualan B2C,Olah Original,5,37500,100000,0,,2,Beli Langsung
+2026-01-16,Pesanan Grosir,Olah Balado,9,72000,225000,0,,3,Sales E-Commerce
+2026-01-16,E-Commerce,Olah Balado,6,48000,150000,0,,2,Sales E-Commerce
+2026-01-16,Pesanan Grosir,Olah Original,1,7500,20000,0,,2,Beli Langsung
+2026-01-16,Bahan Kemasan (Pouch),,0,0,0,319707,modal,0,Restok Bahan Kemasan (Pouch)
+2026-01-17,Gaji Pegawai,,0,0,0,369140,operasional,0,Bayar Gaji Pegawai
+2026-01-18,E-Commerce,Olah Balado,6,48000,150000,0,,1,Sales E-Commerce
+2026-01-18,Pesanan Grosir,Olah Original,6,45000,120000,0,,2,Sales E-Commerce
+2026-01-18,Pesanan Grosir,Olah Balado,3,24000,75000,0,,1,Beli Langsung
+2026-01-18,Penjualan B2C,Olah Original,5,37500,100000,0,,2,Beli Langsung
+2026-01-20,Pesanan Grosir,Olah Original,15,112500,300000,0,,3,Beli Langsung
+2026-01-20,Gaji Pegawai,,0,0,0,273708,operasional,0,Bayar Gaji Pegawai
+2026-01-21,E-Commerce,Olah Original,9,67500,180000,0,,1,Beli Langsung
+2026-01-21,Bahan Kemasan (Pouch),,0,0,0,390832,modal,0,Restok Bahan Kemasan (Pouch)
+2026-01-22,Penjualan B2C,Olah Balado,12,96000,300000,0,,3,Sales E-Commerce
+2026-01-22,Listrik & Air,,0,0,0,346400,operasional,0,Bayar Listrik & Air
+2026-01-23,Pesanan Grosir,Olah Original,6,45000,120000,0,,3,Sales E-Commerce
+2026-01-23,E-Commerce,Olah Balado,1,8000,25000,0,,2,Beli Langsung
+2026-01-23,Iklan Olahh,,0,0,0,313068,operasional,0,Bayar Iklan Olahh
+2026-01-24,E-Commerce,Olah Balado,6,48000,150000,0,,1,Sales E-Commerce
+2026-01-24,E-Commerce,Olah Original,2,15000,40000,0,,1,Beli Langsung
+2026-01-24,E-Commerce,Olah Balado,3,24000,75000,0,,2,Beli Langsung
+2026-01-24,Gaji Pegawai,,0,0,0,392995,operasional,0,Bayar Gaji Pegawai
+2026-01-25,E-Commerce,Olah Original,2,15000,40000,0,,2,Beli Langsung
+2026-01-25,E-Commerce,Olah Balado,9,72000,225000,0,,1,Beli Langsung
+2026-01-26,E-Commerce,Olah Original,1,7500,20000,0,,2,Beli Langsung
+2026-01-26,Penjualan B2C,Olah Original,1,7500,20000,0,,1,Sales E-Commerce
+2026-01-27,E-Commerce,Olah Original,6,45000,120000,0,,1,Beli Langsung
+2026-01-28,E-Commerce,Olah Balado,1,8000,25000,0,,1,Beli Langsung
+2026-01-29,Penjualan B2C,Olah Original,4,30000,80000,0,,2,Beli Langsung
+2026-01-29,Pesanan Grosir,Olah Balado,9,72000,225000,0,,1,Sales E-Commerce
+2026-01-29,Listrik & Air,,0,0,0,347666,operasional,0,Bayar Listrik & Air
+2026-01-30,Pesanan Grosir,Olah Original,3,22500,60000,0,,2,Sales E-Commerce
+2026-01-30,Penjualan B2C,Olah Balado,12,96000,300000,0,,3,Sales E-Commerce
+2026-01-31,Pesanan Grosir,Olah Balado,15,120000,375000,0,,1,Sales E-Commerce
+2026-01-31,Penjualan B2C,Olah Original,2,15000,40000,0,,3,Sales E-Commerce
+2026-01-31,Penjualan B2C,Olah Balado,4,32000,100000,0,,2,Beli Langsung
+2026-01-31,Bahan Baku (Bogor),,0,0,0,563189,operasional,0,Bayar Bahan Baku (Bogor)
+2026-02-01,E-Commerce,Olah Balado,12,96000,300000,0,,3,Beli Langsung
+2026-02-01,Lainnya,,0,0,0,581669,lainnya,0,Bayar Lainnya
+2026-02-02,E-Commerce,Olah Balado,12,96000,300000,0,,2,Beli Langsung
+2026-02-02,Pesanan Grosir,Olah Balado,4,32000,100000,0,,1,Sales E-Commerce
+2026-02-02,Bahan Kemasan (Pouch),,0,0,0,372377,modal,0,Restok Bahan Kemasan (Pouch)
+2026-02-03,Penjualan B2C,Olah Balado,3,24000,75000,0,,2,Sales E-Commerce
+2026-02-04,E-Commerce,Olah Balado,2,16000,50000,0,,3,Sales E-Commerce
+2026-02-04,Pesanan Grosir,Olah Original,2,15000,40000,0,,3,Sales E-Commerce
+2026-02-05,E-Commerce,Olah Balado,4,32000,100000,0,,2,Sales E-Commerce
+2026-02-05,E-Commerce,Olah Original,9,67500,180000,0,,1,Sales E-Commerce
+2026-02-05,E-Commerce,Olah Balado,3,24000,75000,0,,1,Beli Langsung
+2026-02-06,Penjualan B2C,Olah Original,2,15000,40000,0,,3,Beli Langsung
+2026-02-06,Penjualan B2C,Olah Original,2,15000,40000,0,,2,Beli Langsung
+2026-02-06,E-Commerce,Olah Balado,4,32000,100000,0,,2,Sales E-Commerce
+2026-02-06,Lainnya,,0,0,0,367857,lainnya,0,Bayar Lainnya
+2026-02-07,Penjualan B2C,Olah Original,2,15000,40000,0,,1,Sales E-Commerce
+2026-02-07,Pesanan Grosir,Olah Original,8,60000,160000,0,,3,Beli Langsung
+2026-02-07,E-Commerce,Olah Original,3,22500,60000,0,,2,Beli Langsung
+2026-02-07,Bahan Kemasan (Pouch),,0,0,0,434857,modal,0,Restok Bahan Kemasan (Pouch)
+2026-02-08,Penjualan B2C,Olah Original,3,22500,60000,0,,1,Sales E-Commerce
+2026-02-08,E-Commerce,Olah Balado,2,16000,50000,0,,3,Beli Langsung
+2026-02-08,E-Commerce,Olah Balado,15,120000,375000,0,,1,Sales E-Commerce
+2026-02-09,Penjualan B2C,Olah Balado,2,16000,50000,0,,3,Beli Langsung
+2026-02-09,Pesanan Grosir,Olah Original,9,67500,180000,0,,3,Sales E-Commerce
+2026-02-10,E-Commerce,Olah Balado,4,32000,100000,0,,1,Beli Langsung
+2026-02-10,Penjualan B2C,Olah Balado,4,32000,100000,0,,2,Beli Langsung
+2026-02-10,E-Commerce,Olah Balado,4,32000,100000,0,,2,Beli Langsung
+2026-02-10,Bahan Kemasan (Pouch),,0,0,0,270597,modal,0,Restok Bahan Kemasan (Pouch)
+2026-02-11,Penjualan B2C,Olah Balado,9,72000,225000,0,,3,Beli Langsung
+2026-02-11,Pesanan Grosir,Olah Balado,9,72000,225000,0,,2,Beli Langsung
+2026-02-11,Pesanan Grosir,Olah Original,5,37500,100000,0,,1,Sales E-Commerce
+2026-02-11,Bahan Baku (Bogor),,0,0,0,422303,operasional,0,Bayar Bahan Baku (Bogor)
+2026-02-12,Pesanan Grosir,Olah Original,3,22500,60000,0,,1,Sales E-Commerce
+2026-02-13,Pesanan Grosir,Olah Original,3,22500,60000,0,,1,Sales E-Commerce
+2026-02-13,Penjualan B2C,Olah Original,12,90000,240000,0,,1,Sales E-Commerce
+2026-02-13,E-Commerce,Olah Balado,3,24000,75000,0,,2,Beli Langsung
+2026-02-14,Pesanan Grosir,Olah Balado,4,32000,100000,0,,3,Sales E-Commerce
+2026-02-14,Iklan Olahh,,0,0,0,562404,operasional,0,Bayar Iklan Olahh
+2026-02-16,Penjualan B2C,Olah Balado,4,32000,100000,0,,3,Beli Langsung
+2026-02-16,Bahan Baku (Bogor),,0,0,0,385275,operasional,0,Bayar Bahan Baku (Bogor)
+2026-02-17,Penjualan B2C,Olah Balado,9,72000,225000,0,,1,Beli Langsung
+2026-02-17,Penjualan B2C,Olah Balado,12,96000,300000,0,,1,Sales E-Commerce
+2026-02-19,E-Commerce,Olah Original,1,7500,20000,0,,2,Sales E-Commerce
+2026-02-20,Penjualan B2C,Olah Original,6,45000,120000,0,,1,Beli Langsung
+2026-02-20,Bahan Kemasan (Pouch),,0,0,0,549236,modal,0,Restok Bahan Kemasan (Pouch)
+2026-02-21,E-Commerce,Olah Original,5,37500,100000,0,,1,Sales E-Commerce
+2026-02-21,E-Commerce,Olah Balado,2,16000,50000,0,,3,Sales E-Commerce
+2026-02-21,Iklan Olahh,,0,0,0,591890,operasional,0,Bayar Iklan Olahh
+2026-02-22,E-Commerce,Olah Original,10,75000,200000,0,,1,Sales E-Commerce
+2026-02-23,Bahan Baku (Bogor),,0,0,0,327894,operasional,0,Bayar Bahan Baku (Bogor)
+2026-02-24,Iklan Olahh,,0,0,0,496062,operasional,0,Bayar Iklan Olahh
+2026-02-27,Pesanan Grosir,Olah Balado,8,64000,200000,0,,2,Beli Langsung
+2026-02-28,Pesanan Grosir,Olah Original,6,45000,120000,0,,2,Sales E-Commerce
+2026-02-28,Bahan Kemasan (Pouch),,0,0,0,389773,modal,0,Restok Bahan Kemasan (Pouch)
+2026-03-02,Penjualan B2C,Olah Balado,9,72000,225000,0,,1,Sales E-Commerce
+2026-03-02,Listrik & Air,,0,0,0,599583,operasional,0,Bayar Listrik & Air
+2026-03-03,E-Commerce,Olah Original,15,112500,300000,0,,1,Sales E-Commerce
+2026-03-04,Lainnya,,0,0,0,467025,lainnya,0,Bayar Lainnya
+2026-03-05,E-Commerce,Olah Balado,3,24000,75000,0,,3,Sales E-Commerce
+2026-03-05,Gaji Pegawai,,0,0,0,578748,operasional,0,Bayar Gaji Pegawai
+2026-03-06,E-Commerce,Olah Original,6,45000,120000,0,,2,Sales E-Commerce
+2026-03-06,Bahan Kemasan (Pouch),,0,0,0,299592,modal,0,Restok Bahan Kemasan (Pouch)
+2026-03-07,Lainnya,,0,0,0,599486,lainnya,0,Bayar Lainnya
+2026-03-08,Pesanan Grosir,Olah Original,10,75000,200000,0,,2,Beli Langsung
+2026-03-08,Iklan Olahh,,0,0,0,379434,operasional,0,Bayar Iklan Olahh
+2026-03-09,Penjualan B2C,Olah Original,4,30000,80000,0,,1,Sales E-Commerce
+2026-03-09,Bahan Baku (Bogor),,0,0,0,497761,operasional,0,Bayar Bahan Baku (Bogor)
+2026-03-10,Penjualan B2C,Olah Balado,6,48000,150000,0,,2,Beli Langsung
+2026-03-10,Iklan Olahh,,0,0,0,545802,operasional,0,Bayar Iklan Olahh
+2026-03-11,E-Commerce,Olah Balado,6,48000,150000,0,,1,Sales E-Commerce
+2026-03-11,Gaji Pegawai,,0,0,0,563009,operasional,0,Bayar Gaji Pegawai
+2026-03-12,Pesanan Grosir,Olah Original,4,30000,80000,0,,2,Beli Langsung
+2026-03-13,E-Commerce,Olah Original,4,30000,80000,0,,3,Beli Langsung
+2026-03-13,Bahan Kemasan (Pouch),,0,0,0,390121,modal,0,Restok Bahan Kemasan (Pouch)
+2026-03-15,E-Commerce,Olah Original,2,15000,40000,0,,1,Beli Langsung
+2026-03-15,Bahan Baku (Bogor),,0,0,0,416251,operasional,0,Bayar Bahan Baku (Bogor)
+2026-03-16,E-Commerce,Olah Balado,4,32000,100000,0,,1,Beli Langsung
+2026-03-17,E-Commerce,Olah Balado,2,16000,50000,0,,3,Sales E-Commerce
+2026-03-17,Bahan Baku (Bogor),,0,0,0,280503,operasional,0,Bayar Bahan Baku (Bogor)
+2026-03-19,E-Commerce,Olah Balado,9,72000,225000,0,,1,Sales E-Commerce
+2026-03-19,Listrik & Air,,0,0,0,534749,operasional,0,Bayar Listrik & Air
+2026-03-20,E-Commerce,Olah Balado,3,24000,75000,0,,3,Sales E-Commerce
+2026-03-20,Bahan Kemasan (Pouch),,0,0,0,457442,modal,0,Restok Bahan Kemasan (Pouch)
+2026-03-21,E-Commerce,Olah Original,6,45000,120000,0,,2,Beli Langsung
+2026-03-21,Gaji Pegawai,,0,0,0,568950,operasional,0,Bayar Gaji Pegawai
+2026-03-22,E-Commerce,Olah Original,2,15000,40000,0,,1,Sales E-Commerce
+2026-03-22,Gaji Pegawai,,0,0,0,516944,operasional,0,Bayar Gaji Pegawai
+2026-03-23,Pesanan Grosir,Olah Original,4,30000,80000,0,,1,Beli Langsung
+2026-03-23,Bahan Baku (Bogor),,0,0,0,479594,operasional,0,Bayar Bahan Baku (Bogor)
+2026-03-24,Iklan Olahh,,0,0,0,570850,operasional,0,Bayar Iklan Olahh

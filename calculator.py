@@ -97,7 +97,13 @@ def hitung_health_score(transaksi_list, periode_grafik=30):
     skor_stabilitas = 100 if margin >= 0.2 else (max(0, margin) / 0.2 * 100)
 
     # 2. Tren Penjualan (0 - 100)
-    tren_growth_1 = (in_minggu_ini - in_minggu_lalu) / in_minggu_lalu if in_minggu_lalu > 0 else 0
+    if in_minggu_lalu > 0:
+        tren_growth_1 = (in_minggu_ini - in_minggu_lalu) / in_minggu_lalu
+    elif in_minggu_ini > 0:
+        tren_growth_1 = 1.0
+    else:
+        tren_growth_1 = 0
+        
     tren_growth_2 = (in_minggu_lalu - in_minggu_lalu_2) / in_minggu_lalu_2 if in_minggu_lalu_2 > 0 else 0
     
     # Tren yang dipakai untuk pembobotan skor adalah tren_growth langsung (minggu ini vs minggu lalu)
@@ -139,6 +145,11 @@ def hitung_health_score(transaksi_list, periode_grafik=30):
         (skor_konsistensi * BOBOT_KONSISTENSI)
     )
     skor_total = round(skor_total)
+
+    # limit point ampe 45 aja kalau kas nya tekor
+    val_saldo_30_awal = (in_minggu_ini - out_minggu_ini) + (in_minggu_lalu - out_minggu_lalu) + (in_minggu_lalu_2 - out_minggu_lalu_2) + (in_minggu_lalu_3 - out_minggu_lalu_3)
+    if saldo_operasional_minggu_ini < 0 or val_saldo_30_awal < 0:
+        skor_total = min(skor_total, 45)
 
     # Labeling & Warning (Sesuai Sinkronisasi Proposal: Rule Peringatan Dini)
     peringatan = []
@@ -262,9 +273,17 @@ def hitung_health_score(transaksi_list, periode_grafik=30):
     kustom_out_op = sum(t.pengeluaran for t in t_kustom if getattr(t, 'jenis_pengeluaran', 'operasional') == 'operasional')
     kustom_out_md = sum(t.pengeluaran for t in t_kustom if getattr(t, 'jenis_pengeluaran', 'operasional') == 'modal')
     kustom_out_total = kustom_out_op + kustom_out_md
+    
+    # cari modal total barang yang laku pakai hpp asli baris transaksi
+    kustom_hpp = sum((getattr(t, 'harga_modal', 0.0) or 0.0) * (getattr(t, 'kuantitas', 0) or 0) for t in t_kustom)
+    
+    if kustom_hpp > 0:
+        kustom_gm = ((kustom_in - kustom_hpp) / kustom_in * 100) if kustom_in > 0 else 0
+    else:
+        kustom_gm = ((kustom_in - kustom_out_op) / kustom_in * 100) if kustom_in > 0 else 0
+        
     kustom_saldo = kustom_in - kustom_out_total
     hari_kustom = len({t.tanggal for t in t_kustom}) or 1
-    kustom_gm = ((kustom_in - kustom_out_op) / kustom_in * 100) if kustom_in > 0 else 0
 
     ringkasan_kustom = {
         "periode_hari": periode_grafik,
@@ -274,7 +293,7 @@ def hitung_health_score(transaksi_list, periode_grafik=30):
         "total_pengeluaran": kustom_out_total,
         "saldo_bersih": kustom_saldo,
         "rata_pemasukan": round(kustom_in / hari_kustom),
-        "rata_pengeluaran": round(kustom_out_total / hari_kustom),
+        "rata_pengeluaran": round((kustom_out_total + kustom_hpp) / hari_kustom),
         "gross_margin": round(kustom_gm, 1),
         "jumlah_transaksi": len(t_kustom),
         "jumlah_hari_aktif": hari_kustom,
@@ -414,7 +433,9 @@ def analisis_tren_produk(transaksi_list):
             avg_hpp = sum(hpp_list) / len(hpp_list) if hpp_list else 0
             
             avg_weekly = sum(mingguan_kuantitas[nama].values()) / max(len(mingguan_kuantitas[nama]), 1)
-            estimasi_dana = avg_hpp * avg_weekly
+            
+            # siapin perbekalan buat 3 hari ke depan
+            estimasi_dana = avg_hpp * (avg_weekly / 7) * 3
             
             if estimasi_dana > 0:
                 prediksi_restok.append({
