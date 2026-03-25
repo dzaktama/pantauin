@@ -20,6 +20,8 @@ class User(db.Model):
         """Memverifikasi password dengan hash yang tersimpan."""
         return check_password_hash(self.password_hash, password)
 
+    log_aktivitas = db.relationship('AktivitasLog', backref='user_rel', lazy=True, cascade='all, delete-orphan')
+
 class BukuKas(db.Model):
     __tablename__ = 'buku_kas'
     
@@ -95,3 +97,17 @@ class ProfilPerusahaan(db.Model):
     
     created_at = db.Column(db.DateTime(timezone=True), server_default=func.now())
     updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.now())
+
+class AktivitasLog(db.Model):
+    __tablename__ = 'aktivitas_log'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'), nullable=False)
+    buku_kas_id = db.Column(db.Integer, db.ForeignKey('buku_kas.id', ondelete='SET NULL'), nullable=True)
+    entitas = db.Column(db.String(50), nullable=False) # e.g., Transaksi, BukuKas, Auth
+    aktivitas = db.Column(db.Text, nullable=False)
+    tipe_aksi = db.Column(db.String(20), nullable=False) # e.g., tambah, ubah, hapus, info
+    waktu = db.Column(db.DateTime(timezone=True), server_default=func.now())
+    
+    user = db.relationship('User', backref=db.backref('aktivitas_user', lazy=True), overlaps="log_aktivitas,user_rel")
+    buku_kas = db.relationship('BukuKas', backref=db.backref('aktivitas_buku', lazy=True))

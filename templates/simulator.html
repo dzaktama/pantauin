@@ -58,9 +58,9 @@
 {% block content %}
 <div class="row align-items-center mb-4">
     <div class="col-md-8">
-        <h1 class="h3 fw-bold mb-1 text-dark">Business Stress Simulator</h1>
-        <p class="text-muted mb-0">Simulasikan dampak risiko ekonomi terhadap dompet usahamu.
-            <i class="bi bi-info-circle info-tip" data-bs-toggle="tooltip" data-bs-placement="right" title="Simulator ini memproyeksikan bagaimana perubahan kondisi ekonomi (penurunan penjualan, kenaikan harga bahan, dll) berdampak pada keuangan usahamu berdasarkan data transaksi asli."></i>
+        <h1 class="h3 fw-bold mb-1 text-dark">Simulator Proyeksi Bisnis (What-If)</h1>
+        <p class="text-muted mb-0">Simulasikan dampak krisis, efisiensi modal, atau potensi ledakan penjualan terhadap usahamu.
+            <i class="bi bi-info-circle info-tip" data-bs-toggle="tooltip" data-bs-placement="right" title="Mempengaruhi baseline dari data transaksi asli. Geser indikator ke area negatif (Turun) atau area positif (Naik/Tumbuh)."></i>
         </p>
     </div>
     <div class="col-md-4 text-md-end">
@@ -101,43 +101,44 @@
             
             <!-- Scenario Presets -->
             <div class="d-flex flex-wrap gap-2 mb-4">
-                <button class="preset-btn btn btn-outline-success" data-turun="0" data-hpp="0" data-opex="0" title="Kondisi normal tanpa stress">🟢 Normal</button>
-                <button class="preset-btn btn btn-outline-warning" data-turun="15" data-hpp="10" data-opex="5" title="Perlambatan ekonomi ringan: penjualan turun 15%, HPP naik 10%, opex naik 5%">🟡 Resesi</button>
-                <button class="preset-btn btn btn-outline-danger" data-turun="5" data-hpp="30" data-opex="20" title="Inflasi berat: harga bahan naik tajam 30%, opex naik 20%, penjualan turun sedikit 5%">🟠 Inflasi</button>
-                <button class="preset-btn btn btn-outline-dark" data-turun="50" data-hpp="25" data-opex="15" title="Krisis parah: kehilangan separuh pasar, harga naik 25%, opex naik 15%">🔴 Krisis</button>
-                <i class="bi bi-info-circle info-tip align-self-center" data-bs-toggle="tooltip" title="Preset skenario ekonomi umum. Klik untuk langsung mengisi slider sesuai skenario yang sudah terkalibrasi."></i>
+                <button class="preset-btn btn btn-outline-success" data-turun="0" data-hpp="0" data-opex="0" title="Kondisi normal tanpa stress">⚖️ Normal</button>
+                <button class="preset-btn btn btn-outline-info" data-turun="40" data-hpp="0" data-opex="10" title="Penjualan meroket 40%, Opex naik sedikit 10% untuk biaya packing/lembur">🚀 Promo Viral</button>
+                <button class="preset-btn btn btn-outline-primary" data-turun="0" data-hpp="-20" data-opex="0" title="Berhasil nego supplier bahan baku, HPP turun 20%">📉 Diskon Pemasok</button>
+                <button class="preset-btn btn btn-outline-warning" data-turun="-15" data-hpp="10" data-opex="5" title="Perlambatan ekonomi ringan: penjualan turun 15%, HPP naik 10%, opex naik 5%">🟡 Resesi</button>
+                <button class="preset-btn btn btn-outline-danger" data-turun="-50" data-hpp="25" data-opex="15" title="Krisis parah: kehilangan separuh pasar, harga naik 25%, opex naik 15%">🔴 Krisis Ekstrim</button>
+                <i class="bi bi-info-circle info-tip align-self-center" data-bs-toggle="tooltip" title="Preset skenario simulasi cepat."></i>
             </div>
 
             <!-- Slider Omzet Turun -->
             <div class="mb-4 text-center pb-3 border-bottom">
                 <label for="sliderTurun" class="form-label text-muted fw-bold d-block" style="font-size:1.0rem;">
-                    Jika Total Penjualan Bisnis Turun Sebesar:
-                    <i class="bi bi-info-circle info-tip" data-bs-toggle="tooltip" title="Mensimulasikan penurunan total omzet/pemasukan usaha. Misalnya 30% = pemasukan berkurang 30% dari kondisi asli."></i>
+                    Ubah Total Penjualan Bisnis Sebesar:
+                    <i class="bi bi-info-circle info-tip" data-bs-toggle="tooltip" title="Negatif = Omzet turun/sepi. Positif = Promosi meledak pesanan banyak."></i>
                 </label>
                 <div class="display-3 fw-bold mb-3" id="labelPersen" style="color: var(--primary-color);">0%</div>
-                <input type="range" class="form-range" id="sliderTurun" min="0" max="100" step="5" value="0">
+                <input type="range" class="form-range" id="sliderTurun" min="-100" max="250" step="5" value="0">
             </div>
 
             <!-- Slider HPP Naik -->
             <div class="mb-4 text-start">
                 <label for="sliderHPP" class="form-label text-muted small fw-bold d-flex justify-content-between mb-1">
-                    <span>Inflasi/Kenaikan Harga Modal (HPP):
-                        <i class="bi bi-info-circle info-tip" data-bs-toggle="tooltip" title="HPP = Harga Pokok Penjualan (biaya bahan baku per produk). Kenaikan HPP terjadi saat harga bahan baku naik akibat inflasi, kelangkaan, atau kenaikan harga supplier."></i>
+                    <span>Perubahan Harga Modal (HPP):
+                        <i class="bi bi-info-circle info-tip" data-bs-toggle="tooltip" title="Negatif = Bahan baku lebih murah. Positif = Inflasi harga barang."></i>
                     </span>
                     <span id="labelHPP" class="text-warning fw-bold fs-5">0%</span>
                 </label>
-                <input type="range" class="form-range" id="sliderHPP" min="0" max="100" step="5" value="0">
+                <input type="range" class="form-range" id="sliderHPP" min="-50" max="150" step="5" value="0">
             </div>
 
             <!-- Slider Opex Naik -->
             <div class="mb-3 text-start">
                 <label for="sliderOpex" class="form-label text-muted small fw-bold d-flex justify-content-between mb-1">
-                    <span>Kenaikan Beban Operasional (Sewa, Gaji):
-                        <i class="bi bi-info-circle info-tip" data-bs-toggle="tooltip" title="Beban operasional = biaya rutin harian (sewa tempat, gaji karyawan, listrik, transportasi). Kenaikan opex biasanya terjadi saat inflasi atau ekspansi usaha."></i>
+                    <span>Perubahan Beban Operasional:
+                        <i class="bi bi-info-circle info-tip" data-bs-toggle="tooltip" title="Negatif = Penghematan operasional harian. Positif = Beban naik/ekspansi."></i>
                     </span>
                     <span id="labelOpex" class="text-danger fw-bold fs-5">0%</span>
                 </label>
-                <input type="range" class="form-range" id="sliderOpex" min="0" max="100" step="5" value="0">
+                <input type="range" class="form-range" id="sliderOpex" min="-50" max="150" step="5" value="0">
             </div>
 
             <hr class="my-4 text-muted border-2">
@@ -507,15 +508,15 @@
             const valOpex = parseInt(sliderOpex.value, 10);
             
             let payload = { 
-                penurunan_persen: valUmum,
-                kenaikan_hpp: valHpp,
-                kenaikan_opex: valOpex,
+                perubahan_penjualan: valUmum,
+                perubahan_hpp: valHpp,
+                perubahan_opex: valOpex,
                 periode: currentPeriode
             };
             
             produkContainer.querySelectorAll('.prod-slider').forEach(sl => {
                 let name = sl.getAttribute('data-prod');
-                payload['persen_turun_produk_' + name] = parseInt(sl.value, 10);
+                payload['persen_produk_' + name] = parseInt(sl.value, 10);
             });
 
             try {
@@ -617,30 +618,43 @@
                 const turun = parseInt(this.getAttribute('data-turun'), 10);
                 const hpp = parseInt(this.getAttribute('data-hpp'), 10);
                 const opex = parseInt(this.getAttribute('data-opex'), 10);
-                slider.value = turun; lblPersen.innerText = turun + "%";
-                lblPersen.style.color = turun > 50 ? "var(--danger-color)" : (turun > 25 ? "var(--warning-color)" : "var(--primary-color)");
-                sliderHPP.value = hpp; lblHPP.innerText = hpp + "%";
-                sliderOpex.value = opex; lblOpex.innerText = opex + "%";
+                
+                slider.value = turun; 
+                lblPersen.innerText = (turun > 0 ? "+" : "") + turun + "%";
+                lblPersen.style.color = turun > 50 ? "#27AE60" : (turun < -50 ? "var(--danger-color)" : (turun < 0 ? "var(--warning-color)" : "var(--primary-color)"));
+                
+                sliderHPP.value = hpp; 
+                lblHPP.innerText = (hpp > 0 ? "+" : "") + hpp + "%";
+                lblHPP.style.color = hpp > 0 ? "var(--danger-color)" : (hpp < 0 ? "#27AE60" : "var(--warning-color)");
+                
+                sliderOpex.value = opex; 
+                lblOpex.innerText = (opex > 0 ? "+" : "") + opex + "%";
+                lblOpex.style.color = opex > 0 ? "var(--danger-color)" : (opex < 0 ? "#27AE60" : "var(--warning-color)");
+                
                 debouncedHitung();
             });
         });
 
         slider.addEventListener("input", function () {
             const val = parseInt(this.value, 10);
-            lblPersen.innerText = val + "%";
-            lblPersen.style.color = val > 50 ? "var(--danger-color)" : (val > 25 ? "var(--warning-color)" : "var(--primary-color)");
+            lblPersen.innerText = (val > 0 ? "+" : "") + val + "%";
+            lblPersen.style.color = val > 50 ? "#27AE60" : (val < -50 ? "var(--danger-color)" : (val < 0 ? "var(--warning-color)" : "var(--primary-color)"));
             document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
             debouncedHitung();
         });
 
         sliderHPP.addEventListener("input", function () {
-            lblHPP.innerText = this.value + "%";
+            const val = parseInt(this.value, 10);
+            lblHPP.innerText = (val > 0 ? "+" : "") + val + "%";
+            lblHPP.style.color = val > 0 ? "var(--danger-color)" : (val < 0 ? "#27AE60" : "var(--warning-color)");
             document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
             debouncedHitung();
         });
 
         sliderOpex.addEventListener("input", function () {
-            lblOpex.innerText = this.value + "%";
+            const val = parseInt(this.value, 10);
+            lblOpex.innerText = (val > 0 ? "+" : "") + val + "%";
+            lblOpex.style.color = val > 0 ? "var(--danger-color)" : (val < 0 ? "#27AE60" : "var(--warning-color)");
             document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
             debouncedHitung();
         });

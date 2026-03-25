@@ -193,29 +193,35 @@
                         class="btn btn-sm btn-outline-warning shadow-sm {% if periode == 0 %}active{% endif %}">Semua</a>
                 </div>
             </div>
-            <div class="row g-3 mb-3">
-                <div class="col-md-3">
+            <div class="row g-2 mb-3">
+                <div class="col-md-2">
                     <div class="bg-light rounded-3 p-3 text-center h-100">
                         <small class="text-muted d-block mb-1">Hari Aktif</small>
                         <h5 class="fw-bold text-dark mb-0">{{ rk.jumlah_hari_aktif }} Hari</h5>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <div class="bg-light rounded-3 p-3 text-center h-100">
-                        <small class="text-muted d-block mb-1">Jumlah Transaksi</small>
+                        <small class="text-muted d-block mb-1">Jml Transaksi</small>
                         <h5 class="fw-bold text-dark mb-0">{{ rk.jumlah_transaksi }} Data</h5>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <div class="bg-light rounded-3 p-3 text-center h-100">
-                        <small class="text-muted d-block mb-1">Gross Margin</small>
-                        <h5 class="fw-bold mb-0 {% if rk.gross_margin >= 30 %}text-success{% else %}text-danger{% endif %}">{{ rk.gross_margin }}%</h5>
+                        <small class="text-muted d-block mb-1">Total Pelanggan</small>
+                        <h5 class="fw-bold text-dark mb-0">{{ rk.jumlah_pelanggan }} Org</h5>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="bg-light rounded-3 p-3 text-center h-100">
                         <small class="text-muted d-block mb-1">Rata-rata Harian</small>
                         <h5 class="fw-bold text-dark mb-0 js-rupiah" data-val="{{ rk.rata_pemasukan }}">0</h5>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="bg-light rounded-3 p-3 text-center h-100">
+                        <small class="text-muted d-block mb-1">Average Order Value</small>
+                        <h5 class="fw-bold text-dark mb-0 js-rupiah" data-val="{{ rk.aov }}">0</h5>
                     </div>
                 </div>
             </div>
@@ -382,27 +388,43 @@
 {% endif %}
 
 <!-- Visualisasi Grafik -->
-<div class="card summary-card p-4 mb-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h5 class="fw-bold text-dark mb-0">Tren Bisnis (Rupiah)</h5>
-        <div class="btn-group" role="group" aria-label="Pilih range data">
-            <div class="btn-group" role="group" aria-label="Pilih Periode Analisis">
-                <a href="{{ url_for('dashboard', periode=30) }}"
-                    class="btn btn-sm btn-outline-primary shadow-sm {% if periode == 30 %}active{% endif %}">30
-                    Hari</a>
-                <a href="{{ url_for('dashboard', periode=60) }}"
-                    class="btn btn-sm btn-outline-primary shadow-sm {% if periode == 60 %}active{% endif %}">60
-                    Hari</a>
-                <a href="{{ url_for('dashboard', periode=90) }}"
-                    class="btn btn-sm btn-outline-primary shadow-sm {% if periode == 90 %}active{% endif %}">90
-                    Hari</a>
-                <a href="{{ url_for('dashboard', periode=0) }}"
-                    class="btn btn-sm btn-outline-primary shadow-sm {% if periode == 0 %}active{% endif %}">Semua</a>
+<div class="row g-4 mb-4">
+    <!-- Tren Pemasukan -->
+    <div class="col-lg-8">
+        <div class="card summary-card p-4 h-100">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h5 class="fw-bold text-dark mb-0">Tren Bisnis (Rupiah)</h5>
+                <div class="btn-group" role="group" aria-label="Pilih range data">
+                    <div class="btn-group" role="group" aria-label="Pilih Periode Analisis">
+                        <a href="{{ url_for('dashboard', periode=30) }}"
+                            class="btn btn-sm btn-outline-primary shadow-sm {% if periode == 30 %}active{% endif %}">30 Hari</a>
+                        <a href="{{ url_for('dashboard', periode=60) }}"
+                            class="btn btn-sm btn-outline-primary shadow-sm {% if periode == 60 %}active{% endif %}">60 Hari</a>
+                        <a href="{{ url_for('dashboard', periode=90) }}"
+                            class="btn btn-sm btn-outline-primary shadow-sm {% if periode == 90 %}active{% endif %}">90 Hari</a>
+                        <a href="{{ url_for('dashboard', periode=0) }}"
+                            class="btn btn-sm btn-outline-primary shadow-sm {% if periode == 0 %}active{% endif %}">Semua</a>
+                    </div>
+                </div>
+            </div>
+            <div style="height: 300px;">
+                <canvas id="mainChart" aria-label="Grafik Tren Pemasukan UMKM" role="img"></canvas>
             </div>
         </div>
     </div>
-    <div style="height: 300px;">
-        <canvas id="mainChart" aria-label="Grafik Tren Pemasukan UMKM" role="img"></canvas>
+    
+    <!-- Distribusi Pengeluaran -->
+    <div class="col-lg-4">
+        <div class="card summary-card p-4 h-100">
+            <h5 class="fw-bold text-dark mb-2 border-bottom pb-2">Distribusi Pengeluaran</h5>
+            <div style="height: 250px; position: relative;">
+                {% if data.ringkasan_kustom.pie_data and data.ringkasan_kustom.pie_data|sum > 0 %}
+                <canvas id="pieChart" aria-label="Grafik Distribusi Pengeluaran" role="img"></canvas>
+                {% else %}
+                <div class="d-flex w-100 h-100 align-items-center justify-content-center text-muted">Belum ada data pengeluaran</div>
+                {% endif %}
+            </div>
+        </div>
     </div>
 </div>
 
@@ -441,6 +463,31 @@
             <p class="text-muted small">semua produk aman sentosa</p>
             {% endif %}
         </div>
+        {% if data.data_produk.semua_produk %}
+        <div class="col-12 mt-4">
+            <h6 class="text-primary fw-bold border-bottom pb-2 mb-3"><i class="bi bi-list-ul me-1"></i>Peringkat Semua Produk</h6>
+            <div class="table-responsive border rounded" style="max-height: 250px; overflow-y: auto;">
+                <table class="table table-sm table-hover align-middle mb-0" style="font-size: 0.95rem;">
+                    <thead class="table-light" style="position: sticky; top: 0; z-index: 1;">
+                        <tr>
+                            <th class="ps-3" style="width: 10%;">#</th>
+                            <th>Nama Produk</th>
+                            <th class="text-end pe-3">Total Terjual</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for p in data.data_produk.semua_produk %}
+                        <tr>
+                            <td class="text-muted ps-3">{{ loop.index }}</td>
+                            <td class="fw-medium text-dark">{{ p.nama }}</td>
+                            <td class="text-end pe-3"><span class="badge bg-secondary rounded-pill">{{ p.total }}</span></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% endif %}
     </div>
     {% else %}
     <div class="text-center py-5 text-muted bg-light rounded-4">
@@ -448,6 +495,55 @@
         belum ada rekam jejak barang yang tercatat
     </div>
     {% endif %}
+</div>
+
+<!-- Advanced Product Analytics -->
+<div class="row g-4 mb-5">
+    <!-- Cash Cow -->
+    <div class="col-lg-6">
+        <div class="card summary-card p-4 h-100 border-start border-4 border-info shadow-sm">
+            <h5 class="fw-bold text-dark mb-3"><i class="bi bi-star-fill text-warning me-2"></i>Produk Paling Untung (Cash Cow)</h5>
+            {% if data.advanced_analytics and data.advanced_analytics.cash_cow %}
+            <div class="d-flex align-items-center mb-2">
+                <div class="flex-grow-1">
+                    <h4 class="fw-bold text-dark mb-1">{{ data.advanced_analytics.cash_cow.nama }}</h4>
+                    <span class="text-muted d-block" style="font-size: 0.9rem;">Produk dengan Margin Kotor (Rupiah) Terbesar</span>
+                </div>
+                <div class="text-end">
+                    <h4 class="fw-bold text-success mb-0 js-rupiah" data-val="{{ data.advanced_analytics.cash_cow.margin_kotor }}">0</h4>
+                    <span class="badge bg-info mt-1">Cash Cow</span>
+                </div>
+            </div>
+            {% else %}
+            <div class="text-center py-4 text-muted bg-light rounded-4">
+                <i class="bi bi-graph-down-arrow fs-2 d-block mb-3 opacity-25"></i>
+                Belum ada data margin bersih yang terhitung.
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <!-- Restock Prediction -->
+    <div class="col-lg-6">
+        <div class="card summary-card p-4 h-100 border-start border-4 border-danger shadow-sm">
+            <h5 class="fw-bold text-dark mb-3"><i class="bi bi-cart-x-fill text-danger me-2"></i>Peringatan Restok (3 Hari Kedepan)</h5>
+            {% if data.advanced_analytics and data.advanced_analytics.prediksi_restok %}
+            <ul class="list-group list-group-flush">
+                {% for p in data.advanced_analytics.prediksi_restok %}
+                <li class="list-group-item px-0 py-2 d-flex justify-content-between align-items-center bg-transparent border-bottom">
+                    <span class="fw-bold text-dark">{{ p.nama }} <br><small class="text-muted fw-normal">Siapkan dana modal restok</small></span>
+                    <span class="badge bg-danger rounded-pill px-3 py-2 js-rupiah" data-val="{{ p.estimasi_dana }}" style="font-size: 0.95rem;">0</span>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <div class="text-center py-4 text-muted bg-light rounded-4">
+                <i class="bi bi-check-circle-fill text-success fs-2 d-block mb-3 opacity-50"></i>
+                Tidak ada peringatan mendesak. Stok aman.
+            </div>
+            {% endif %}
+        </div>
+    </div>
 </div>
 
 {% endif %}
@@ -485,7 +581,9 @@
     "grafik_ma30": data.grafik_ma30,
     "grafik_op_aktual": data.grafik_op_aktual,
     "grafik_md_aktual": data.grafik_md_aktual,
-    "grafik_proyeksi": data.grafik_proyeksi
+    "grafik_proyeksi": data.grafik_proyeksi,
+    "pie_labels": data.ringkasan_kustom.pie_labels if data.ringkasan_kustom else [],
+    "pie_data": data.ringkasan_kustom.pie_data if data.ringkasan_kustom else []
 } | tojson | safe }}
 </script>
 {% endif %}
@@ -579,6 +677,31 @@
                     }
                 }
             });
+            
+            // Pie Chart
+            const pieCtx = document.getElementById('pieChart');
+            if (pieCtx && chartData.pie_labels && chartData.pie_labels.length > 0) {
+                new Chart(pieCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: chartData.pie_labels,
+                        datasets: [{
+                            data: chartData.pie_data,
+                            backgroundColor: ['#E74C3C', '#F39C12', '#F1C40F', '#8E44AD', '#3498DB', '#95A5A6'],
+                            borderWidth: 2,
+                            borderColor: '#ffffff'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        cutout: '65%',
+                        plugins: {
+                            legend: { position: 'bottom', labels: { boxWidth: 12, padding: 15, font: {size: 11} } }
+                        }
+                    }
+                });
+            }
         }
 
         // 3. Logic Sederhana Chatbot (Frontend Simulasi)

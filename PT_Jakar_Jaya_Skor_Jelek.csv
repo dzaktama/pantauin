@@ -1,194 +1,182 @@
 tanggal,kategori,nama_produk,kuantitas,harga_modal,pemasukan,pengeluaran,jenis_pengeluaran,jumlah_pelanggan,catatan
-2025-12-24,E-Commerce,Olah Balado,15,120000,375000,0,,1,Sales E-Commerce
-2025-12-24,Pesanan Grosir,Olah Original,2,15000,40000,0,,2,Sales E-Commerce
-2025-12-24,Penjualan B2C,Olah Balado,4,32000,100000,0,,3,Sales E-Commerce
-2025-12-24,E-Commerce,Olah Original,15,112500,300000,0,,3,Sales E-Commerce
-2025-12-26,E-Commerce,Olah Balado,12,96000,300000,0,,1,Sales E-Commerce
-2025-12-26,Penjualan B2C,Olah Balado,3,24000,75000,0,,1,Beli Langsung
-2025-12-26,Pesanan Grosir,Olah Balado,5,40000,125000,0,,1,Beli Langsung
-2025-12-26,Penjualan B2C,Olah Original,5,37500,100000,0,,2,Sales E-Commerce
-2025-12-26,Lainnya,,0,0,0,301580,lainnya,0,Bayar Lainnya
-2025-12-27,Pesanan Grosir,Olah Balado,5,40000,125000,0,,2,Beli Langsung
-2025-12-28,Penjualan B2C,Olah Balado,4,32000,100000,0,,2,Beli Langsung
-2025-12-28,Pesanan Grosir,Olah Original,8,60000,160000,0,,2,Beli Langsung
-2025-12-29,Penjualan B2C,Olah Original,8,60000,160000,0,,2,Beli Langsung
-2025-12-31,Listrik & Air,,0,0,0,337434,operasional,0,Bayar Listrik & Air
-2026-01-01,E-Commerce,Olah Balado,4,32000,100000,0,,3,Sales E-Commerce
-2026-01-01,Listrik & Air,,0,0,0,453712,operasional,0,Bayar Listrik & Air
-2026-01-02,Penjualan B2C,Olah Balado,3,24000,75000,0,,3,Sales E-Commerce
-2026-01-02,Pesanan Grosir,Olah Original,2,15000,40000,0,,1,Sales E-Commerce
-2026-01-02,E-Commerce,Olah Balado,4,32000,100000,0,,3,Sales E-Commerce
-2026-01-03,Pesanan Grosir,Olah Balado,6,48000,150000,0,,3,Beli Langsung
-2026-01-03,Pesanan Grosir,Olah Balado,1,8000,25000,0,,2,Sales E-Commerce
-2026-01-03,Pesanan Grosir,Olah Original,1,7500,20000,0,,3,Beli Langsung
-2026-01-04,Pesanan Grosir,Olah Original,5,37500,100000,0,,3,Sales E-Commerce
-2026-01-04,Pesanan Grosir,Olah Original,3,22500,60000,0,,3,Sales E-Commerce
-2026-01-04,E-Commerce,Olah Balado,5,40000,125000,0,,1,Sales E-Commerce
-2026-01-06,Penjualan B2C,Olah Original,3,22500,60000,0,,2,Beli Langsung
-2026-01-06,E-Commerce,Olah Balado,6,48000,150000,0,,1,Beli Langsung
-2026-01-06,E-Commerce,Olah Balado,12,96000,300000,0,,2,Sales E-Commerce
-2026-01-06,Penjualan B2C,Olah Balado,4,32000,100000,0,,3,Sales E-Commerce
-2026-01-06,Pesanan Grosir,Olah Original,2,15000,40000,0,,1,Sales E-Commerce
-2026-01-07,E-Commerce,Olah Balado,3,24000,75000,0,,3,Beli Langsung
-2026-01-07,E-Commerce,Olah Original,4,30000,80000,0,,2,Beli Langsung
-2026-01-07,Penjualan B2C,Olah Balado,9,72000,225000,0,,2,Sales E-Commerce
-2026-01-07,Pesanan Grosir,Olah Balado,12,96000,300000,0,,1,Beli Langsung
-2026-01-07,Iklan Olahh,,0,0,0,272625,operasional,0,Bayar Iklan Olahh
-2026-01-08,E-Commerce,Olah Balado,9,72000,225000,0,,2,Sales E-Commerce
-2026-01-08,E-Commerce,Olah Balado,2,16000,50000,0,,3,Beli Langsung
-2026-01-08,Penjualan B2C,Olah Balado,6,48000,150000,0,,1,Beli Langsung
-2026-01-08,Penjualan B2C,Olah Original,3,22500,60000,0,,2,Sales E-Commerce
-2026-01-09,E-Commerce,Olah Original,1,7500,20000,0,,1,Beli Langsung
-2026-01-09,Penjualan B2C,Olah Balado,15,120000,375000,0,,2,Beli Langsung
-2026-01-09,Iklan Olahh,,0,0,0,420406,operasional,0,Bayar Iklan Olahh
-2026-01-10,Pesanan Grosir,Olah Balado,3,24000,75000,0,,3,Beli Langsung
-2026-01-10,Pesanan Grosir,Olah Balado,6,48000,150000,0,,2,Beli Langsung
-2026-01-10,Penjualan B2C,Olah Original,8,60000,160000,0,,1,Sales E-Commerce
-2026-01-10,Pesanan Grosir,Olah Balado,10,80000,250000,0,,1,Sales E-Commerce
-2026-01-10,Pesanan Grosir,Olah Original,9,67500,180000,0,,3,Beli Langsung
-2026-01-10,Bahan Kemasan (Pouch),,0,0,0,358062,modal,0,Restok Bahan Kemasan (Pouch)
-2026-01-12,E-Commerce,Olah Original,9,67500,180000,0,,3,Sales E-Commerce
-2026-01-12,Penjualan B2C,Olah Original,6,45000,120000,0,,2,Beli Langsung
-2026-01-12,E-Commerce,Olah Original,6,45000,120000,0,,2,Beli Langsung
-2026-01-12,Penjualan B2C,Olah Balado,3,24000,75000,0,,2,Sales E-Commerce
-2026-01-12,Bahan Baku (Bogor),,0,0,0,346377,operasional,0,Bayar Bahan Baku (Bogor)
-2026-01-13,Pesanan Grosir,Olah Balado,1,8000,25000,0,,2,Beli Langsung
-2026-01-13,Pesanan Grosir,Olah Balado,4,32000,100000,0,,1,Sales E-Commerce
-2026-01-13,Iklan Olahh,,0,0,0,567534,operasional,0,Bayar Iklan Olahh
-2026-01-14,Penjualan B2C,Olah Balado,15,120000,375000,0,,3,Sales E-Commerce
-2026-01-14,Pesanan Grosir,Olah Original,2,15000,40000,0,,3,Sales E-Commerce
-2026-01-14,Penjualan B2C,Olah Balado,15,120000,375000,0,,1,Beli Langsung
-2026-01-14,E-Commerce,Olah Balado,3,24000,75000,0,,3,Beli Langsung
-2026-01-14,Gaji Pegawai,,0,0,0,417112,operasional,0,Bayar Gaji Pegawai
-2026-01-15,Pesanan Grosir,Olah Original,12,90000,240000,0,,1,Sales E-Commerce
-2026-01-15,Penjualan B2C,Olah Balado,9,72000,225000,0,,3,Beli Langsung
-2026-01-15,Penjualan B2C,Olah Original,12,90000,240000,0,,3,Sales E-Commerce
-2026-01-15,Bahan Kemasan (Pouch),,0,0,0,490338,modal,0,Restok Bahan Kemasan (Pouch)
-2026-01-16,Penjualan B2C,Olah Original,5,37500,100000,0,,2,Beli Langsung
-2026-01-16,Pesanan Grosir,Olah Balado,9,72000,225000,0,,3,Sales E-Commerce
-2026-01-16,E-Commerce,Olah Balado,6,48000,150000,0,,2,Sales E-Commerce
-2026-01-16,Pesanan Grosir,Olah Original,1,7500,20000,0,,2,Beli Langsung
-2026-01-16,Bahan Kemasan (Pouch),,0,0,0,319707,modal,0,Restok Bahan Kemasan (Pouch)
-2026-01-17,Gaji Pegawai,,0,0,0,369140,operasional,0,Bayar Gaji Pegawai
-2026-01-18,E-Commerce,Olah Balado,6,48000,150000,0,,1,Sales E-Commerce
-2026-01-18,Pesanan Grosir,Olah Original,6,45000,120000,0,,2,Sales E-Commerce
-2026-01-18,Pesanan Grosir,Olah Balado,3,24000,75000,0,,1,Beli Langsung
-2026-01-18,Penjualan B2C,Olah Original,5,37500,100000,0,,2,Beli Langsung
-2026-01-20,Pesanan Grosir,Olah Original,15,112500,300000,0,,3,Beli Langsung
-2026-01-20,Gaji Pegawai,,0,0,0,273708,operasional,0,Bayar Gaji Pegawai
-2026-01-21,E-Commerce,Olah Original,9,67500,180000,0,,1,Beli Langsung
-2026-01-21,Bahan Kemasan (Pouch),,0,0,0,390832,modal,0,Restok Bahan Kemasan (Pouch)
-2026-01-22,Penjualan B2C,Olah Balado,12,96000,300000,0,,3,Sales E-Commerce
-2026-01-22,Listrik & Air,,0,0,0,346400,operasional,0,Bayar Listrik & Air
-2026-01-23,Pesanan Grosir,Olah Original,6,45000,120000,0,,3,Sales E-Commerce
-2026-01-23,E-Commerce,Olah Balado,1,8000,25000,0,,2,Beli Langsung
-2026-01-23,Iklan Olahh,,0,0,0,313068,operasional,0,Bayar Iklan Olahh
-2026-01-24,E-Commerce,Olah Balado,6,48000,150000,0,,1,Sales E-Commerce
-2026-01-24,E-Commerce,Olah Original,2,15000,40000,0,,1,Beli Langsung
-2026-01-24,E-Commerce,Olah Balado,3,24000,75000,0,,2,Beli Langsung
-2026-01-24,Gaji Pegawai,,0,0,0,392995,operasional,0,Bayar Gaji Pegawai
-2026-01-25,E-Commerce,Olah Original,2,15000,40000,0,,2,Beli Langsung
-2026-01-25,E-Commerce,Olah Balado,9,72000,225000,0,,1,Beli Langsung
-2026-01-26,E-Commerce,Olah Original,1,7500,20000,0,,2,Beli Langsung
-2026-01-26,Penjualan B2C,Olah Original,1,7500,20000,0,,1,Sales E-Commerce
-2026-01-27,E-Commerce,Olah Original,6,45000,120000,0,,1,Beli Langsung
-2026-01-28,E-Commerce,Olah Balado,1,8000,25000,0,,1,Beli Langsung
-2026-01-29,Penjualan B2C,Olah Original,4,30000,80000,0,,2,Beli Langsung
-2026-01-29,Pesanan Grosir,Olah Balado,9,72000,225000,0,,1,Sales E-Commerce
-2026-01-29,Listrik & Air,,0,0,0,347666,operasional,0,Bayar Listrik & Air
-2026-01-30,Pesanan Grosir,Olah Original,3,22500,60000,0,,2,Sales E-Commerce
-2026-01-30,Penjualan B2C,Olah Balado,12,96000,300000,0,,3,Sales E-Commerce
-2026-01-31,Pesanan Grosir,Olah Balado,15,120000,375000,0,,1,Sales E-Commerce
-2026-01-31,Penjualan B2C,Olah Original,2,15000,40000,0,,3,Sales E-Commerce
-2026-01-31,Penjualan B2C,Olah Balado,4,32000,100000,0,,2,Beli Langsung
-2026-01-31,Bahan Baku (Bogor),,0,0,0,563189,operasional,0,Bayar Bahan Baku (Bogor)
-2026-02-01,E-Commerce,Olah Balado,12,96000,300000,0,,3,Beli Langsung
-2026-02-01,Lainnya,,0,0,0,581669,lainnya,0,Bayar Lainnya
-2026-02-02,E-Commerce,Olah Balado,12,96000,300000,0,,2,Beli Langsung
-2026-02-02,Pesanan Grosir,Olah Balado,4,32000,100000,0,,1,Sales E-Commerce
-2026-02-02,Bahan Kemasan (Pouch),,0,0,0,372377,modal,0,Restok Bahan Kemasan (Pouch)
-2026-02-03,Penjualan B2C,Olah Balado,3,24000,75000,0,,2,Sales E-Commerce
-2026-02-04,E-Commerce,Olah Balado,2,16000,50000,0,,3,Sales E-Commerce
-2026-02-04,Pesanan Grosir,Olah Original,2,15000,40000,0,,3,Sales E-Commerce
-2026-02-05,E-Commerce,Olah Balado,4,32000,100000,0,,2,Sales E-Commerce
-2026-02-05,E-Commerce,Olah Original,9,67500,180000,0,,1,Sales E-Commerce
-2026-02-05,E-Commerce,Olah Balado,3,24000,75000,0,,1,Beli Langsung
-2026-02-06,Penjualan B2C,Olah Original,2,15000,40000,0,,3,Beli Langsung
-2026-02-06,Penjualan B2C,Olah Original,2,15000,40000,0,,2,Beli Langsung
-2026-02-06,E-Commerce,Olah Balado,4,32000,100000,0,,2,Sales E-Commerce
-2026-02-06,Lainnya,,0,0,0,367857,lainnya,0,Bayar Lainnya
-2026-02-07,Penjualan B2C,Olah Original,2,15000,40000,0,,1,Sales E-Commerce
-2026-02-07,Pesanan Grosir,Olah Original,8,60000,160000,0,,3,Beli Langsung
-2026-02-07,E-Commerce,Olah Original,3,22500,60000,0,,2,Beli Langsung
-2026-02-07,Bahan Kemasan (Pouch),,0,0,0,434857,modal,0,Restok Bahan Kemasan (Pouch)
-2026-02-08,Penjualan B2C,Olah Original,3,22500,60000,0,,1,Sales E-Commerce
-2026-02-08,E-Commerce,Olah Balado,2,16000,50000,0,,3,Beli Langsung
-2026-02-08,E-Commerce,Olah Balado,15,120000,375000,0,,1,Sales E-Commerce
-2026-02-09,Penjualan B2C,Olah Balado,2,16000,50000,0,,3,Beli Langsung
-2026-02-09,Pesanan Grosir,Olah Original,9,67500,180000,0,,3,Sales E-Commerce
-2026-02-10,E-Commerce,Olah Balado,4,32000,100000,0,,1,Beli Langsung
-2026-02-10,Penjualan B2C,Olah Balado,4,32000,100000,0,,2,Beli Langsung
-2026-02-10,E-Commerce,Olah Balado,4,32000,100000,0,,2,Beli Langsung
-2026-02-10,Bahan Kemasan (Pouch),,0,0,0,270597,modal,0,Restok Bahan Kemasan (Pouch)
-2026-02-11,Penjualan B2C,Olah Balado,9,72000,225000,0,,3,Beli Langsung
-2026-02-11,Pesanan Grosir,Olah Balado,9,72000,225000,0,,2,Beli Langsung
-2026-02-11,Pesanan Grosir,Olah Original,5,37500,100000,0,,1,Sales E-Commerce
-2026-02-11,Bahan Baku (Bogor),,0,0,0,422303,operasional,0,Bayar Bahan Baku (Bogor)
-2026-02-12,Pesanan Grosir,Olah Original,3,22500,60000,0,,1,Sales E-Commerce
-2026-02-13,Pesanan Grosir,Olah Original,3,22500,60000,0,,1,Sales E-Commerce
-2026-02-13,Penjualan B2C,Olah Original,12,90000,240000,0,,1,Sales E-Commerce
-2026-02-13,E-Commerce,Olah Balado,3,24000,75000,0,,2,Beli Langsung
-2026-02-14,Pesanan Grosir,Olah Balado,4,32000,100000,0,,3,Sales E-Commerce
-2026-02-14,Iklan Olahh,,0,0,0,562404,operasional,0,Bayar Iklan Olahh
-2026-02-16,Penjualan B2C,Olah Balado,4,32000,100000,0,,3,Beli Langsung
-2026-02-16,Bahan Baku (Bogor),,0,0,0,385275,operasional,0,Bayar Bahan Baku (Bogor)
-2026-02-17,Penjualan B2C,Olah Balado,9,72000,225000,0,,1,Beli Langsung
-2026-02-17,Penjualan B2C,Olah Balado,12,96000,300000,0,,1,Sales E-Commerce
-2026-02-19,E-Commerce,Olah Original,1,7500,20000,0,,2,Sales E-Commerce
-2026-02-20,Penjualan B2C,Olah Original,6,45000,120000,0,,1,Beli Langsung
-2026-02-20,Bahan Kemasan (Pouch),,0,0,0,549236,modal,0,Restok Bahan Kemasan (Pouch)
-2026-02-21,E-Commerce,Olah Original,5,37500,100000,0,,1,Sales E-Commerce
-2026-02-21,E-Commerce,Olah Balado,2,16000,50000,0,,3,Sales E-Commerce
-2026-02-21,Iklan Olahh,,0,0,0,591890,operasional,0,Bayar Iklan Olahh
-2026-02-22,E-Commerce,Olah Original,10,75000,200000,0,,1,Sales E-Commerce
-2026-02-23,Bahan Baku (Bogor),,0,0,0,327894,operasional,0,Bayar Bahan Baku (Bogor)
-2026-02-24,Iklan Olahh,,0,0,0,496062,operasional,0,Bayar Iklan Olahh
-2026-02-27,Pesanan Grosir,Olah Balado,8,64000,200000,0,,2,Beli Langsung
-2026-02-28,Pesanan Grosir,Olah Original,6,45000,120000,0,,2,Sales E-Commerce
-2026-02-28,Bahan Kemasan (Pouch),,0,0,0,389773,modal,0,Restok Bahan Kemasan (Pouch)
-2026-03-02,Penjualan B2C,Olah Balado,9,72000,225000,0,,1,Sales E-Commerce
-2026-03-02,Listrik & Air,,0,0,0,599583,operasional,0,Bayar Listrik & Air
-2026-03-03,E-Commerce,Olah Original,15,112500,300000,0,,1,Sales E-Commerce
-2026-03-04,Lainnya,,0,0,0,467025,lainnya,0,Bayar Lainnya
-2026-03-05,E-Commerce,Olah Balado,3,24000,75000,0,,3,Sales E-Commerce
-2026-03-05,Gaji Pegawai,,0,0,0,578748,operasional,0,Bayar Gaji Pegawai
-2026-03-06,E-Commerce,Olah Original,6,45000,120000,0,,2,Sales E-Commerce
-2026-03-06,Bahan Kemasan (Pouch),,0,0,0,299592,modal,0,Restok Bahan Kemasan (Pouch)
-2026-03-07,Lainnya,,0,0,0,599486,lainnya,0,Bayar Lainnya
-2026-03-08,Pesanan Grosir,Olah Original,10,75000,200000,0,,2,Beli Langsung
-2026-03-08,Iklan Olahh,,0,0,0,379434,operasional,0,Bayar Iklan Olahh
-2026-03-09,Penjualan B2C,Olah Original,4,30000,80000,0,,1,Sales E-Commerce
-2026-03-09,Bahan Baku (Bogor),,0,0,0,497761,operasional,0,Bayar Bahan Baku (Bogor)
-2026-03-10,Penjualan B2C,Olah Balado,6,48000,150000,0,,2,Beli Langsung
-2026-03-10,Iklan Olahh,,0,0,0,545802,operasional,0,Bayar Iklan Olahh
-2026-03-11,E-Commerce,Olah Balado,6,48000,150000,0,,1,Sales E-Commerce
-2026-03-11,Gaji Pegawai,,0,0,0,563009,operasional,0,Bayar Gaji Pegawai
-2026-03-12,Pesanan Grosir,Olah Original,4,30000,80000,0,,2,Beli Langsung
-2026-03-13,E-Commerce,Olah Original,4,30000,80000,0,,3,Beli Langsung
-2026-03-13,Bahan Kemasan (Pouch),,0,0,0,390121,modal,0,Restok Bahan Kemasan (Pouch)
-2026-03-15,E-Commerce,Olah Original,2,15000,40000,0,,1,Beli Langsung
-2026-03-15,Bahan Baku (Bogor),,0,0,0,416251,operasional,0,Bayar Bahan Baku (Bogor)
-2026-03-16,E-Commerce,Olah Balado,4,32000,100000,0,,1,Beli Langsung
-2026-03-17,E-Commerce,Olah Balado,2,16000,50000,0,,3,Sales E-Commerce
-2026-03-17,Bahan Baku (Bogor),,0,0,0,280503,operasional,0,Bayar Bahan Baku (Bogor)
-2026-03-19,E-Commerce,Olah Balado,9,72000,225000,0,,1,Sales E-Commerce
-2026-03-19,Listrik & Air,,0,0,0,534749,operasional,0,Bayar Listrik & Air
-2026-03-20,E-Commerce,Olah Balado,3,24000,75000,0,,3,Sales E-Commerce
-2026-03-20,Bahan Kemasan (Pouch),,0,0,0,457442,modal,0,Restok Bahan Kemasan (Pouch)
-2026-03-21,E-Commerce,Olah Original,6,45000,120000,0,,2,Beli Langsung
-2026-03-21,Gaji Pegawai,,0,0,0,568950,operasional,0,Bayar Gaji Pegawai
-2026-03-22,E-Commerce,Olah Original,2,15000,40000,0,,1,Sales E-Commerce
-2026-03-22,Gaji Pegawai,,0,0,0,516944,operasional,0,Bayar Gaji Pegawai
-2026-03-23,Pesanan Grosir,Olah Original,4,30000,80000,0,,1,Beli Langsung
-2026-03-23,Bahan Baku (Bogor),,0,0,0,479594,operasional,0,Bayar Bahan Baku (Bogor)
-2026-03-24,Iklan Olahh,,0,0,0,570850,operasional,0,Bayar Iklan Olahh
+2025-12-25,E-Commerce,Makaroni Bantet Balado,15,90000,180000,0,,3,Sales E-Commerce
+2025-12-25,E-Commerce,Mie Lidi Pedas Level 5,1,5000,10000,0,,1,Sales E-Commerce
+2025-12-25,Pesanan Grosir,Makaroni Bantet Balado,1,6000,12000,0,,2,Beli Langsung
+2025-12-25,E-Commerce,Usus Crispy Original,3,42000,66000,0,,2,Sales E-Commerce
+2025-12-25,Pesanan Grosir,Kacang Umpet Karamel,2,22000,40000,0,,3,Sales E-Commerce
+2025-12-25,Penjualan B2C,Keripik Singkong Balado,4,32000,60000,0,,2,Sales E-Commerce
+2025-12-26,Pesanan Grosir,Basreng Original Gurih,6,72000,120000,0,,1,Beli Langsung
+2025-12-26,Lainnya,,0,0,0,382225,lainnya,0,Bayar Lainnya
+2025-12-27,Lainnya,,0,0,0,510122,lainnya,0,Bayar Lainnya
+2025-12-28,Pesanan Grosir,Stik Keju Premium,9,117000,216000,0,,2,Beli Langsung
+2025-12-28,E-Commerce,Basreng Pedas Daun Jeruk,4,48000,80000,0,,3,Beli Langsung
+2025-12-28,Iklan Olahh,,0,0,0,364543,operasional,0,Bayar Iklan Olahh
+2025-12-29,Pesanan Grosir,Usus Crispy Original,2,28000,44000,0,,3,Sales E-Commerce
+2025-12-29,Pesanan Grosir,Keripik Singkong Original,6,48000,90000,0,,3,Beli Langsung
+2025-12-29,Pesanan Grosir,Keripik Kaca Original,15,150000,270000,0,,1,Beli Langsung
+2025-12-29,Pesanan Grosir,Mie Lidi Pedas Level 5,6,30000,60000,0,,3,Beli Langsung
+2025-12-29,E-Commerce,Keripik Kaca Original,1,10000,18000,0,,2,Beli Langsung
+2025-12-31,Penjualan B2C,Stik Keju Premium,2,26000,48000,0,,3,Sales E-Commerce
+2025-12-31,Penjualan B2C,Peyek Kacang Mini,3,24000,45000,0,,3,Sales E-Commerce
+2025-12-31,Penjualan B2C,Makaroni Bantet Balado,3,18000,36000,0,,3,Sales E-Commerce
+2025-12-31,Pesanan Grosir,Mie Lidi Pedas Level 5,3,15000,30000,0,,3,Beli Langsung
+2026-01-01,Bahan Kemasan (Pouch),,0,0,0,570657,modal,0,Restok Bahan Kemasan (Pouch)
+2026-01-02,Pesanan Grosir,Usus Crispy Balado,3,42000,66000,0,,3,Beli Langsung
+2026-01-02,E-Commerce,Seblak Kering Pedas,6,51000,96000,0,,3,Beli Langsung
+2026-01-02,Pesanan Grosir,Usus Crispy Balado,3,42000,66000,0,,2,Beli Langsung
+2026-01-02,Bahan Baku (Bogor),,0,0,0,398466,operasional,0,Bayar Bahan Baku (Bogor)
+2026-01-03,Penjualan B2C,Kacang Umpet Karamel,2,22000,40000,0,,3,Sales E-Commerce
+2026-01-03,Pesanan Grosir,Keripik Kaca Original,1,10000,18000,0,,2,Sales E-Commerce
+2026-01-03,E-Commerce,Mie Lidi Pedas Level 5,1,5000,10000,0,,1,Sales E-Commerce
+2026-01-03,E-Commerce,Stik Keju Premium,8,104000,192000,0,,3,Beli Langsung
+2026-01-04,E-Commerce,Basreng Original Gurih,3,36000,60000,0,,1,Sales E-Commerce
+2026-01-04,E-Commerce,Pilus Cikur Pedas,1,7000,14000,0,,3,Beli Langsung
+2026-01-04,Penjualan B2C,Mie Lidi Pedas Level 5,9,45000,90000,0,,1,Sales E-Commerce
+2026-01-04,Listrik & Air,,0,0,0,422083,operasional,0,Bayar Listrik & Air
+2026-01-05,Penjualan B2C,Keripik Kaca Pedas Nampol,9,90000,162000,0,,1,Beli Langsung
+2026-01-05,E-Commerce,Mie Lidi Jagung Bakar,2,10000,20000,0,,1,Beli Langsung
+2026-01-06,Pesanan Grosir,Mie Lidi Pedas Level 5,3,15000,30000,0,,3,Sales E-Commerce
+2026-01-06,E-Commerce,Mie Lidi Pedas Level 5,3,15000,30000,0,,1,Sales E-Commerce
+2026-01-06,E-Commerce,Seblak Kering Original,5,42500,80000,0,,2,Beli Langsung
+2026-01-06,E-Commerce,Kacang Umpet Karamel,1,11000,20000,0,,2,Sales E-Commerce
+2026-01-06,Bahan Baku (Bogor),,0,0,0,552935,operasional,0,Bayar Bahan Baku (Bogor)
+2026-01-07,Pesanan Grosir,Keripik Kaca Original,2,20000,36000,0,,3,Beli Langsung
+2026-01-07,Penjualan B2C,Seblak Kering Pedas,2,17000,32000,0,,3,Sales E-Commerce
+2026-01-07,E-Commerce,Usus Crispy Balado,5,70000,110000,0,,3,Sales E-Commerce
+2026-01-07,Pesanan Grosir,Makaroni Keju Premium,3,22500,45000,0,,3,Beli Langsung
+2026-01-08,Penjualan B2C,Emping Pedas Manis,4,72000,120000,0,,3,Beli Langsung
+2026-01-08,E-Commerce,Usus Crispy Original,12,168000,264000,0,,2,Sales E-Commerce
+2026-01-09,E-Commerce,Mie Lidi Pedas Level 5,4,20000,40000,0,,3,Sales E-Commerce
+2026-01-09,E-Commerce,Sus Kering Cokelat Lumer,6,90000,150000,0,,2,Beli Langsung
+2026-01-09,Penjualan B2C,Basreng Pedas Daun Jeruk,4,48000,80000,0,,2,Sales E-Commerce
+2026-01-09,Pesanan Grosir,Sus Kering Cokelat Lumer,6,90000,150000,0,,2,Sales E-Commerce
+2026-01-09,Penjualan B2C,Peyek Kacang Mini,2,16000,30000,0,,3,Sales E-Commerce
+2026-01-10,Penjualan B2C,Usus Crispy Original,3,42000,66000,0,,3,Beli Langsung
+2026-01-10,E-Commerce,Usus Crispy Balado,4,56000,88000,0,,1,Beli Langsung
+2026-01-10,E-Commerce,Sus Kering Cokelat Lumer,10,150000,250000,0,,2,Beli Langsung
+2026-01-10,Penjualan B2C,Keripik Singkong Original,9,72000,135000,0,,2,Beli Langsung
+2026-01-10,Pesanan Grosir,Kacang Umpet Karamel,3,33000,60000,0,,1,Beli Langsung
+2026-01-11,Pesanan Grosir,Usus Crispy Original,10,140000,220000,0,,3,Beli Langsung
+2026-01-11,Penjualan B2C,Keripik Kaca Pedas Nampol,3,30000,54000,0,,1,Sales E-Commerce
+2026-01-11,Penjualan B2C,Keripik Kaca Pedas Nampol,6,60000,108000,0,,1,Sales E-Commerce
+2026-01-11,Penjualan B2C,Makaroni Keju Premium,10,75000,150000,0,,1,Beli Langsung
+2026-01-12,Gaji Pegawai,,0,0,0,291538,operasional,0,Bayar Gaji Pegawai
+2026-01-13,Pesanan Grosir,Makaroni Keju Premium,8,60000,120000,0,,2,Sales E-Commerce
+2026-01-13,Penjualan B2C,Makaroni Bantet Balado,6,36000,72000,0,,3,Sales E-Commerce
+2026-01-13,E-Commerce,Basreng Pedas Daun Jeruk,1,12000,20000,0,,2,Beli Langsung
+2026-01-13,Penjualan B2C,Basreng Original Gurih,15,180000,300000,0,,3,Beli Langsung
+2026-01-14,Penjualan B2C,Makaroni Keju Premium,10,75000,150000,0,,2,Beli Langsung
+2026-01-14,Bahan Baku (Bogor),,0,0,0,534365,operasional,0,Bayar Bahan Baku (Bogor)
+2026-01-15,Penjualan B2C,Stik Keju Premium,3,39000,72000,0,,1,Beli Langsung
+2026-01-15,Penjualan B2C,Seblak Kering Pedas,3,25500,48000,0,,1,Beli Langsung
+2026-01-15,Pesanan Grosir,Mie Lidi Pedas Level 5,12,60000,120000,0,,1,Sales E-Commerce
+2026-01-15,E-Commerce,Usus Crispy Original,3,42000,66000,0,,3,Sales E-Commerce
+2026-01-16,Penjualan B2C,Keripik Kaca Original,15,150000,270000,0,,2,Sales E-Commerce
+2026-01-17,Pesanan Grosir,Basreng Pedas Daun Jeruk,4,48000,80000,0,,2,Beli Langsung
+2026-01-19,Penjualan B2C,Peyek Kacang Mini,1,8000,15000,0,,2,Sales E-Commerce
+2026-01-19,Pesanan Grosir,Kacang Umpet Karamel,15,165000,300000,0,,1,Sales E-Commerce
+2026-01-19,Pesanan Grosir,Emping Pedas Manis,2,36000,60000,0,,1,Sales E-Commerce
+2026-01-19,Pesanan Grosir,Sus Kering Cokelat Lumer,6,90000,150000,0,,3,Beli Langsung
+2026-01-20,Pesanan Grosir,Peyek Kacang Mini,9,72000,135000,0,,2,Sales E-Commerce
+2026-01-20,Pesanan Grosir,Mie Lidi Jagung Bakar,2,10000,20000,0,,3,Beli Langsung
+2026-01-21,Pesanan Grosir,Peyek Kacang Mini,4,32000,60000,0,,1,Beli Langsung
+2026-01-21,E-Commerce,Makaroni Bantet Balado,2,12000,24000,0,,3,Beli Langsung
+2026-01-21,Penjualan B2C,Usus Crispy Balado,4,56000,88000,0,,3,Sales E-Commerce
+2026-01-23,E-Commerce,Makaroni Bantet Balado,5,30000,60000,0,,1,Sales E-Commerce
+2026-01-23,Pesanan Grosir,Mie Lidi Pedas Level 5,3,15000,30000,0,,1,Sales E-Commerce
+2026-01-24,Penjualan B2C,Sus Kering Cokelat Lumer,15,225000,375000,0,,3,Beli Langsung
+2026-01-25,Pesanan Grosir,Keripik Singkong Balado,4,32000,60000,0,,1,Sales E-Commerce
+2026-01-25,Penjualan B2C,Stik Keju Premium,10,130000,240000,0,,2,Beli Langsung
+2026-01-25,Lainnya,,0,0,0,260896,lainnya,0,Bayar Lainnya
+2026-01-28,Penjualan B2C,Basreng Original Gurih,4,48000,80000,0,,3,Beli Langsung
+2026-01-28,E-Commerce,Usus Crispy Balado,15,210000,330000,0,,1,Sales E-Commerce
+2026-01-28,E-Commerce,Mie Lidi Jagung Bakar,5,25000,50000,0,,2,Sales E-Commerce
+2026-01-28,Gaji Pegawai,,0,0,0,389479,operasional,0,Bayar Gaji Pegawai
+2026-01-29,Penjualan B2C,Peyek Kacang Mini,2,16000,30000,0,,1,Beli Langsung
+2026-01-29,Pesanan Grosir,Kacang Umpet Karamel,1,11000,20000,0,,3,Sales E-Commerce
+2026-01-29,Pesanan Grosir,Usus Crispy Original,4,56000,88000,0,,2,Sales E-Commerce
+2026-01-30,Pesanan Grosir,Mie Lidi Jagung Bakar,9,45000,90000,0,,3,Beli Langsung
+2026-01-30,E-Commerce,Keripik Singkong Balado,6,48000,90000,0,,1,Sales E-Commerce
+2026-01-30,Pesanan Grosir,Keripik Singkong Original,1,8000,15000,0,,1,Sales E-Commerce
+2026-01-30,Bahan Kemasan (Pouch),,0,0,0,453141,modal,0,Restok Bahan Kemasan (Pouch)
+2026-01-31,Pesanan Grosir,Basreng Original Gurih,8,96000,160000,0,,2,Sales E-Commerce
+2026-01-31,E-Commerce,Stik Keju Premium,10,130000,240000,0,,1,Beli Langsung
+2026-01-31,Pesanan Grosir,Kacang Umpet Karamel,5,55000,100000,0,,1,Sales E-Commerce
+2026-01-31,Pesanan Grosir,Keripik Kaca Pedas Nampol,1,10000,18000,0,,3,Beli Langsung
+2026-02-01,E-Commerce,Makaroni Bantet Balado,10,60000,120000,0,,2,Beli Langsung
+2026-02-04,Pesanan Grosir,Usus Crispy Balado,4,56000,88000,0,,1,Sales E-Commerce
+2026-02-04,Penjualan B2C,Basreng Original Gurih,5,60000,100000,0,,2,Sales E-Commerce
+2026-02-04,Penjualan B2C,Peyek Kacang Mini,9,72000,135000,0,,1,Beli Langsung
+2026-02-04,Lainnya,,0,0,0,554091,lainnya,0,Bayar Lainnya
+2026-02-05,Bahan Kemasan (Pouch),,0,0,0,502305,modal,0,Restok Bahan Kemasan (Pouch)
+2026-02-07,Pesanan Grosir,Seblak Kering Original,4,34000,64000,0,,1,Beli Langsung
+2026-02-07,E-Commerce,Seblak Kering Original,6,51000,96000,0,,2,Sales E-Commerce
+2026-02-08,E-Commerce,Makaroni Bantet Balado,2,12000,24000,0,,3,Beli Langsung
+2026-02-08,Pesanan Grosir,Seblak Kering Pedas,6,51000,96000,0,,3,Beli Langsung
+2026-02-08,Bahan Baku (Bogor),,0,0,0,400070,operasional,0,Bayar Bahan Baku (Bogor)
+2026-02-09,Penjualan B2C,Seblak Kering Pedas,1,8500,16000,0,,2,Beli Langsung
+2026-02-09,Listrik & Air,,0,0,0,256208,operasional,0,Bayar Listrik & Air
+2026-02-10,Penjualan B2C,Seblak Kering Original,10,85000,160000,0,,2,Beli Langsung
+2026-02-10,Pesanan Grosir,Keripik Singkong Balado,6,48000,90000,0,,1,Beli Langsung
+2026-02-11,E-Commerce,Makaroni Keju Premium,9,67500,135000,0,,1,Beli Langsung
+2026-02-11,Bahan Baku (Bogor),,0,0,0,473578,operasional,0,Bayar Bahan Baku (Bogor)
+2026-02-12,Penjualan B2C,Makaroni Keju Premium,4,30000,60000,0,,2,Sales E-Commerce
+2026-02-12,Listrik & Air,,0,0,0,584425,operasional,0,Bayar Listrik & Air
+2026-02-13,Listrik & Air,,0,0,0,442162,operasional,0,Bayar Listrik & Air
+2026-02-14,Penjualan B2C,Basreng Original Gurih,9,108000,180000,0,,2,Sales E-Commerce
+2026-02-14,Pesanan Grosir,Seblak Kering Original,3,25500,48000,0,,2,Beli Langsung
+2026-02-14,Pesanan Grosir,Sus Kering Cokelat Lumer,8,120000,200000,0,,3,Beli Langsung
+2026-02-14,Bahan Kemasan (Pouch),,0,0,0,551225,modal,0,Restok Bahan Kemasan (Pouch)
+2026-02-15,Pesanan Grosir,Keripik Singkong Balado,15,120000,225000,0,,3,Sales E-Commerce
+2026-02-16,Pesanan Grosir,Seblak Kering Original,3,25500,48000,0,,3,Sales E-Commerce
+2026-02-16,Pesanan Grosir,Makaroni Keju Premium,4,30000,60000,0,,3,Sales E-Commerce
+2026-02-16,E-Commerce,Seblak Kering Pedas,1,8500,16000,0,,3,Beli Langsung
+2026-02-17,Pesanan Grosir,Mie Lidi Jagung Bakar,4,20000,40000,0,,2,Sales E-Commerce
+2026-02-17,E-Commerce,Emping Pedas Manis,6,108000,180000,0,,3,Sales E-Commerce
+2026-02-17,Penjualan B2C,Kacang Umpet Karamel,1,11000,20000,0,,3,Beli Langsung
+2026-02-17,Bahan Kemasan (Pouch),,0,0,0,432606,modal,0,Restok Bahan Kemasan (Pouch)
+2026-02-18,E-Commerce,Peyek Kacang Mini,10,80000,150000,0,,2,Sales E-Commerce
+2026-02-18,E-Commerce,Emping Pedas Manis,2,36000,60000,0,,1,Beli Langsung
+2026-02-19,Pesanan Grosir,Makaroni Bantet Balado,4,24000,48000,0,,2,Sales E-Commerce
+2026-02-19,Penjualan B2C,Usus Crispy Balado,9,126000,198000,0,,2,Sales E-Commerce
+2026-02-21,Penjualan B2C,Peyek Kacang Mini,5,40000,75000,0,,3,Sales E-Commerce
+2026-02-21,Pesanan Grosir,Basreng Original Gurih,3,36000,60000,0,,3,Beli Langsung
+2026-02-21,Lainnya,,0,0,0,276223,lainnya,0,Bayar Lainnya
+2026-02-22,E-Commerce,Keripik Kaca Pedas Nampol,12,120000,216000,0,,3,Beli Langsung
+2026-02-22,Iklan Olahh,,0,0,0,566359,operasional,0,Bayar Iklan Olahh
+2026-02-23,Penjualan B2C,Keripik Kaca Original,12,120000,216000,0,,1,Sales E-Commerce
+2026-02-23,E-Commerce,Seblak Kering Original,12,102000,192000,0,,1,Beli Langsung
+2026-02-24,Penjualan B2C,Keripik Kaca Pedas Nampol,2,20000,36000,0,,2,Beli Langsung
+2026-02-24,Bahan Kemasan (Pouch),,0,0,0,388441,modal,0,Restok Bahan Kemasan (Pouch)
+2026-02-26,Bahan Kemasan (Pouch),,0,0,0,424620,modal,0,Restok Bahan Kemasan (Pouch)
+2026-02-27,Pesanan Grosir,Usus Crispy Balado,6,84000,132000,0,,2,Sales E-Commerce
+2026-02-28,Penjualan B2C,Keripik Kaca Pedas Nampol,10,100000,180000,0,,3,Sales E-Commerce
+2026-02-28,Listrik & Air,,0,0,0,279054,operasional,0,Bayar Listrik & Air
+2026-03-01,Penjualan B2C,Keripik Kaca Original,12,120000,216000,0,,1,Beli Langsung
+2026-03-01,Iklan Olahh,,0,0,0,528663,operasional,0,Bayar Iklan Olahh
+2026-03-03,E-Commerce,Keripik Singkong Original,1,8000,15000,0,,3,Beli Langsung
+2026-03-04,Penjualan B2C,Sus Kering Cokelat Lumer,3,45000,75000,0,,2,Sales E-Commerce
+2026-03-04,Lainnya,,0,0,0,582916,lainnya,0,Bayar Lainnya
+2026-03-05,Lainnya,,0,0,0,407076,lainnya,0,Bayar Lainnya
+2026-03-06,Penjualan B2C,Kacang Umpet Karamel,12,132000,240000,0,,2,Sales E-Commerce
+2026-03-06,Bahan Kemasan (Pouch),,0,0,0,395597,modal,0,Restok Bahan Kemasan (Pouch)
+2026-03-07,E-Commerce,Mie Lidi Pedas Level 5,4,20000,40000,0,,2,Sales E-Commerce
+2026-03-08,E-Commerce,Mie Lidi Pedas Level 5,1,5000,10000,0,,1,Beli Langsung
+2026-03-08,Gaji Pegawai,,0,0,0,323683,operasional,0,Bayar Gaji Pegawai
+2026-03-09,Bahan Baku (Bogor),,0,0,0,545749,operasional,0,Bayar Bahan Baku (Bogor)
+2026-03-11,E-Commerce,Keripik Kaca Pedas Nampol,3,30000,54000,0,,3,Sales E-Commerce
+2026-03-11,Iklan Olahh,,0,0,0,594691,operasional,0,Bayar Iklan Olahh
+2026-03-12,E-Commerce,Mie Lidi Jagung Bakar,6,30000,60000,0,,3,Sales E-Commerce
+2026-03-13,Penjualan B2C,Seblak Kering Pedas,8,68000,128000,0,,1,Sales E-Commerce
+2026-03-13,Iklan Olahh,,0,0,0,471342,operasional,0,Bayar Iklan Olahh
+2026-03-14,Gaji Pegawai,,0,0,0,489921,operasional,0,Bayar Gaji Pegawai
+2026-03-15,Penjualan B2C,Usus Crispy Balado,15,210000,330000,0,,1,Sales E-Commerce
+2026-03-15,Iklan Olahh,,0,0,0,534624,operasional,0,Bayar Iklan Olahh
+2026-03-18,Iklan Olahh,,0,0,0,598351,operasional,0,Bayar Iklan Olahh
+2026-03-19,Penjualan B2C,Usus Crispy Balado,6,84000,132000,0,,2,Sales E-Commerce
+2026-03-19,Bahan Kemasan (Pouch),,0,0,0,284545,modal,0,Restok Bahan Kemasan (Pouch)
+2026-03-20,Bahan Kemasan (Pouch),,0,0,0,287975,modal,0,Restok Bahan Kemasan (Pouch)
+2026-03-21,Iklan Olahh,,0,0,0,524557,operasional,0,Bayar Iklan Olahh
+2026-03-23,Gaji Pegawai,,0,0,0,432555,operasional,0,Bayar Gaji Pegawai
+2026-03-24,Penjualan B2C,Sus Kering Cokelat Lumer,2,30000,50000,0,,3,Sales E-Commerce
+2026-03-25,Penjualan B2C,Keripik Kaca Pedas Nampol,3,30000,54000,0,,2,Sales E-Commerce

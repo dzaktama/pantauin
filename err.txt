@@ -1,0 +1,61 @@
+﻿python : C:\Users\Prasetyo 
+Aditomo\AppData\Local\Progr
+ams\Python\Python311\Lib\si
+te-packages\requests\__init
+__.py:113: 
+RequestsDependencyWarning: 
+urllib3 (2.6.3) or chardet 
+(7.0.1)/charset_normalizer 
+(3.4.5) doesn't match a 
+supported version!
+At line:1 char:84
++ ... err.txt; if 
+($LASTEXITCODE -ne 0) { 
+python migrate_db.py 2>&1 
+| Out-F ...
++                          
+               
+~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo         
+     : NotSpecified: (C:\  
+  Users\Praset...ported    
+ version!:String) [], R    
+emoteException
+    + FullyQualifiedErrorI 
+   d : NativeCommandError
+ 
+  warnings.warn(
+C:\laragon\www\PANTAUIN\gem
+ini_helper.py:3: 
+FutureWarning: 
+
+All support for the 
+`google.generativeai` 
+package has ended. It will 
+no longer be receiving 
+updates or bug fixes. 
+Please switch to the 
+`google.genai` package as 
+soon as possible.
+See README for more 
+details:
+
+https://github.com/google-g
+emini/deprecated-generative
+-ai-python/blob/main/README
+.md
+
+  import 
+google.generativeai as 
+genai
+Groq berhasil diinisialisasi
+Gemini Vision berhasil diinisialisasi
+Traceback (most recent 
+call last):
+  File "C:\laragon\www\PANT
+AUIN\migrate_db.py", line 
+1, in <module>
+    from app import app, db
+ImportError: cannot import 
+name 'app' from 'app' (C:\l
+aragon\www\PANTAUIN\app.py)

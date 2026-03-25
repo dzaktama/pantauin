@@ -286,6 +286,21 @@ def hitung_health_score(transaksi_list, periode_grafik=30):
     kustom_saldo = kustom_in - kustom_out_total
     hari_kustom = len({t.tanggal for t in t_kustom}) or 1
 
+    kustom_pelanggan = sum(getattr(t, 'jumlah_pelanggan', 0) or 0 for t in t_kustom)
+    kustom_aov = round(kustom_in / kustom_pelanggan) if kustom_pelanggan > 0 else 0
+    kustom_pengeluaran_kategori = defaultdict(float)
+    for t in t_kustom:
+        if t.pengeluaran > 0:
+            kat = getattr(t, 'kategori', 'Lainnya') or 'Lainnya'
+            kustom_pengeluaran_kategori[kat] += t.pengeluaran
+
+    sorted_kat = sorted(kustom_pengeluaran_kategori.items(), key=lambda x: x[1], reverse=True)
+    pie_labels = [k[0] for k in sorted_kat[:5]]
+    pie_data = [k[1] for k in sorted_kat[:5]]
+    if len(sorted_kat) > 5:
+        pie_labels.append("Lainnya")
+        pie_data.append(sum(k[1] for k in sorted_kat[5:]))
+
     ringkasan_kustom = {
         "periode_hari": periode_grafik,
         "total_pemasukan": kustom_in,
@@ -298,6 +313,10 @@ def hitung_health_score(transaksi_list, periode_grafik=30):
         "gross_margin": round(kustom_gm, 1),
         "jumlah_transaksi": len(t_kustom),
         "jumlah_hari_aktif": hari_kustom,
+        "jumlah_pelanggan": kustom_pelanggan,
+        "aov": kustom_aov,
+        "pie_labels": pie_labels,
+        "pie_data": pie_data,
     }
 
     return {
@@ -454,6 +473,7 @@ def analisis_tren_produk(transaksi_list):
     }
     
     return {
+        "semua_produk": [{"nama": p[0].title(), "total": p[1]} for p in sorted_produk],
         "top_3_terlaris": top_3_terlaris,
         "bottom_3_menurun": bottom_3_menurun,
         "advanced_analytics": advanced_analytics

@@ -9,7 +9,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from dotenv import load_dotenv
 
 from config import Config
-from models import db, User, Transaksi, BukuKas, ProfilPerusahaan
+from models import db, User, Transaksi, BukuKas, ProfilPerusahaan, AktivitasLog, AktivitasLog
 from forms import LoginForm, RegisterForm, TransaksiForm, BukuKasForm, UploadCSVForm, ProfilPerusahaanForm
 from flask_caching import Cache
 import json
@@ -84,6 +84,7 @@ def create_app(config_class=Config):
                 if user and user.check_password(form.password.data):
                     session['user_id'] = user.id
                     session['username'] = user.username
+                    log_activity(user.id, session.get('buku_kas_id'), f"Pengguna {user.username} berhasil login.", "Auth", "info")
                     flash(f"Halo kembali, {user.username}!", "success")
                     return redirect(url_for('dashboard'))
                 flash("Kredensial tidak cocok, silakan coba lagi.", "error")
@@ -132,6 +133,7 @@ def create_app(config_class=Config):
             bk = BukuKas(user_id=session['user_id'], nama_buku=form.nama_buku.data)
             db.session.add(bk)
             db.session.commit()
+            log_activity(session['user_id'], bk.id, f"Membuat buku kas baru: '{bk.nama_buku}'.", "BukuKas", "tambah")
             flash(f"Buku Kas '{bk.nama_buku}' berhasil dibuat!", "success")
             return redirect(url_for('buku_kas_manager'))
             
@@ -158,8 +160,10 @@ def create_app(config_class=Config):
         bk = BukuKas.query.filter_by(id=buku_id, user_id=session['user_id']).first_or_404()
         new_name = request.form.get('nama_buku_baru')
         if new_name and new_name.strip():
+            nama_lama = bk.nama_buku
             bk.nama_buku = new_name.strip()
             db.session.commit()
+            log_activity(session['user_id'], bk.id, f"Mengubah nama buku kas dari '{nama_lama}' menjadi '{bk.nama_buku}'.", "BukuKas", "ubah")
             flash(f"Nama buku berhasil diubah menjadi '{bk.nama_buku}'.", "success")
         else:
             flash("Nama buku tidak boleh kosong.", "error")
@@ -178,6 +182,7 @@ def create_app(config_class=Config):
         nama_buku = bk.nama_buku
         db.session.delete(bk)
         db.session.commit()
+        log_activity(session['user_id'], None, f"Menghapus secara permanen buku kas '{nama_buku}'.", "BukuKas", "hapus")
         
         if session.get('buku_kas_id') == buku_id:
             session.pop('buku_kas_id', None)
@@ -357,44 +362,92 @@ def create_app(config_class=Config):
         return render_template('profil_perusahaan.html', form=form, nama_buku=buku_aktif.nama_buku, profil=profil, dt_extr=dt_extr)
 
     @app.route('/input', methods=['GET', 'POST'])
+    @app.route('/input/<int:t_id>', methods=['GET', 'POST'])
     @login_required
-    def input_transaksi():
+    def input_transaksi(t_id=None):
         try:
             buku_kas_id = session.get('buku_kas_id')
             if not buku_kas_id: return redirect(url_for('buku_kas_manager'))
             
             form = TransaksiForm()
+            t = None
+            if t_id:
+                t = Transaksi.query.filter_by(id=t_id, buku_kas_id=buku_kas_id).first_or_404()
+            else:
+                t = Transaksi(user_id=session['user_id'], buku_kas_id=buku_kas_id)
+                
             if form.validate_on_submit():
-                t = Transaksi(
-                    user_id=session['user_id'],
-                    buku_kas_id=buku_kas_id,
-                    tanggal=form.tanggal.data,
-                    kategori=form.kategori.data,
-                    nama_produk=form.nama_produk.data if form.nama_produk.data else None,
-                    kuantitas=form.kuantitas.data,
-                    harga_modal=form.harga_modal.data,
-                    jenis_pengeluaran=form.jenis_pengeluaran.data,
-                    pemasukan=form.pemasukan.data,
-                    pengeluaran=form.pengeluaran.data,
-                    jumlah_pelanggan=form.jumlah_pelanggan.data,
-                    catatan=form.catatan.data if form.catatan.data else None
-                )
-                db.session.add(t)
+                t.tanggal = form.tanggal.data
+                t.kategori = form.kategori.data
+                t.nama_produk = form.nama_produk.data if form.nama_produk.data else None
+                t.kuantitas = form.kuantitas.data or 0
+                t.harga_modal = form.harga_modal.data or 0.0
+                t.jenis_pengeluaran = form.jenis_pengeluaran.data
+                t.pemasukan = form.pemasukan.data or 0.0
+                t.pengeluaran = form.pengeluaran.data or 0.0
+                t.jumlah_pelanggan = form.jumlah_pelanggan.data or 0
+                t.catatan = form.catatan.data if form.catatan.data else None
+                
+                if not t_id:
+                    db.session.add(t)
+                
                 db.session.commit()
-                # Invalidate cache
-                cache.delete(f"dashboard_bk_{buku_kas_id}_30_{datetime.now().strftime('%Y%m%d')}_v3")
-                cache.delete(f"dashboard_bk_{buku_kas_id}_60_{datetime.now().strftime('%Y%m%d')}_v3")
-                cache.delete(f"dashboard_bk_{buku_kas_id}_90_{datetime.now().strftime('%Y%m%d')}_v3")
-                cache.delete(f"saran_bk_{buku_kas_id}")
-                flash("Sip, Transaksi berhasil dicatat!", "success")
+                nom = t.pemasukan if t.pemasukan > 0 else t.pengeluaran
+                
+                if not t_id:
+                    log_activity(session['user_id'], buku_kas_id, f"Mencatat transaksi manual {t.kategori} sebesar Rp {nom:,.0f}.", "Transaksi", "tambah")
+                    flash("Sip, Transaksi berhasil dicatat!", "success")
+                else:
+                    log_activity(session['user_id'], buku_kas_id, f"Mengubah transaksi {t.kategori} sebesar Rp {nom:,.0f}.", "Transaksi", "ubah")
+                    flash("Transaksi berhasil diperbarui!", "success")
+                    
+                cache.clear()
+                
+                if t_id: # jika edit, kembalikan ke riwayat
+                    return redirect(url_for('riwayat'))
                 return redirect(url_for('input_transaksi'))
             
+            # GET mode
+            if request.method == 'GET' and t_id:
+                form.tanggal.data = t.tanggal
+                form.kategori.data = t.kategori
+                form.nama_produk.data = t.nama_produk
+                form.kuantitas.data = t.kuantitas
+                form.harga_modal.data = t.harga_modal
+                form.jenis_pengeluaran.data = t.jenis_pengeluaran
+                form.pemasukan.data = t.pemasukan
+                form.pengeluaran.data = t.pengeluaran
+                form.jumlah_pelanggan.data = t.jumlah_pelanggan
+                form.catatan.data = t.catatan
+            
             # Ambil Riwayat 15 Transaksi Terakhir untuk Tabel Transparansi
-            riwayat = Transaksi.query.filter_by(buku_kas_id=buku_kas_id).order_by(Transaksi.tanggal.desc()).limit(15).all()
-            return render_template('input.html', form=form, riwayat=riwayat)
-        except Exception:
+            riwayat_trx = Transaksi.query.filter_by(buku_kas_id=buku_kas_id).order_by(Transaksi.tanggal.desc()).limit(15).all()
+            return render_template('input.html', form=form, riwayat=riwayat_trx, edit_mode=bool(t_id), t_id=t_id)
+        except Exception as e:
             db.session.rollback()
+            print(f"Error input: {e}")
             return render_template('error.html', pesan="Gagal menyimpan/memuat transaksi manual."), 500
+
+    @app.route('/transaksi/delete/<int:t_id>', methods=['POST'])
+    @login_required
+    def hapus_transaksi(t_id):
+        buku_kas_id = session.get('buku_kas_id')
+        if not buku_kas_id: return jsonify({"error": "Pilih buku kas"}), 400
+        
+        t = Transaksi.query.filter_by(id=t_id, buku_kas_id=buku_kas_id).first_or_404()
+        try:
+            nom = t.pemasukan if t.pemasukan > 0 else t.pengeluaran
+            kat = t.kategori
+            db.session.delete(t)
+            db.session.commit()
+            log_activity(session['user_id'], buku_kas_id, f"Menghapus transaksi {kat} sebesar Rp {nom:,.0f}.", "Transaksi", "hapus")
+            cache.clear()
+            flash("Transaksi berhasil dihapus.", "success")
+            return redirect(url_for('riwayat'))
+        except Exception as e:
+            db.session.rollback()
+            flash("Gagal menghapus transaksi.", "error")
+            return redirect(url_for('riwayat'))
 
     @app.route('/api/scan-struk', methods=['POST'])
     @login_required
@@ -429,8 +482,21 @@ def create_app(config_class=Config):
             if not buku_kas_id: return redirect(url_for('buku_kas_manager'))
             
             q = request.args.get('q', '').strip()
+            start_date = request.args.get('start_date', '')
+            end_date = request.args.get('end_date', '')
+            jenis = request.args.get('jenis', '')
+            
             query = Transaksi.query.filter_by(buku_kas_id=buku_kas_id)
             
+            if start_date:
+                query = query.filter(Transaksi.tanggal >= start_date)
+            if end_date:
+                query = query.filter(Transaksi.tanggal <= end_date)
+            if jenis == 'masuk':
+                query = query.filter(Transaksi.pemasukan > 0)
+            elif jenis == 'keluar':
+                query = query.filter(Transaksi.pengeluaran > 0)
+                
             if q:
                 query = query.filter(db.or_(
                     Transaksi.catatan.ilike(f"%{q}%"),
@@ -438,7 +504,34 @@ def create_app(config_class=Config):
                     Transaksi.nama_produk.ilike(f"%{q}%")
                 ))
             
-            transaksi_list_tampil = query.order_by(Transaksi.tanggal.desc()).all()
+            # For running balance, order ASC first
+            trxs = query.order_by(Transaksi.tanggal.asc(), Transaksi.id.asc()).all()
+            
+            saldo = 0
+            for t in trxs:
+                saldo += t.pemasukan
+                saldo -= t.pengeluaran
+                t.saldo_berjalan = saldo
+                
+            # Reverse for display (Newest first)
+            transaksi_list_tampil_all = list(reversed(trxs))
+
+            # --- PAGINATION LOGIC ---
+            per_page = request.args.get('per_page', 50, type=int)
+            page = request.args.get('page', 1, type=int)
+            
+            total_items = len(transaksi_list_tampil_all)
+            from math import ceil
+            total_pages = ceil(total_items / per_page) if total_items > 0 else 1
+            
+            if page < 1: page = 1
+            if page > total_pages: page = total_pages
+            
+            start_idx = (page - 1) * per_page
+            end_idx = start_idx + per_page
+            transaksi_list_tampil = transaksi_list_tampil_all[start_idx:end_idx]
+            
+            page_range = range(max(1, page - 2), min(total_pages + 1, page + 3))
 
             cache_key = f"dashboard_bk_{buku_kas_id}_30_{datetime.now().strftime('%Y%m%d')}_v3"
             data = cache.get(cache_key)
@@ -447,9 +540,26 @@ def create_app(config_class=Config):
                 data = hitung_health_score(transaksi_list_all, periode_grafik=30)
                 cache.set(cache_key, data)
             
-            return render_template('riwayat.html', transaksi_list=transaksi_list_tampil, data=data)
+            return render_template('riwayat.html', transaksi_list=transaksi_list_tampil, data=data,
+                                   start_date=start_date, end_date=end_date, jenis=jenis, q=q,
+                                   page=page, per_page=per_page, total_pages=total_pages, total_items=total_items, page_range=page_range)
         except Exception as e:
+            import traceback
+            traceback.print_exc()
             return render_template('error.html', pesan=f"Gagal memuat halaman master data. Detail: {str(e)}"), 500
+
+    @app.route('/log-aktivitas', methods=['GET'])
+    @login_required
+    def log_aktivitas():
+        try:
+            buku_kas_id = session.get('buku_kas_id')
+            query = AktivitasLog.query.filter_by(user_id=session['user_id'])
+            if buku_kas_id:
+                query = query.filter(db.or_(AktivitasLog.buku_kas_id == buku_kas_id, AktivitasLog.buku_kas_id == None))
+            logs = query.order_by(AktivitasLog.waktu.desc()).limit(100).all()
+            return render_template('log_aktivitas.html', logs=logs)
+        except Exception as e:
+            return render_template('error.html', pesan=f"Gagal memuat log aktivitas. {str(e)}"), 500
 
     @app.route('/upload', methods=['GET', 'POST'])
     @login_required
@@ -490,6 +600,7 @@ def create_app(config_class=Config):
                                 kategori=row.get('kategori', 'Lainnya'),
                                 nama_produk=row.get('nama_produk') or None,
                                 kuantitas=int(row.get('kuantitas') or 0),
+                                harga_modal=float(row.get('harga_modal') or 0),
                                 jenis_pengeluaran=row.get('jenis_pengeluaran', 'operasional').lower() if row.get('jenis_pengeluaran') else 'operasional',
                                 pemasukan=float(row.get('pemasukan') or 0),
                                 pengeluaran=float(row.get('pengeluaran') or 0),
@@ -512,8 +623,10 @@ def create_app(config_class=Config):
                 
                 if gagal:
                     flash(f"Berhasil memuat {sukses} baris. Gagal pada baris: {', '.join(gagal)}", "warning")
+                    log_activity(session['user_id'], buku_kas_id, f"Mengimpor CSV ({sukses} sukses, {len(gagal)} gagal).", "Transaksi", "tambah")
                 else:
                     flash(f"Berhasil menggabungkan {sukses} baris transaksi ke Buku Kas ini.", "success")
+                    log_activity(session['user_id'], buku_kas_id, f"Mengimpor CSV secara penuh ({sukses} baris).", "Transaksi", "tambah")
                 return redirect(url_for('dashboard'))
 
             return render_template('upload.html', form=form)
@@ -595,9 +708,9 @@ def create_app(config_class=Config):
             if not buku_kas_id: return jsonify({"error": "Pilih buku kas terlebih dahulu."}), 400
             
             req = request.get_json()
-            persen_umum = min(max(_safe_float(req.get('penurunan_persen', 0)), 0), 100) / 100
-            persen_hpp = min(max(_safe_float(req.get('kenaikan_hpp', 0)), 0), 100) / 100
-            persen_opex = min(max(_safe_float(req.get('kenaikan_opex', 0)), 0), 100) / 100
+            persen_umum = min(max(_safe_float(req.get('perubahan_penjualan', 0)), -500), 500) / 100
+            persen_hpp = min(max(_safe_float(req.get('perubahan_hpp', 0)), -100), 500) / 100
+            persen_opex = min(max(_safe_float(req.get('perubahan_opex', 0)), -100), 500) / 100
             periode = int(_safe_float(req.get('periode', 7)))
             
             # --- Query transaksi sesuai periode ---
@@ -645,21 +758,21 @@ def create_app(config_class=Config):
             # Rata-rata per hari untuk kalkulasi bertahan
             avg_pengeluaran_harian = total_pengeluaran / hari_aktif if hari_aktif > 0 else 0
 
-            # --- Kalkulasi Stress ---
-            in_baru = total_pemasukan * (1 - persen_umum)
+            # --- Kalkulasi Forecasting ---
+            in_baru = total_pemasukan * (1 + persen_umum)
             
-            # Stress per produk
+            # Forecasting per produk
             for k, v in req.items():
-                if k.startswith('persen_turun_produk_'):
-                    nama_produk = k.replace('persen_turun_produk_', '').lower()
-                    persen_turun = float(v) / 100
+                if k.startswith('persen_produk_'):
+                    nama_produk = k.replace('persen_produk_', '').lower()
+                    perubahan_persen = float(v) / 100
                     pemasukan_produk = sum(t.pemasukan for t in t_periode if t.nama_produk and t.nama_produk.lower() == nama_produk)
-                    in_baru -= (pemasukan_produk * persen_turun)
+                    in_baru += (pemasukan_produk * perubahan_persen)
             
             in_baru = max(0, in_baru)
             
-            modal_baru = total_modal * (1 + persen_hpp)
-            opex_baru = total_operasional * (1 + persen_opex)
+            modal_baru = max(0, total_modal * (1 + persen_hpp))
+            opex_baru = max(0, total_operasional * (1 + persen_opex))
             
             if total_pengeluaran == 0:
                 out_baru = 0
@@ -695,12 +808,14 @@ def create_app(config_class=Config):
             )
             if is_default:
                 saran = f"Kondisi stabil berdasarkan {jumlah_trx} transaksi ({hari_aktif} hari aktif)."
-            elif persen_umum >= 1.0:
+            elif persen_umum <= -1.0:
                 saran = "Anda mensimulasikan SHUTDOWN total penjualan. Tidak ada pemasukan sama sekali."
+            elif persen_umum > 0.5 or (saldo_baru > saldo_asli * 1.5):
+                saran = f"Proyeksi Pertumbuhan! Pastikan kapasitas produksi dan bahan baku siap untuk lonjakan pesanan."
             elif saldo_baru >= 0:
-                saran = f"Status {status_bisnis}. Masih ada margin untung Rp {int(saldo_baru):,}. BEP di {bep_persen:.0f}% kapasitas.".replace(',', '.')
+                saran = f"Status {status_bisnis}. Laba bersih Rp {int(saldo_baru):,}. BEP di {bep_persen:.0f}% kapasitas.".replace(',', '.')
             else:
-                saran = f"RUGI Rp {int(abs(saldo_baru)):,}! Dana cadangan bertahan ±{hari_bertahan} hari.".replace(',', '.')
+                saran = f"RUGI Rp {int(abs(saldo_baru)):,}! Dana cadangan riil bertahan ±{hari_bertahan} hari.".replace(',', '.')
             
             result = {
                 "pemasukan_baru": round(in_baru),
@@ -736,18 +851,28 @@ def create_app(config_class=Config):
         try:
             req = request.get_json()
             data = req.get('data', {})
+            penjualan_val = float(req.get('penurunan', 0))
+            hpp_val = float(req.get('hpp_naik', 0))
+            opex_val = float(req.get('opex_naik', 0))
             
-            prompt = f"""Analisis singkat stress test bisnis UMKM ini dalam 3-4 kalimat:
-- Skenario: Penjualan turun {req.get('penurunan', 0)}%, HPP naik {req.get('hpp_naik', 0)}%, Opex naik {req.get('opex_naik', 0)}%
-- Pemasukan setelah stress: Rp {int(data.get('pemasukan_baru', 0)):,}
-- Saldo setelah stress: Rp {int(data.get('saldo_baru', 0)):,}
-- Gross Margin: {data.get('gross_margin', 0)}%
-- BEP: {data.get('bep_persen', 0)}%
-- Hari bertahan: {data.get('hari_bertahan', 0)} hari
-- Status: {data.get('status_bisnis', '-')}
+            str_penj = f"Naik {penjualan_val}%" if penjualan_val > 0 else (f"Turun {abs(penjualan_val)}%" if penjualan_val < 0 else "Tetap")
+            str_hpp = f"Naik {hpp_val}%" if hpp_val > 0 else (f"Turun {abs(hpp_val)}%" if hpp_val < 0 else "Tetap")
+            str_opex = f"Naik {opex_val}%" if opex_val > 0 else (f"Turun {abs(opex_val)}%" if opex_val < 0 else "Tetap")
+            
+            jenis_skenario = "Kritis/Resesi" if penjualan_val < 0 or hpp_val > 0 or opex_val > 0 else "Pertumbuhan/Ekspansi"
 
-Berikan analisis risiko singkat dan sarankan strategi taktis.
-PENTING: Buatlah khusus dalam bentuk tabel evaluasi taktis (Kolom 1: Area Fokus, Kolom 2: Kondisi Saat Ini, Kolom 3: Solusi Konkret). Format harus pakai syntax Tabel Markdown yang rapi.
+            prompt = f"""Analisis singkat skenario proyeksi What-If bisnis UMKM ini dalam 3-4 kalimat:
+- Skenario Utama: {jenis_skenario}
+- Konfigurasi Simulasi: Penjualan {str_penj}, HPP {str_hpp}, Opex {str_opex}
+- Laba Bersih Setelah Proyeksi: Rp {int(data.get('saldo_baru', 0)):,}
+- Pemasukan Setelah Proyeksi: Rp {int(data.get('pemasukan_baru', 0)):,}
+- Gross Margin Proyeksi: {data.get('gross_margin', 0)}%
+- BEP Target: {data.get('bep_persen', 0)}%
+- Hari bertahan kas riil: {data.get('hari_bertahan', 0)} hari
+- Status Akhir: {data.get('status_bisnis', '-')}
+
+Berikan analisis performa singkat dan sarankan strategi taktis pengembangan (jika skenario positif/untung besar beri solusi manajemen kapasitas & ekspansi, jika skenario negatif/rugi beri solusi ketahanan/survival).
+PENTING: Buatlah khusus dalam bentuk tabel evaluasi taktis (Kolom 1: Area Fokus, Kolom 2: Analisis Saat Ini, Kolom 3: Tindakan/Solusi). Format harus pakai syntax Tabel Markdown yang rapi.
 """.replace(',', '.')
             
             from gemini_helper import _chat, groq_client

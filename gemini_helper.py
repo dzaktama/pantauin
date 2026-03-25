@@ -263,19 +263,29 @@ def get_simulator_chat_response(pesan_user, data):
     if not groq_client:
         return "maaf ya, sistem ai nya belum aktif karena kuncinya belum dipasang"
     try:
+        penjualan_val = float(data.get('penurunan', 0))
+        hpp_val = float(data.get('hpp_naik', 0))
+        opex_val = float(data.get('opex_naik', 0))
+        
+        str_penj = f"Naik {penjualan_val}%" if penjualan_val > 0 else (f"Turun {abs(penjualan_val)}%" if penjualan_val < 0 else "Tetap")
+        str_hpp = f"Naik {hpp_val}%" if hpp_val > 0 else (f"Turun {abs(hpp_val)}%" if hpp_val < 0 else "Tetap")
+        str_opex = f"Naik {opex_val}%" if opex_val > 0 else (f"Turun {abs(opex_val)}%" if opex_val < 0 else "Tetap")
+        
+        jenis_skenario = "Kritis/Resesi" if penjualan_val < 0 or hpp_val > 0 or opex_val > 0 else "Pertumbuhan Ekspansif"
+
         prompt = f"""
-Jawab pertanyaan lanjutan dari user ini berdasarkan hasil simulasi skenario risiko berikut:
-- Skenario Stress: Penjualan turun {data.get('penurunan', 0)}%, HPP naik {data.get('hpp_naik', 0)}%, Opex naik {data.get('opex_naik', 0)}%
-- Pemasukan Baru: Rp {format_rp(data.get('data', {}).get('pemasukan_baru', 0))}
-- Pengeluaran Baru: Rp {format_rp(data.get('data', {}).get('pengeluaran_baru', 0))}
-- Saldo Baru: Rp {format_rp(data.get('data', {}).get('saldo_baru', 0))}
+Jawab pertanyaan lanjutan dari user ini berdasarkan hasil simulasi proyeksi bisnis ({jenis_skenario}) berikut:
+- Konfigurasi Simulasi: Penjualan {str_penj}, HPP {str_hpp}, Opex {str_opex}
+- Pemasukan Baru Proyeksi: Rp {format_rp(data.get('data', {}).get('pemasukan_baru', 0))}
+- Pengeluaran Baru Proyeksi: Rp {format_rp(data.get('data', {}).get('pengeluaran_baru', 0))}
+- Saldo Laba Bersih Baru: Rp {format_rp(data.get('data', {}).get('saldo_baru', 0))}
 - Status Bisnis: {data.get('data', {}).get('status_bisnis', '-')}
 - Gross Margin: {data.get('data', {}).get('gross_margin', 0)}%
-- Ketahanan: {data.get('data', {}).get('hari_bertahan', 0)} hari
+- Ketahanan Kas Riil: {data.get('data', {}).get('hari_bertahan', 0)} hari
 
 Pertanyaan user: "{pesan_user}"
 
-PENTING: Jika pengguna meminta saran atau strategi kelanjutan, sajikan dalam format Tabel Markdown dengan 3 kolom: Area Fokus, Kondisi Saat Ini, dan Solusi Taktis.
+PENTING: Jika pengguna meminta saran atau strategi operasional lanjutan, sajikan dalam format Tabel Markdown dengan 3 kolom: Area Fokus, Kondisi Saat Ini, dan Solusi Taktis. Jika simulasi berstatus Pertumbuhan Ekspansif, berikan solusi manajemen kapasitas, investasi, dan kelola operasional tambahan, bukan mode bertahan hidup.
         """
         return _chat(prompt, max_tokens=600)
     except Exception as e:

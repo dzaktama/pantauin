@@ -66,15 +66,39 @@
 <div class="card summary-card p-4">
     <!-- Form Pencarian Live Search -->
     <div class="mb-4">
-        <div class="row g-2">
-            <div class="col-md-12">
-                <div class="input-group input-group-lg shadow-sm">
+        <form method="GET" action="{{ url_for('riwayat') }}" class="row g-2 align-items-center">
+            <div class="col-md-2">
+                <input type="date" name="start_date" class="form-control" value="{{ start_date }}" title="Mulai Tanggal">
+            </div>
+            <div class="col-md-2">
+                <input type="date" name="end_date" class="form-control" value="{{ end_date }}" title="Sampai Tanggal">
+            </div>
+            <div class="col-md-2">
+                <select name="jenis" class="form-select">
+                    <option value="">Semua Jenis</option>
+                    <option value="masuk" {% if jenis == 'masuk' %}selected{% endif %}>Pemasukan (+)</option>
+                    <option value="keluar" {% if jenis == 'keluar' %}selected{% endif %}>Pengeluaran (-)</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <div class="input-group">
                     <span class="input-group-text bg-white text-primary border-end-0"><i class="bi bi-search"></i></span>
-                    <input type="text" id="searchInput" class="form-control border-start-0"
-                        placeholder="Ketik untuk mencari cepat (Kategori, Nama Produk, dll)..." onkeyup="filterTable()">
+                    <input type="text" name="q" id="searchInput" class="form-control border-start-0"
+                        placeholder="Cari sesuatu..." value="{{ q }}" onkeyup="filterTable()">
                 </div>
             </div>
-        </div>
+            <div class="col-md-2">
+                <select name="per_page" class="form-select" onchange="this.form.submit()" title="Jumlah Baris per Halaman">
+                    <option value="10" {% if per_page == 10 %}selected{% endif %}>10 Baris</option>
+                    <option value="50" {% if per_page == 50 %}selected{% endif %}>50 Baris</option>
+                    <option value="100" {% if per_page == 100 %}selected{% endif %}>100 Baris</option>
+                    <option value="500" {% if per_page == 500 %}selected{% endif %}>500 Baris</option>
+                </select>
+            </div>
+            <div class="col-md-1">
+                <button type="submit" class="btn btn-primary w-100 shadow-sm" title="Terapkan Filter"><i class="bi bi-funnel-fill"></i></button>
+            </div>
+        </form>
     </div>
 
     <!-- Tabel Data Utama -->
@@ -93,6 +117,8 @@
                     <th class="py-3" style="color:#f59e0b;">Margin%</th>
                     <th class="py-3" title="Jumlah Pelanggan"><i class="bi bi-people-fill"></i></th>
                     <th class="py-3 text-start">Catatan</th>
+                    <th class="py-3 text-primary">Saldo Berjalan</th>
+                    <th class="py-3">Aksi</th>
                 </tr>
             </thead>
             <tbody>
@@ -140,8 +166,15 @@
                         {% endif %}
                     </td>
                     <td class="text-muted">{{ row.jumlah_pelanggan if row.jumlah_pelanggan > 0 else '-' }}</td>
-                    <td class="text-start text-muted small" style="min-width: 250px;">
+                    <td class="text-start text-muted small" style="min-width: 200px;">
                         {{ row.catatan if row.catatan else '-' }}
+                    </td>
+                    <td class="fw-bold text-primary js-rupiah" data-val="{{ row.saldo_berjalan }}">0</td>
+                    <td>
+                        <div class="d-flex justify-content-center gap-1">
+                            <a href="{{ url_for('input_transaksi', t_id=row.id) }}" class="btn btn-sm btn-outline-warning" title="Edit Transaksi"><i class="bi bi-pencil-square"></i></a>
+                            <button type="button" class="btn btn-sm btn-outline-danger" title="Hapus Transaksi" onclick="hapusTrx({{ row.id }})"><i class="bi bi-trash"></i></button>
+                        </div>
                     </td>
                 </tr>
                 {% endfor %}
@@ -162,9 +195,69 @@
             </tbody>
         </table>
     </div>
+    
+    <!-- Bagian Pagination -->
+    {% if total_pages is defined and total_pages > 1 %}
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mt-4 gap-3">
+        <span class="text-muted small">Menampilkan halaman <strong class="text-dark">{{ page }}</strong> dari <strong class="text-dark">{{ total_pages }}</strong> (Total: {{ total_items }} baris)</span>
+        <nav aria-label="Page navigation">
+            <ul class="pagination pagination-sm mb-0 shadow-sm">
+                <!-- Tombol Prev -->
+                <li class="page-item {% if page <= 1 %}disabled{% endif %}">
+                    <a class="page-link" href="{{ url_for('riwayat', page=page-1, per_page=per_page, start_date=start_date, end_date=end_date, jenis=jenis, q=q) }}">Prev</a>
+                </li>
+                
+                <!-- Nomor Halaman -->
+                {% for p in page_range %}
+                <li class="page-item {% if p == page %}active{% endif %}">
+                    <a class="page-link" href="{{ url_for('riwayat', page=p, per_page=per_page, start_date=start_date, end_date=end_date, jenis=jenis, q=q) }}">{{ p }}</a>
+                </li>
+                {% endfor %}
+                
+                <!-- Tombol Next -->
+                <li class="page-item {% if page >= total_pages %}disabled{% endif %}">
+                    <a class="page-link" href="{{ url_for('riwayat', page=page+1, per_page=per_page, start_date=start_date, end_date=end_date, jenis=jenis, q=q) }}">Next</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+    {% elif total_items is defined and total_items > 0 %}
+    <div class="mt-4 text-muted small text-end">
+        Menampilkan semua <strong class="text-dark">{{ total_items }}</strong> baris riwayat.
+    </div>
+    {% endif %}
+</div>
+
+<!-- Modal Konfirmasi Hapus -->
+<div class="modal fade" id="deleteTrxModal" tabindex="-1" aria-labelledby="deleteTrxLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fw-bold text-danger" id="deleteTrxLabel"><i class="bi bi-exclamation-triangle-fill me-2"></i>Hapus Transaksi?</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Apakah Anda yakin ingin menghapus catatan transaksi ini? Aksi ini akan mempengaruhi Laporan dan Saldo Berjalan Anda secara permanen.
+            </div>
+            <div class="modal-footer border-0">
+                <form id="deleteTrxForm" method="POST" action="">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button type="button" class="btn btn-light fw-bold" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-danger fw-bold shadow-sm">Ya, Hapus Permanen</button>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
+function hapusTrx(id) {
+    const form = document.getElementById('deleteTrxForm');
+    form.action = `/transaksi/delete/${id}`;
+    const modal = new bootstrap.Modal(document.getElementById('deleteTrxModal'));
+    modal.show();
+}
+
 function filterTable() {
     let input = document.getElementById("searchInput");
     let filter = input.value.toLowerCase();

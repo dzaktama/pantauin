@@ -3,12 +3,35 @@ import random
 from datetime import date, timedelta
 
 # Profil Perusahaan
-PRODUK = ["Olah Balado", "Olah Original"]
+PRODUK_INFO = {
+    "Keripik Singkong Balado": {"jual": 15000, "modal": 8000},
+    "Keripik Singkong Original": {"jual": 15000, "modal": 8000},
+    "Basreng Pedas Daun Jeruk": {"jual": 20000, "modal": 12000},
+    "Basreng Original Gurih": {"jual": 20000, "modal": 12000},
+    "Makaroni Bantet Balado": {"jual": 12000, "modal": 6000},
+    "Makaroni Keju Premium": {"jual": 15000, "modal": 7500},
+    "Keripik Kaca Pedas Nampol": {"jual": 18000, "modal": 10000},
+    "Keripik Kaca Original": {"jual": 18000, "modal": 10000},
+    "Usus Crispy Balado": {"jual": 22000, "modal": 14000},
+    "Usus Crispy Original": {"jual": 22000, "modal": 14000},
+    "Mie Lidi Pedas Level 5": {"jual": 10000, "modal": 5000},
+    "Mie Lidi Jagung Bakar": {"jual": 10000, "modal": 5000},
+    "Seblak Kering Pedas": {"jual": 16000, "modal": 8500},
+    "Seblak Kering Original": {"jual": 16000, "modal": 8500},
+    "Pilus Cikur Pedas": {"jual": 14000, "modal": 7000},
+    "Sus Kering Cokelat Lumer": {"jual": 25000, "modal": 15000},
+    "Kacang Umpet Karamel": {"jual": 20000, "modal": 11000},
+    "Stik Keju Premium": {"jual": 24000, "modal": 13000},
+    "Emping Pedas Manis": {"jual": 30000, "modal": 18000},
+    "Peyek Kacang Mini": {"jual": 15000, "modal": 8000}
+}
+PRODUK = list(PRODUK_INFO.keys())
+
 KATEGORI_IN = ["Penjualan B2C", "Pesanan Grosir", "E-Commerce"]
 KATEGORI_OUT = ["Bahan Kemasan (Pouch)", "Bahan Baku (Bogor)", "Listrik & Air", "Gaji Pegawai", "Iklan Olahh", "Lainnya"]
 
 # Setup Waktu: 3 bulan terakhir (90 hari)
-tanggal_akhir = date(2026, 3, 24)
+tanggal_akhir = date.today()
 tanggal_awal = tanggal_akhir - timedelta(days=90)
 rentang_hari = (tanggal_akhir - tanggal_awal).days
 
@@ -47,8 +70,8 @@ def generate_csv(filename, scenario):
             for _ in range(qty_trx):
                 prod = random.choice(PRODUK)
                 qty = random.randint(1, 5) * random.randint(1, 3)
-                harga_jual_satuan = 25000 if prod == "Olah Balado" else 20000
-                harga_modal_satuan = 8000 if prod == "Olah Balado" else 7500
+                harga_jual_satuan = PRODUK_INFO[prod]['jual']
+                harga_modal_satuan = PRODUK_INFO[prod]['modal']
                 total_in = qty * harga_jual_satuan
                 data.append({
                     "tanggal": hari_ini.strftime("%Y-%m-%d"),
@@ -64,9 +87,6 @@ def generate_csv(filename, scenario):
                 })
         
         # Pengeluaran Operasional & Modal
-        # Bagus: Opex kecil terukur (20% dari estimasi income)
-        # Sedang: Opex lumayan besar (60% dari estimasi income)
-        # Jelek: Opex barbar tiap hari (> 90% income)
         if scenario == 'bagus':
             prob_out = 0.2
             biaya_range = (50000, 150000)

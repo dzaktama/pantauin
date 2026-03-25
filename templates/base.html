@@ -65,6 +65,11 @@
                         href="{{ url_for('edit_profil_perusahaan') }}">
                         <i class="bi bi-briefcase-fill fs-5 me-3"></i> Profil Usaha
                     </a>
+                </li>
+                <li class="nav-item mb-1">
+                    <a class="nav-link {% if request.endpoint == 'log_aktivitas' %}active{% endif %}"
+                        href="{{ url_for('log_aktivitas') }}">
+                        <i class="bi bi-shield-check fs-5 me-3"></i> Log Aktivitas
                     </a>
                 </li>
                 <li class="nav-item mb-1 mt-4 px-3">
