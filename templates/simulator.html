@@ -83,6 +83,21 @@
                     <button class="period-btn" data-periode="14">14 Hari</button>
                     <button class="period-btn active" data-periode="30">30 Hari</button>
                     <button class="period-btn" data-periode="0">Semua</button>
+                    <button class="period-btn" data-periode="custom" id="btnCustomPeriod">Kustom</button>
+                </div>
+                <!-- Input Custom Date -->
+                <div class="d-none mt-3 p-3 bg-light rounded border" id="customDateContainer">
+                    <div class="d-flex gap-2 mb-2">
+                        <div class="flex-grow-1">
+                            <label class="form-label small text-muted mb-1 fw-bold">Dari Tanggal</label>
+                            <input type="date" class="form-control form-control-sm" id="simStartDate">
+                        </div>
+                        <div class="flex-grow-1">
+                            <label class="form-label small text-muted mb-1 fw-bold">Sampai Tanggal</label>
+                            <input type="date" class="form-control form-control-sm" id="simEndDate">
+                        </div>
+                    </div>
+                    <button class="btn btn-sm btn-primary w-100" id="applyCustomDateBtn">Terapkan Rentang Waktu</button>
                 </div>
                 <small class="text-muted d-block">
                     <i class="bi bi-info-circle me-1"></i>
@@ -373,6 +388,8 @@
         const produkContainer = document.getElementById("produkSliderContainer");
         let debounceTimer;
         let currentPeriode = 30;
+        let start_date_custom = "";
+        let end_date_custom = "";
         let lastSimData = null;
         
         // ==========================================
@@ -511,7 +528,9 @@
                 perubahan_penjualan: valUmum,
                 perubahan_hpp: valHpp,
                 perubahan_opex: valOpex,
-                periode: currentPeriode
+                periode: currentPeriode,
+                start_date: start_date_custom,
+                end_date: end_date_custom
             };
             
             produkContainer.querySelectorAll('.prod-slider').forEach(sl => {
@@ -599,15 +618,44 @@
         };
 
         // --- Period buttons ---
+        const customDateContainer = document.getElementById('customDateContainer');
+        const inputStartDate = document.getElementById('simStartDate');
+        const inputEndDate = document.getElementById('simEndDate');
+        
         document.querySelectorAll('.period-btn').forEach(btn => {
             btn.addEventListener('click', function() {
                 document.querySelectorAll('.period-btn').forEach(b => b.classList.remove('active'));
                 this.classList.add('active');
-                currentPeriode = parseInt(this.getAttribute('data-periode'), 10);
-                const labels = {0: 'Semua', 7: '7 Hari', 14: '14 Hari', 30: '30 Hari'};
-                badgePeriod.innerText = labels[currentPeriode] || currentPeriode + ' Hari';
-                debouncedHitung();
+                
+                const val = this.getAttribute('data-periode');
+                if (val === 'custom') {
+                    customDateContainer.classList.remove('d-none');
+                    currentPeriode = 'custom';
+                } else {
+                    customDateContainer.classList.add('d-none');
+                    currentPeriode = parseInt(val, 10);
+                    start_date_custom = "";
+                    end_date_custom = "";
+                    const labels = {0: 'Semua', 7: '7 Hari', 14: '14 Hari', 30: '30 Hari'};
+                    badgePeriod.innerText = labels[currentPeriode] || currentPeriode + ' Hari';
+                    debouncedHitung();
+                }
             });
+        });
+
+        document.getElementById('applyCustomDateBtn').addEventListener('click', function() {
+            if (!inputStartDate.value || !inputEndDate.value) {
+                alert("Harap isi rentang tanggal dengan lengkap.");
+                return;
+            }
+            if (inputStartDate.value > inputEndDate.value) {
+                alert("Tanggal mulai tidak boleh lebih besar dari tanggal akhir.");
+                return;
+            }
+            start_date_custom = inputStartDate.value;
+            end_date_custom = inputEndDate.value;
+            badgePeriod.innerText = start_date_custom + " s/d " + end_date_custom;
+            debouncedHitung();
         });
 
         // --- Preset buttons ---

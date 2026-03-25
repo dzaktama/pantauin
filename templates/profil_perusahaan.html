@@ -115,30 +115,56 @@
                 <hr class="text-muted my-4">
                 <h6 class="text-uppercase fw-bold text-muted small mb-3">Perizinan & SDM</h6>
 
-                <div class="row g-4">
-                    <div class="col-md-6">
-                        {{ form.ijin_usaha.label(class="form-label fw-bold text-secondary small") }}
-                        {{ form.ijin_usaha(class="form-control rounded-3", placeholder="NIB: 12345...") }}
+                <div class="row g-4 mb-4">
+                    <div class="col-md-12">
+                        <label class="form-label fw-bold text-secondary small">Ijin Usaha yang dimiliki (jika ada)</label>
+                        <div class="d-none">{{ form.ijin_usaha() }}</div>
+                        <div class="d-flex flex-wrap gap-3 mb-2">
+                            {% for subfield in form.ijin_usaha_jenis %}
+                                <div class="form-check">
+                                    {{ subfield(class="form-check-input") }} {{ subfield.label(class="form-check-label") }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <div class="row g-2 mt-1">
+                            <div class="col-md-6">{{ form.ijin_usaha_nomor(class="form-control rounded-3", placeholder="Nomor Ijin Usaha") }}</div>
+                            <div class="col-md-6">{{ form.ijin_usaha_tanggal(class="form-control rounded-3") }}</div>
+                        </div>
                     </div>
+                    
                     <div class="col-md-6">
-                        {{ form.haki.label(class="form-label fw-bold text-secondary small") }}
-                        {{ form.haki(class="form-control rounded-3", placeholder="Sertifikat Halal No...") }}
+                        <label class="form-label fw-bold text-secondary small">Perlindungan HAKI & Sertifikasi HALAL</label>
+                        <div class="d-none">{{ form.haki() }}</div>
+                        <div class="d-flex flex-wrap gap-3 mt-1">
+                            {% for subfield in form.haki_jenis %}
+                                <div class="form-check">
+                                    {{ subfield(class="form-check-input") }} {{ subfield.label(class="form-check-label") }}
+                                </div>
+                            {% endfor %}
+                        </div>
                     </div>
                     <div class="col-md-6">
                         {{ form.merk_dagang.label(class="form-label fw-bold text-secondary small") }}
-                        {{ form.merk_dagang(class="form-control rounded-3", placeholder="Keripik Mantap") }}
+                        {{ form.merk_dagang(class="form-control rounded-3", placeholder="Merk Dagang Anda") }}
                     </div>
-                    <div class="col-md-6">
+                    
+                    <div class="col-md-4">
                         {{ form.tahun_berdiri.label(class="form-label fw-bold text-secondary small") }}
                         {{ form.tahun_berdiri(class="form-control rounded-3", placeholder="2018") }}
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         {{ form.tk_tetap.label(class="form-label fw-bold text-secondary small") }}
-                        {{ form.tk_tetap(class="form-control rounded-3", type="number") }}
+                        <div class="input-group">
+                            {{ form.tk_tetap(class="form-control rounded-start", type="number") }}
+                            <span class="input-group-text small">Org</span>
+                        </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         {{ form.tk_tidak_tetap.label(class="form-label fw-bold text-secondary small") }}
-                        {{ form.tk_tidak_tetap(class="form-control rounded-3", type="number") }}
+                        <div class="input-group">
+                            {{ form.tk_tidak_tetap(class="form-control rounded-start", type="number") }}
+                            <span class="input-group-text small">Org</span>
+                        </div>
                     </div>
                 </div>
 
@@ -149,83 +175,210 @@
         <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
             <div class="card-header bg-warning text-dark py-3 fw-bold d-flex align-items-center">
                 <i class="bi bi-box-seam fs-5 me-2"></i>
-                II. Produksi, Teknologi & Pemasaran
+                II. Jenis, Kapasitas Produksi, Teknologi, dan Pemasaran
             </div>
             <div class="card-body p-4 p-md-5">
 
-                <div class="mb-4">
-                    {{ form.jenis_produk.label(class="form-label fw-bold text-secondary small") }}
-                    {{ form.jenis_produk(class="form-control rounded-3", rows="3", placeholder="1. Keripik Singkong
-                    Balado\n2. Keripik Tempe Mendoan\n...") }}
+                <h6 class="fw-bold text-secondary small mb-3">Jenis-jenis produk yang dihasilkan</h6>
+                <div class="row g-2 mb-4">
+                    <div class="col-12">{{ form.jenis_produk_1(class="form-control rounded-3", placeholder="1. ...") }}</div>
+                    <div class="col-12">{{ form.jenis_produk_2(class="form-control rounded-3", placeholder="2. ...") }}</div>
+                    <div class="col-12">{{ form.jenis_produk_3(class="form-control rounded-3", placeholder="3. ...") }}</div>
+                    <div class="col-12">{{ form.jenis_produk_4(class="form-control rounded-3", placeholder="4. ...") }}</div>
+                    <div class="col-12">{{ form.jenis_produk_5(class="form-control rounded-3", placeholder="5. ...") }}</div>
                 </div>
 
                 <div class="row g-4 mb-4">
                     <div class="col-md-6">
-                        {{ form.kapasitas_produksi.label(class="form-label fw-bold text-secondary small") }}
-                        {{ form.kapasitas_produksi(class="form-control rounded-3", placeholder="50 kg / bulan") }}
+                        {{ form.kapasitas_produksi_jumlah.label(class="form-label fw-bold text-secondary small") }}
+                        {{ form.kapasitas_produksi_jumlah(class="form-control rounded-3", placeholder="Contoh: 100 kg") }}
                     </div>
                     <div class="col-md-6">
-                        {{ form.omzet_usaha.label(class="form-label fw-bold text-secondary small") }}
-                        {{ form.omzet_usaha(class="form-control rounded-3", placeholder="Rp 15.000.000 / bln") }}
-                    </div>
-                    <div class="col-md-6">
-                        {{ form.teknologi_produksi.label(class="form-label fw-bold text-secondary small") }}
-                        {{ form.teknologi_produksi(class="form-control rounded-3") }}
-                    </div>
-                    <div class="col-md-6">
-                        {{ form.teknologi_pengemasan.label(class="form-label fw-bold text-secondary small") }}
-                        {{ form.teknologi_pengemasan(class="form-control rounded-3") }}
-                    </div>
-                </div>
-
-                <hr class="text-muted my-4">
-
-                <div class="row g-4 mb-4">
-                    <div class="col-md-6">
-                        {{ form.bahan_baku_asal.label(class="form-label fw-bold text-secondary small") }}
-                        {{ form.bahan_baku_asal(class="form-control rounded-3", placeholder="Pasar Beringharjo Lokal
-                        Yogyakarta") }}
-                    </div>
-                    <div class="col-md-6">
-                        {{ form.bahan_baku_ketersediaan.label(class="form-label fw-bold text-secondary small") }}
-                        {{ form.bahan_baku_ketersediaan(class="form-select rounded-3") }}
-                    </div>
-                    <div class="col-md-6">
-                        {{ form.kemasan_bahan.label(class="form-label fw-bold text-secondary small") }}
-                        {{ form.kemasan_bahan(class="form-control rounded-3", placeholder="Plastik Pouch Zipper
-                        Standup") }}
-                    </div>
-                    <div class="col-md-6">
-                        {{ form.kemasan_desain.label(class="form-label fw-bold text-secondary small") }}
-                        {{ form.kemasan_desain(class="form-select rounded-3") }}
+                        {{ form.kapasitas_produksi_waktu.label(class="form-label fw-bold text-secondary small") }}
+                        {{ form.kapasitas_produksi_waktu(class="form-control rounded-3", placeholder="Contoh: per bulan") }}
                     </div>
                     <div class="col-md-12">
-                        {{ form.desain_produk.label(class="form-label fw-bold text-secondary small") }}
-                        {{ form.desain_produk(class="form-select rounded-3") }}
+                        {{ form.omzet_usaha.label(class="form-label fw-bold text-secondary small") }}
+                        {{ form.omzet_usaha(class="form-control rounded-3", placeholder="Rp ... /hari/bulan/tahun") }}
+                    </div>
+                </div>
+
+                <hr class="text-muted my-4">
+                
+                <h6 class="fw-bold text-secondary small mb-3">Teknologi yang digunakan</h6>
+                <div class="row g-4 mb-4">
+                    <div class="col-md-6">
+                        <label class="form-label small text-muted">A. Teknologi Produksi</label>
+                        <div>
+                        {% for subfield in form.teknologi_produksi %}
+                            <div class="form-check form-check-inline">
+                                {{ subfield(class="form-check-input") }} {{ subfield.label(class="form-check-label") }}
+                            </div>
+                        {% endfor %}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label small text-muted">B. Teknologi Pengemasan</label>
+                        <div>
+                        {% for subfield in form.teknologi_pengemasan %}
+                            <div class="form-check form-check-inline">
+                                {{ subfield(class="form-check-input") }} {{ subfield.label(class="form-check-label") }}
+                            </div>
+                        {% endfor %}
+                        </div>
                     </div>
                 </div>
 
                 <hr class="text-muted my-4">
 
-                <div class="row g-4">
+                <h6 class="fw-bold text-secondary small mb-3">Bahan Baku</h6>
+                <div class="row g-4 mb-4">
                     <div class="col-md-6">
-                        {{ form.segmen_pasar.label(class="form-label fw-bold text-secondary small") }}
-                        {{ form.segmen_pasar(class="form-control rounded-3", placeholder="Menengah 70%, Bawah 30%") }}
+                        <label class="form-label small text-muted">A. Asal bahan baku</label>
+                        <div class="mb-2">
+                        {% for subfield in form.bahan_baku_asal %}
+                            <div class="form-check form-check-inline">
+                                {{ subfield(class="form-check-input") }} {{ subfield.label(class="form-check-label") }}
+                            </div>
+                        {% endfor %}
+                        </div>
+                        {{ form.bahan_baku_asal_lain(class="form-control rounded-3 mt-2", placeholder="(sebutkan daerah jika lain daerah)") }}
                     </div>
                     <div class="col-md-6">
-                        {{ form.daerah_pemasaran.label(class="form-label fw-bold text-secondary small") }}
-                        {{ form.daerah_pemasaran(class="form-control rounded-3", placeholder="Lokal 90%, Luar Kota 10%")
-                        }}
+                        <label class="form-label small text-muted">B. Ketersediaan bahan baku</label>
+                        <div>
+                        {% for subfield in form.bahan_baku_ketersediaan %}
+                            <div class="form-check form-check-inline">
+                                {{ subfield(class="form-check-input") }} {{ subfield.label(class="form-check-label") }}
+                            </div>
+                        {% endfor %}
+                        </div>
                     </div>
+                </div>
+
+                <hr class="text-muted my-4">
+
+                <div class="row g-4 mb-4">
+                    <div class="col-md-12">
+                        <label class="form-label fw-bold text-secondary small">Desain Produk</label>
+                        <div class="d-flex flex-wrap gap-3">
+                        {% for subfield in form.desain_produk %}
+                            <div class="form-check">
+                                {{ subfield(class="form-check-input") }} {{ subfield.label(class="form-check-label") }}
+                            </div>
+                        {% endfor %}
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-12">
+                        <label class="form-label fw-bold text-secondary small mt-3">Kemasan</label>
+                        <div class="row mt-2">
+                            <div class="col-md-6">
+                                <label class="form-label small text-muted">A. Bahan Kemasan</label>
+                                <div class="d-flex flex-column gap-2 mb-2">
+                                {% for subfield in form.kemasan_bahan %}
+                                    <div class="form-check">
+                                        {{ subfield(class="form-check-input") }} {{ subfield.label(class="form-check-label") }}
+                                    </div>
+                                {% endfor %}
+                                </div>
+                                {{ form.kemasan_bahan_lain(class="form-control form-control-sm rounded-3", placeholder="Lainnya...") }}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small text-muted">B. Ketebalan bahan</label>
+                                <div class="input-group input-group-sm mb-3">
+                                    {{ form.kemasan_ketebalan(class="form-control rounded-start") }}
+                                    <span class="input-group-text small">mm</span>
+                                </div>
+                                <label class="form-label small text-muted">C. Desain</label>
+                                <div>
+                                {% for subfield in form.kemasan_desain %}
+                                    <div class="form-check form-check-inline">
+                                        {{ subfield(class="form-check-input") }} {{ subfield.label(class="form-check-label") }}
+                                    </div>
+                                {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="text-muted my-4">
+
+                <div class="row g-4 mb-4">
+                    <div class="col-md-12">
+                        <label class="form-label fw-bold text-secondary small">Segmen Target Pasar Utama (%)</label>
+                        <div class="row g-2">
+                            <div class="col-md-4">
+                                <div class="input-group">
+                                    <span class="input-group-text small">Atas</span>
+                                    {{ form.segmen_atas(class="form-control") }}
+                                    <span class="input-group-text small">%</span>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="input-group">
+                                    <span class="input-group-text small">Mengh</span>
+                                    {{ form.segmen_menengah(class="form-control") }}
+                                    <span class="input-group-text small">%</span>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="input-group">
+                                    <span class="input-group-text small">Bawah</span>
+                                    {{ form.segmen_bawah(class="form-control") }}
+                                    <span class="input-group-text small">%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <label class="form-label fw-bold text-secondary small">Daerah Pemasaran (%)</label>
+                        <div class="row g-2">
+                            <div class="col-md-4">
+                                <div class="input-group">
+                                    <span class="input-group-text small">Lokal</span>
+                                    {{ form.pemasaran_lokal(class="form-control") }}
+                                    <span class="input-group-text small">%</span>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="input-group">
+                                    <span class="input-group-text small">Regn.</span>
+                                    {{ form.pemasaran_regional(class="form-control") }}
+                                    <span class="input-group-text small">%</span>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="input-group">
+                                    <span class="input-group-text small">Ekpsor</span>
+                                    {{ form.pemasaran_ekspor(class="form-control") }}
+                                    <span class="input-group-text small">%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="col-md-12">
                         {{ form.wilayah_pemasaran.label(class="form-label fw-bold text-secondary small") }}
-                        {{ form.wilayah_pemasaran(class="form-control rounded-3", placeholder="Kabupaten Sleman dan
-                        Sekitarnya") }}
+                        {{ form.wilayah_pemasaran(class="form-control rounded-3", placeholder="1. ...\n2. ...\n3. ...", rows="3") }}
                     </div>
+
                     <div class="col-md-12">
-                        {{ form.sistem_penjualan.label(class="form-label fw-bold text-secondary small") }}
-                        {{ form.sistem_penjualan(class="form-control rounded-3", placeholder="Retail langsung & Titip
-                        Warung") }}
+                        <label class="form-label fw-bold text-secondary small">Sistem Penjualan</label>
+                        <div class="d-flex flex-wrap gap-4 mb-2">
+                            <div class="form-check">
+                                {{ form.sistem_retail(class="form-check-input") }} {{ form.sistem_retail.label(class="form-check-label") }}
+                            </div>
+                            <div class="form-check">
+                                {{ form.sistem_distributor(class="form-check-input") }} {{ form.sistem_distributor.label(class="form-check-label") }}
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center mt-1">
+                            <span class="small text-muted me-2">c.</span>
+                            {{ form.sistem_lainnya(class="form-control form-control-sm rounded-3", placeholder="Lainnya (sebutkan)") }}
+                        </div>
                     </div>
                 </div>
 

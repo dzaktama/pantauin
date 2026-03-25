@@ -28,7 +28,7 @@ PRODUK_INFO = {
 PRODUK = list(PRODUK_INFO.keys())
 
 KATEGORI_IN = ["Penjualan B2C", "Pesanan Grosir", "E-Commerce"]
-KATEGORI_OUT = ["Bahan Kemasan (Pouch)", "Bahan Baku (Bogor)", "Listrik & Air", "Gaji Pegawai", "Iklan Olahh", "Lainnya"]
+KATEGORI_OUT = ["Bahan Kemasan (Pouch)", "Bahan Baku (Bogor)", "Listrik & Air", "Gaji Pegawai", "Biaya Iklan", "Lainnya"]
 
 # Setup Waktu: 3 bulan terakhir (90 hari)
 tanggal_akhir = date.today()

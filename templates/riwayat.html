@@ -106,6 +106,9 @@
         <table class="table table-hover table-striped mb-0 text-center align-middle" style="font-size: 0.95rem;" id="transaksiTable">
             <thead class="table-dark">
                 <tr>
+                    <th class="py-3" style="width: 40px;">
+                        <input class="form-check-input border-secondary" type="checkbox" id="checkAll" title="Pilih Semua">
+                    </th>
                     <th class="py-3">No.</th>
                     <th class="py-3">Tanggal</th>
                     <th class="py-3 text-start">Kategori</th>
@@ -124,7 +127,10 @@
             <tbody>
                 {% if transaksi_list %}
                 {% for row in transaksi_list %}
-                <tr>
+                <tr class="trx-row">
+                    <td>
+                        <input class="form-check-input row-checkbox border-secondary" type="checkbox" value="{{ row.id }}">
+                    </td>
                     <td class="text-muted fw-bold">{{ loop.index }}</td>
                     <td class="fw-bold text-muted" style="white-space: nowrap;">
                         {{ row.tanggal.strftime('%d %b %Y') }}
@@ -179,14 +185,14 @@
                 </tr>
                 {% endfor %}
                 <tr id="emptyRow" style="display: none;">
-                    <td colspan="11" class="py-5 text-muted">
+                    <td colspan="12" class="py-5 text-muted">
                         <i class="bi bi-search fs-1 d-block mb-3 opacity-50"></i>
                         Tidak ada transaksi yang cocok dengan kata pencarian ini.
                     </td>
                 </tr>
                 {% else %}
                 <tr>
-                    <td colspan="11" class="py-5 text-muted">
+                    <td colspan="12" class="py-5 text-muted">
                         <i class="bi bi-file-earmark-x fs-1 d-block mb-3 opacity-50"></i>
                         Belum ada riwayat transaksi pada buku ini.
                     </td>
@@ -303,6 +309,18 @@ function filterTable() {
 </script>
 
 
+
+<!-- Floating Action Bar for Bulk Select -->
+<div id="bulkActionBar" class="position-fixed bottom-0 start-50 translate-middle-x mb-4 bg-white shadow-lg rounded-pill px-4 py-3 align-items-center justify-content-between d-none" style="z-index: 1050; min-width: 350px; border: 2px solid var(--primary-color);">
+    <div>
+        <span class="fw-bold text-primary fs-5 me-2" id="selectedCount">0</span>
+        <span class="text-muted fw-bold">Transaksi Terpilih</span>
+    </div>
+    <div>
+        <button class="btn btn-danger rounded-pill fw-bold shadow-sm" onclick="submitBulkDelete()"><i class="bi bi-trash-fill me-2"></i>Hapus Masal</button>
+    </div>
+</div>
+
 </div>
 {% endblock %}
 
@@ -314,6 +332,79 @@ function filterTable() {
             const num = parseFloat(el.getAttribute('data-val'));
             el.innerText = window.formatRupiah(num);
         });
+
+        // Bulk Select Logic
+        const checkAll = document.getElementById('checkAll');
+        const rowCheckboxes = document.querySelectorAll('.row-checkbox');
+        const bulkActionBar = document.getElementById('bulkActionBar');
+        const selectedCountSpan = document.getElementById('selectedCount');
+        let lastChecked = null;
+
+        function updateBulkActionBar() {
+            const checkedCount = document.querySelectorAll('.row-checkbox:checked').length;
+            if (selectedCountSpan) selectedCountSpan.innerText = checkedCount;
+            if (bulkActionBar) {
+                if (checkedCount > 0) {
+                    bulkActionBar.classList.remove('d-none');
+                    bulkActionBar.classList.add('d-flex');
+                } else {
+                    bulkActionBar.classList.add('d-none');
+                    bulkActionBar.classList.remove('d-flex');
+                }
+            }
+            if (checkAll) {
+                checkAll.checked = (checkedCount === rowCheckboxes.length && rowCheckboxes.length > 0);
+            }
+        }
+
+        if (checkAll) {
+            checkAll.addEventListener('change', function() {
+                rowCheckboxes.forEach(cb => cb.checked = this.checked);
+                updateBulkActionBar();
+            });
+        }
+
+        rowCheckboxes.forEach((checkbox, index) => {
+            checkbox.addEventListener('click', function(e) {
+                if (e.shiftKey && lastChecked !== null) {
+                    let start = Math.min(index, lastChecked);
+                    let end = Math.max(index, lastChecked);
+                    for (let i = start; i <= end; i++) {
+                        rowCheckboxes[i].checked = this.checked;
+                    }
+                }
+                lastChecked = index;
+                updateBulkActionBar();
+            });
+        });
+
+        window.submitBulkDelete = function() {
+            const selectedIds = Array.from(document.querySelectorAll('.row-checkbox:checked')).map(cb => cb.value);
+            if(selectedIds.length === 0) return;
+            
+            if(confirm(`Apakah Anda yakin ingin menghapus permanen ${selectedIds.length} transaksi terpilih?`)) {
+                fetch('{{ url_for("transaksi_delete_bulk") }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({ ids: selectedIds })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if(data.success) {
+                        window.location.reload();
+                    } else {
+                        alert('Gagal menghapus: ' + data.error);
+                    }
+                })
+                .catch(err => {
+                    alert('Terjadi kesalahan jaringan.');
+                    console.error(err);
+                });
+            }
+        };
     });
 </script>
 {% endblock %}

@@ -291,15 +291,24 @@ def hitung_health_score(transaksi_list, periode_grafik=30):
     kustom_pengeluaran_kategori = defaultdict(float)
     for t in t_kustom:
         if t.pengeluaran > 0:
-            kat = getattr(t, 'kategori', 'Lainnya') or 'Lainnya'
+            kat = str(getattr(t, 'kategori', '') or '').strip()
+            if not kat:
+                kat = 'Lainnya'
             kustom_pengeluaran_kategori[kat] += t.pengeluaran
 
+    # Gabung kategori "Lainnya" bawaan data dgn "Lainnya" dari tail data
+    lainnya_val = kustom_pengeluaran_kategori.pop('Lainnya', 0)
+    
     sorted_kat = sorted(kustom_pengeluaran_kategori.items(), key=lambda x: x[1], reverse=True)
     pie_labels = [k[0] for k in sorted_kat[:5]]
     pie_data = [k[1] for k in sorted_kat[:5]]
-    if len(sorted_kat) > 5:
+    
+    sisa_val = sum(k[1] for k in sorted_kat[5:])
+    total_lainnya = float(sisa_val) + float(lainnya_val)
+    
+    if total_lainnya > 0:
         pie_labels.append("Lainnya")
-        pie_data.append(sum(k[1] for k in sorted_kat[5:]))
+        pie_data.append(total_lainnya)
 
     ringkasan_kustom = {
         "periode_hari": periode_grafik,
@@ -308,9 +317,9 @@ def hitung_health_score(transaksi_list, periode_grafik=30):
         "total_pengeluaran_md": kustom_out_md,
         "total_pengeluaran": kustom_out_total,
         "saldo_bersih": kustom_saldo,
-        "rata_pemasukan": round(kustom_in / hari_kustom),
-        "rata_pengeluaran": round(kustom_out_total / hari_kustom),
-        "gross_margin": round(kustom_gm, 1),
+        "rata_pemasukan": round(float(kustom_in) / float(max(1, hari_kustom))),
+        "rata_pengeluaran": round(float(kustom_out_total) / float(max(1, hari_kustom))),
+        "gross_margin": round(float(kustom_gm), 1),
         "jumlah_transaksi": len(t_kustom),
         "jumlah_hari_aktif": hari_kustom,
         "jumlah_pelanggan": kustom_pelanggan,
@@ -355,11 +364,11 @@ def hitung_health_score(transaksi_list, periode_grafik=30):
             "pengeluaran": round(skor_pengeluaran),
             "gross_margin": round(skor_gross_margin),
             "konsistensi": round(skor_konsistensi),
-            "nilai_margin_ops": margin * 100,
-            "nilai_tren_growth": tren_growth * 100,
-            "nilai_rasio_out": (rasio_out * 100) if 'rasio_out' in locals() else 0,
-            "nilai_gross_margin_pct": gross_margin_pct if 'gross_margin_pct' in locals() else 0,
-            "nilai_cv_konsistensi": cv if 'cv' in locals() else 1
+            "nilai_margin_ops": float(margin) * 100.0,
+            "nilai_tren_growth": float(tren_growth) * 100.0,
+            "nilai_rasio_out": (float(rasio_out) * 100.0) if 'rasio_out' in locals() else 0.0,
+            "nilai_gross_margin_pct": float(gross_margin_pct) if 'gross_margin_pct' in locals() else 0.0,
+            "nilai_cv_konsistensi": float(cv) if 'cv' in locals() else 1.0
         },
         "statistik_4_minggu": statistik_4_minggu
     }
@@ -484,7 +493,7 @@ def format_rp(nilai):
 
 def _hitung_risiko(score, breakdown, val_in_30, val_op_30, val_saldo_30,
                    avg_in, avg_out, gross_margin_pct, warnings, proy_arr):
-    risiko = {}
+    risiko = {}  # type: ignore
 
     dana_darurat_ideal = avg_out * 14
     coverage           = val_saldo_30 / dana_darurat_ideal if dana_darurat_ideal > 0 else 0

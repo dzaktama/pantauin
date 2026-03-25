@@ -308,43 +308,130 @@ def create_app(config_class=Config):
         if request.method == 'GET' and profil and profil.detil_industri:
             try:
                 dt_extr = json.loads(profil.detil_industri)
-                form.jenis_produk.data = dt_extr.get('jenis_produk', '')
-                form.kapasitas_produksi.data = dt_extr.get('kapasitas_produksi', '')
+                
+                # Ijin Usaha & HAKI
+                form.ijin_usaha_jenis.data = dt_extr.get('ijin_usaha_jenis', [])
+                form.ijin_usaha_nomor.data = dt_extr.get('ijin_usaha_nomor', '')
+                if dt_extr.get('ijin_usaha_tanggal'):
+                    try:
+                        form.ijin_usaha_tanggal.data = datetime.strptime(dt_extr.get('ijin_usaha_tanggal'), '%Y-%m-%d').date()
+                    except: pass
+                form.haki_jenis.data = dt_extr.get('haki_jenis', [])
+                
+                # Jenis Produk 1-5
+                form.jenis_produk_1.data = dt_extr.get('jenis_produk_1', '')
+                form.jenis_produk_2.data = dt_extr.get('jenis_produk_2', '')
+                form.jenis_produk_3.data = dt_extr.get('jenis_produk_3', '')
+                form.jenis_produk_4.data = dt_extr.get('jenis_produk_4', '')
+                form.jenis_produk_5.data = dt_extr.get('jenis_produk_5', '')
+                
+                form.kapasitas_produksi_jumlah.data = dt_extr.get('kapasitas_produksi_jumlah', '')
+                form.kapasitas_produksi_waktu.data = dt_extr.get('kapasitas_produksi_waktu', '')
                 form.omzet_usaha.data = dt_extr.get('omzet_usaha', '')
+                
                 form.teknologi_produksi.data = dt_extr.get('teknologi_produksi', '')
                 form.teknologi_pengemasan.data = dt_extr.get('teknologi_pengemasan', '')
+                
                 form.bahan_baku_asal.data = dt_extr.get('bahan_baku_asal', '')
+                form.bahan_baku_asal_lain.data = dt_extr.get('bahan_baku_asal_lain', '')
                 form.bahan_baku_ketersediaan.data = dt_extr.get('bahan_baku_ketersediaan', '')
+                
                 form.desain_produk.data = dt_extr.get('desain_produk', '')
-                form.kemasan_bahan.data = dt_extr.get('kemasan_bahan', '')
+                
+                form.kemasan_bahan.data = dt_extr.get('kemasan_bahan', [])
+                form.kemasan_bahan_lain.data = dt_extr.get('kemasan_bahan_lain', '')
+                form.kemasan_ketebalan.data = dt_extr.get('kemasan_ketebalan', '')
                 form.kemasan_desain.data = dt_extr.get('kemasan_desain', '')
-                form.segmen_pasar.data = dt_extr.get('segmen_pasar', '')
-                form.daerah_pemasaran.data = dt_extr.get('daerah_pemasaran', '')
+                
+                form.segmen_atas.data = dt_extr.get('segmen_atas', 0)
+                form.segmen_menengah.data = dt_extr.get('segmen_menengah', 0)
+                form.segmen_bawah.data = dt_extr.get('segmen_bawah', 0)
+                
+                form.pemasaran_lokal.data = dt_extr.get('pemasaran_lokal', 0)
+                form.pemasaran_regional.data = dt_extr.get('pemasaran_regional', 0)
+                form.pemasaran_ekspor.data = dt_extr.get('pemasaran_ekspor', 0)
+                
                 form.wilayah_pemasaran.data = dt_extr.get('wilayah_pemasaran', '')
-                form.sistem_penjualan.data = dt_extr.get('sistem_penjualan', '')
-                form.komitmen.data = dt_extr.get('komitmen', '')
+                
+                form.sistem_retail.data = dt_extr.get('sistem_retail', False)
+                form.sistem_distributor.data = dt_extr.get('sistem_distributor', False)
+                form.sistem_lainnya.data = dt_extr.get('sistem_lainnya', '')
+                
+                form.komitmen_1.data = dt_extr.get('komitmen_1', False)
+                form.komitmen_2.data = dt_extr.get('komitmen_2', False)
+                form.komitmen_3.data = dt_extr.get('komitmen_3', False)
+                form.komitmen_4.data = dt_extr.get('komitmen_4', False)
+                form.komitmen_5.data = dt_extr.get('komitmen_5', False)
             except:
                 dt_extr = {}
         else:
             dt_extr = {}
 
         if form.validate_on_submit():
+            # Build ijin_usaha gabungan and haki gabungan for display purposes or backward compatibility
+            ij_arr = form.ijin_usaha_jenis.data or []
+            ij_str = " / ".join(ij_arr)
+            ij_tgl = form.ijin_usaha_tanggal.data.strftime('%Y-%m-%d') if form.ijin_usaha_tanggal.data else ''
+            ijin_usaha_gabungan = f"{ij_str}"
+            if form.ijin_usaha_nomor.data:
+                ijin_usaha_gabungan += f" No: {form.ijin_usaha_nomor.data}"
+            if ij_tgl:
+                ijin_usaha_gabungan += f" Tgl: {ij_tgl}"
+            
+            form.ijin_usaha.data = ijin_usaha_gabungan if ijin_usaha_gabungan.strip() else ""
+            
+            hk_arr = form.haki_jenis.data or []
+            form.haki.data = " / ".join(hk_arr)
+            
             dt_extr = {
-                'jenis_produk': form.jenis_produk.data,
-                'kapasitas_produksi': form.kapasitas_produksi.data,
+                'ijin_usaha_jenis': form.ijin_usaha_jenis.data,
+                'ijin_usaha_nomor': form.ijin_usaha_nomor.data,
+                'ijin_usaha_tanggal': ij_tgl,
+                'haki_jenis': form.haki_jenis.data,
+                
+                'jenis_produk_1': form.jenis_produk_1.data,
+                'jenis_produk_2': form.jenis_produk_2.data,
+                'jenis_produk_3': form.jenis_produk_3.data,
+                'jenis_produk_4': form.jenis_produk_4.data,
+                'jenis_produk_5': form.jenis_produk_5.data,
+                
+                'kapasitas_produksi_jumlah': form.kapasitas_produksi_jumlah.data,
+                'kapasitas_produksi_waktu': form.kapasitas_produksi_waktu.data,
                 'omzet_usaha': form.omzet_usaha.data,
+                
                 'teknologi_produksi': form.teknologi_produksi.data,
                 'teknologi_pengemasan': form.teknologi_pengemasan.data,
+                
                 'bahan_baku_asal': form.bahan_baku_asal.data,
+                'bahan_baku_asal_lain': form.bahan_baku_asal_lain.data,
                 'bahan_baku_ketersediaan': form.bahan_baku_ketersediaan.data,
+                
                 'desain_produk': form.desain_produk.data,
+                
                 'kemasan_bahan': form.kemasan_bahan.data,
+                'kemasan_bahan_lain': form.kemasan_bahan_lain.data,
+                'kemasan_ketebalan': form.kemasan_ketebalan.data,
                 'kemasan_desain': form.kemasan_desain.data,
-                'segmen_pasar': form.segmen_pasar.data,
-                'daerah_pemasaran': form.daerah_pemasaran.data,
+                
+                'segmen_atas': form.segmen_atas.data,
+                'segmen_menengah': form.segmen_menengah.data,
+                'segmen_bawah': form.segmen_bawah.data,
+                
+                'pemasaran_lokal': form.pemasaran_lokal.data,
+                'pemasaran_regional': form.pemasaran_regional.data,
+                'pemasaran_ekspor': form.pemasaran_ekspor.data,
+                
                 'wilayah_pemasaran': form.wilayah_pemasaran.data,
-                'sistem_penjualan': form.sistem_penjualan.data,
-                'komitmen': form.komitmen.data
+                
+                'sistem_retail': form.sistem_retail.data,
+                'sistem_distributor': form.sistem_distributor.data,
+                'sistem_lainnya': form.sistem_lainnya.data,
+                
+                'komitmen_1': form.komitmen_1.data,
+                'komitmen_2': form.komitmen_2.data,
+                'komitmen_3': form.komitmen_3.data,
+                'komitmen_4': form.komitmen_4.data,
+                'komitmen_5': form.komitmen_5.data,
             }
             
             if not profil:
@@ -448,6 +535,45 @@ def create_app(config_class=Config):
             db.session.rollback()
             flash("Gagal menghapus transaksi.", "error")
             return redirect(url_for('riwayat'))
+
+    @app.route('/transaksi/delete_bulk', methods=['POST'])
+    @login_required
+    def transaksi_delete_bulk():
+        buku_kas_id = session.get('buku_kas_id')
+        if not buku_kas_id: return jsonify({"error": "Pilih buku kas"}), 400
+        
+        data = request.get_json()
+        if not data or 'ids' not in data:
+            return jsonify({"error": "Permintaan tidak valid"}), 400
+            
+        ids = data.get('ids', [])
+        if not ids:
+            return jsonify({"error": "Tidak ada ID yang dipilih"}), 400
+            
+        try:
+            valid_ids = [int(i) for i in ids if str(i).isdigit()]
+            if not valid_ids:
+                return jsonify({"error": "Format ID tidak valid"}), 400
+                
+            trx_to_delete = Transaksi.query.filter(Transaksi.id.in_(valid_ids), Transaksi.buku_kas_id == buku_kas_id).all()
+            deleted_count = len(trx_to_delete)
+            
+            if deleted_count == 0:
+                return jsonify({"error": "Data tidak valid atau sudah dihapus"}), 404
+                
+            for t in trx_to_delete:
+                db.session.delete(t)
+                
+            db.session.commit()
+            
+            log_activity(session['user_id'], buku_kas_id, f"Menghapus {deleted_count} transaksi secara bersamaan.", "Transaksi", "hapus")
+            cache.clear()
+            
+            flash(f"{deleted_count} transaksi berhasil dihapus secara massal.", "success")
+            return jsonify({"success": True})
+        except Exception as e:
+            db.session.rollback()
+            return jsonify({"error": str(e)}), 500
 
     @app.route('/api/scan-struk', methods=['POST'])
     @login_required
@@ -711,22 +837,37 @@ def create_app(config_class=Config):
             persen_umum = min(max(_safe_float(req.get('perubahan_penjualan', 0)), -500), 500) / 100
             persen_hpp = min(max(_safe_float(req.get('perubahan_hpp', 0)), -100), 500) / 100
             persen_opex = min(max(_safe_float(req.get('perubahan_opex', 0)), -100), 500) / 100
-            periode = int(_safe_float(req.get('periode', 7)))
+            
+            periode_str = req.get('periode', '30')
+            start_date_str = req.get('start_date', '')
+            end_date_str = req.get('end_date', '')
             
             # --- Query transaksi sesuai periode ---
             sekarang = date.today()
-            if periode <= 0:
-                # Semua transaksi
-                t_periode = Transaksi.query.filter_by(buku_kas_id=buku_kas_id).all()
-                first_trx = Transaksi.query.filter_by(buku_kas_id=buku_kas_id).order_by(Transaksi.tanggal.asc()).first()
-                actual_days = (sekarang - first_trx.tanggal).days + 1 if first_trx else 1
-            else:
-                start_date = sekarang - timedelta(days=periode)
+            if str(periode_str).lower() == 'custom' and start_date_str and end_date_str:
+                dt_start = datetime.strptime(start_date_str, '%Y-%m-%d').date()
+                dt_end = datetime.strptime(end_date_str, '%Y-%m-%d').date()
                 t_periode = Transaksi.query.filter(
                     Transaksi.buku_kas_id == buku_kas_id,
-                    Transaksi.tanggal >= start_date
+                    Transaksi.tanggal >= dt_start,
+                    Transaksi.tanggal <= dt_end
                 ).all()
-                actual_days = periode
+                actual_days = (dt_end - dt_start).days + 1
+                if actual_days <= 0: actual_days = 1
+            else:
+                periode = int(_safe_float(periode_str))
+                if periode <= 0:
+                    # Semua transaksi
+                    t_periode = Transaksi.query.filter_by(buku_kas_id=buku_kas_id).all()
+                    first_trx = Transaksi.query.filter_by(buku_kas_id=buku_kas_id).order_by(Transaksi.tanggal.asc()).first()
+                    actual_days = (sekarang - first_trx.tanggal).days + 1 if first_trx else 1
+                else:
+                    start_date = sekarang - timedelta(days=periode)
+                    t_periode = Transaksi.query.filter(
+                        Transaksi.buku_kas_id == buku_kas_id,
+                        Transaksi.tanggal >= start_date
+                    ).all()
+                    actual_days = periode
             
             hari_aktif = len({t.tanggal for t in t_periode}) or 1
             jumlah_trx = len(t_periode)

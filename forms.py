@@ -1,8 +1,12 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, DateField, FloatField, SelectField, IntegerField, RadioField, TextAreaField
+from wtforms import StringField, PasswordField, SubmitField, DateField, FloatField, SelectField, IntegerField, RadioField, TextAreaField, SelectMultipleField, BooleanField, widgets
 from wtforms.validators import DataRequired, Length, EqualTo, Regexp
 from flask_wtf.file import FileField, FileRequired, FileAllowed
 from datetime import date
+
+class MultiCheckboxField(SelectMultipleField):
+    widget = widgets.ListWidget(prefix_label=False)
+    option_widget = widgets.CheckboxInput()
 
 class LoginForm(FlaskForm):
     """Form Login Pengguna UMKM."""
@@ -94,8 +98,18 @@ class ProfilPerusahaanForm(FlaskForm):
     email_web = StringField('Web / E-mail / Blog', validators=[Length(max=100)])
     
     # BAGIAN 1: Legalitas
-    ijin_usaha = StringField('Ijin Usaha (SIUP/TDP/Akte dll)', validators=[Length(max=255)])
-    haki = StringField('Sertifikasi HAKI/HALAL', validators=[Length(max=255)])
+    ijin_usaha_jenis = MultiCheckboxField('Ijin Usaha yang dimiliki', choices=[
+        ('SIUP', 'SIUP'), ('TDP', 'TDP'), ('HO', 'HO'),
+        ('SPTIK', 'SPTIK'), ('AKTE', 'AKTE'), ('PIRT', 'PIRT')
+    ])
+    ijin_usaha_nomor = StringField('Nomor Ijin Usaha', validators=[Length(max=100)])
+    ijin_usaha_tanggal = DateField('Tanggal Ijin Usaha (Opsional)', format='%Y-%m-%d', validators=[])
+    ijin_usaha = StringField('Ijin Usaha Gabungan (Hidden)', validators=[Length(max=255)])
+    
+    haki_jenis = MultiCheckboxField('Perlindungan HAKI & Sertifikasi HALAL', choices=[
+        ('Merk', 'Merk'), ('Cipta', 'Cipta'), ('Paten', 'Paten'), ('Halal', 'Halal')
+    ])
+    haki = StringField('HAKI Gabungan (Hidden)', validators=[Length(max=255)])
     merk_dagang = StringField('Merk Dagang', validators=[Length(max=100)])
     
     # BAGIAN 1: Tenaga Kerja
@@ -103,26 +117,49 @@ class ProfilPerusahaanForm(FlaskForm):
     tk_tidak_tetap = IntegerField('Jumlah Tenaga Kerja Tidak Tetap', default=0)
     
     # BAGIAN 2: Data Produksi & Pemasaran (JSON-destined)
-    jenis_produk = TextAreaField('Jenis-jenis produk yang dihasilkan (1 - 5)')
-    kapasitas_produksi = StringField('Kapasitas Produksi & Waktu')
-    omzet_usaha = StringField('Omzet Usaha (Rp/bln/tahun)')
+    jenis_produk_1 = StringField('1. Jenis Produk')
+    jenis_produk_2 = StringField('2. Jenis Produk')
+    jenis_produk_3 = StringField('3. Jenis Produk')
+    jenis_produk_4 = StringField('4. Jenis Produk')
+    jenis_produk_5 = StringField('5. Jenis Produk')
     
-    teknologi_produksi = SelectField('Teknologi Produksi', choices=[('Tradisional', 'Tradisional'), ('Tepat Guna', 'Tepat Guna'), ('Modern', 'Modern'), ('', '- Bebas -')], default='')
-    teknologi_pengemasan = SelectField('Teknologi Pengemasan', choices=[('Tradisional', 'Tradisional'), ('Tepat Guna', 'Tepat Guna'), ('Modern', 'Modern'), ('', '- Bebas -')], default='')
+    kapasitas_produksi_jumlah = StringField('Kapasitas Produksi per (unit/kg/ton/liter)')
+    kapasitas_produksi_waktu = StringField('Waktu Produksi (hari/bulan/tahun)')
+    omzet_usaha = StringField('Omzet Usaha (Rp/hari/bulan/tahun)')
     
-    bahan_baku_asal = StringField('Asal bahan baku')
-    bahan_baku_ketersediaan = SelectField('Ketersediaan bahan baku', choices=[('Kurang', 'Kurang'), ('Cukup', 'Cukup'), ('Melimpah', 'Melimpah'), ('', '- Bebas -')], default='')
+    teknologi_produksi = RadioField('Teknologi Produksi', choices=[('Tradisional', 'Tradisional'), ('Tepat guna', 'Tepat guna'), ('Modern', 'Modern')], default='')
+    teknologi_pengemasan = RadioField('Teknologi Pengemasan', choices=[('Tradisional', 'Tradisional'), ('Tepat guna', 'Tepat guna'), ('Modern', 'Modern')], default='')
     
-    desain_produk = SelectField('Desain Produk', choices=[('Marketable', 'Marketable'), ('Tidak Marketable', 'Tidak Marketable'), ('', '- Bebas -')], default='')
-    kemasan_bahan = StringField('Bahan Kemasan (Plastik/Mika/dll)')
-    kemasan_desain = SelectField('Desain Kemasan', choices=[('Menarik', 'Menarik'), ('Tidak Menarik', 'Tidak Menarik'), ('', '- Bebas -')], default='')
+    bahan_baku_asal = RadioField('Asal bahan baku', choices=[('Lokal', 'Lokal'), ('Lain daerah', 'Lain daerah')], default='')
+    bahan_baku_asal_lain = StringField('Sebutkan daerah asal bahan baku')
+    bahan_baku_ketersediaan = RadioField('Ketersediaan bahan baku', choices=[('Kurang', 'Kurang'), ('Cukup', 'Cukup'), ('Melimpah', 'Melimpah')], default='')
     
-    segmen_pasar = StringField('Segmen Target Pasar Utama (Atas %, Menengah %, Bawah %)')
-    daerah_pemasaran = StringField('Daerah Pemasaran Lokal, Regional, Ekspor (%)')
-    wilayah_pemasaran = TextAreaField('Sebutkan Wilayah Pemasaran secara spesifik')
-    sistem_penjualan = StringField('Sistem Penjualan (Retail/Distributor dll)')
+    desain_produk = RadioField('Desain Produk', choices=[('Marketable', 'Marketable'), ('Tidak marketable', 'Tidak marketable')], default='')
+    
+    kemasan_bahan = MultiCheckboxField('Bahan Kemasan', choices=[('Plastik', 'Plastik'), ('Stereoform', 'Stereoform'), ('Kardus', 'Kardus'), ('Mika', 'Mika'), ('Lainnya', 'Lainnya')])
+    kemasan_bahan_lain = StringField('Bahan kemasan lainnya')
+    kemasan_ketebalan = StringField('Ketebalan bahan (mm)')
+    kemasan_desain = RadioField('Desain Kemasan', choices=[('Menarik', 'Menarik'), ('Tidak menarik', 'Tidak menarik')], default='')
+    
+    segmen_atas = IntegerField('Segmen konsumen atas (%)', default=0)
+    segmen_menengah = IntegerField('Segmen konsumen menengah (%)', default=0)
+    segmen_bawah = IntegerField('Segmen konsumen bawah (%)', default=0)
+    
+    pemasaran_lokal = IntegerField('Lokal (%)', default=0)
+    pemasaran_regional = IntegerField('Regional (%)', default=0)
+    pemasaran_ekspor = IntegerField('Ekspor (%)', default=0)
+    
+    wilayah_pemasaran = TextAreaField('Sebutkan daerah pemasaran selama ini (1, 2, 3...)')
+    
+    sistem_retail = BooleanField('Retail')
+    sistem_distributor = BooleanField('Distributor')
+    sistem_lainnya = StringField('Sistem penjualan lainnya')
     
     # BAGIAN 3: Komitmen
-    komitmen = TextAreaField('Kesediaan / Komitmen yang tersedia diberikan (pisahkan dengan koma)')
+    komitmen_1 = BooleanField('Mengirim profil perusahaan')
+    komitmen_2 = BooleanField('Mengirim daftar jenis produk')
+    komitmen_3 = BooleanField('Mengirim E-Digital Produk')
+    komitmen_4 = BooleanField('Mengirimkan Sample Produk')
+    komitmen_5 = BooleanField('Mengikuti pameran yang difasilitasi ITPC')
     
     submit = SubmitField('Simpan Profil Perusahaan')
