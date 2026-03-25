@@ -392,11 +392,24 @@
                 III. Komitmen Kemitraan
             </div>
             <div class="card-body p-4 p-md-5">
-                {{ form.komitmen.label(class="form-label fw-bold text-secondary small") }}
-                {{ form.komitmen(class="form-control rounded-3", rows="4", placeholder="Mengirimkan katalog rutin,
-                Mengikuti pameran, Memberi sample uji coba...") }}
-                <div class="form-text mt-2"><i class="bi bi-info-circle me-1"></i> Pisahkan ragam komitmen Anda
-                    menggunakan tanda koma (,).</div>
+                <label class="form-label fw-bold text-secondary small mb-3">Kesediaan / Komitmen yang bersedia diberikan:</label>
+                <div class="d-flex flex-column gap-2">
+                    <div class="form-check">
+                        {{ form.komitmen_1(class="form-check-input") }} {{ form.komitmen_1.label(class="form-check-label text-dark") }}
+                    </div>
+                    <div class="form-check">
+                        {{ form.komitmen_2(class="form-check-input") }} {{ form.komitmen_2.label(class="form-check-label text-dark") }}
+                    </div>
+                    <div class="form-check">
+                        {{ form.komitmen_3(class="form-check-input") }} {{ form.komitmen_3.label(class="form-check-label text-dark") }}
+                    </div>
+                    <div class="form-check">
+                        {{ form.komitmen_4(class="form-check-input") }} {{ form.komitmen_4.label(class="form-check-label text-dark") }}
+                    </div>
+                    <div class="form-check">
+                        {{ form.komitmen_5(class="form-check-input") }} {{ form.komitmen_5.label(class="form-check-label text-dark") }}
+                    </div>
+                </div>
             </div>
         </div>
 
