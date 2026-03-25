@@ -120,15 +120,16 @@ def hitung_health_score(transaksi_list, periode_grafik=30):
     # 4. Gross Margin Harian (0 - 100)
     data_harian = list(_agregasi_per_hari(transaksi_list).values())
     pemasukan_harian = [d['pemasukan'] for d in data_harian]
-    margin_harian = [max(0, d['pemasukan'] - d['pengeluaran_op']) for d in data_harian]
+    margin_harian = [max(0, d['pemasukan'] - d['pengeluaran_md']) for d in data_harian]
     rata_margin = np.mean(margin_harian) if margin_harian else 0
     rata_pemasukan_harian = np.mean(pemasukan_harian) if pemasukan_harian else 0
     
     if rata_pemasukan_harian == 0:
         skor_gross_margin = 0
+        gross_margin_pct = 0
     else:
-        gross_margin_pct = rata_margin / rata_pemasukan_harian
-        skor_gross_margin = min(100, max(0, gross_margin_pct * 100 / 0.3)) # asumsi margin idaman 30%
+        gross_margin_pct = (rata_margin / rata_pemasukan_harian) * 100
+        skor_gross_margin = min(100, max(0, gross_margin_pct / 0.3)) # asumsi margin idaman 30%
 
     # 5. Konsistensi Pemasukan (Standard Deviasi) (0 - 100)
     rata_harian = rata_pemasukan_harian
@@ -263,7 +264,7 @@ def hitung_health_score(transaksi_list, periode_grafik=30):
         "total_pengeluaran_op": val_op_30,
         "saldo_bersih": val_saldo_30,
         "rata_pemasukan": round(rata_harian),
-        "rata_pengeluaran": round(np.mean([d['pengeluaran_op'] for d in data_harian]) if data_harian else 0),
+        "rata_pengeluaran": round(np.mean([d['pengeluaran_op'] + d['pengeluaran_md'] for d in data_harian]) if data_harian else 0),
         "gross_margin": gross_margin_pct if 'gross_margin_pct' in locals() else 0,
     }
 
@@ -280,7 +281,7 @@ def hitung_health_score(transaksi_list, periode_grafik=30):
     if kustom_hpp > 0:
         kustom_gm = ((kustom_in - kustom_hpp) / kustom_in * 100) if kustom_in > 0 else 0
     else:
-        kustom_gm = ((kustom_in - kustom_out_op) / kustom_in * 100) if kustom_in > 0 else 0
+        kustom_gm = ((kustom_in - kustom_out_md) / kustom_in * 100) if kustom_in > 0 else 0
         
     kustom_saldo = kustom_in - kustom_out_total
     hari_kustom = len({t.tanggal for t in t_kustom}) or 1
@@ -293,7 +294,7 @@ def hitung_health_score(transaksi_list, periode_grafik=30):
         "total_pengeluaran": kustom_out_total,
         "saldo_bersih": kustom_saldo,
         "rata_pemasukan": round(kustom_in / hari_kustom),
-        "rata_pengeluaran": round((kustom_out_total + kustom_hpp) / hari_kustom),
+        "rata_pengeluaran": round(kustom_out_total / hari_kustom),
         "gross_margin": round(kustom_gm, 1),
         "jumlah_transaksi": len(t_kustom),
         "jumlah_hari_aktif": hari_kustom,
@@ -319,7 +320,7 @@ def hitung_health_score(transaksi_list, periode_grafik=30):
         "total_pengeluaran_minggu_ini": out_minggu_ini,
         "saldo_minggu_ini": saldo_minggu_ini,
         "rata_pemasukan": round(rata_harian),
-        "rata_pengeluaran": round(np.mean([d['pengeluaran_op'] for d in data_harian]) if data_harian else 0),
+        "rata_pengeluaran": round(np.mean([d['pengeluaran_op'] + d['pengeluaran_md'] for d in data_harian]) if data_harian else 0),
         "tren_status": "naik" if tren_growth >= 0 else "turun",
         "grafik_aktual": Y_trend, # Array 1D pemasukan harian
         "grafik_ma7": Y_ma7,
@@ -335,9 +336,9 @@ def hitung_health_score(transaksi_list, periode_grafik=30):
             "pengeluaran": round(skor_pengeluaran),
             "gross_margin": round(skor_gross_margin),
             "konsistensi": round(skor_konsistensi),
-            "nilai_margin_ops": margin,
-            "nilai_tren_growth": tren_growth,
-            "nilai_rasio_out": rasio_out if 'rasio_out' in locals() else 0,
+            "nilai_margin_ops": margin * 100,
+            "nilai_tren_growth": tren_growth * 100,
+            "nilai_rasio_out": (rasio_out * 100) if 'rasio_out' in locals() else 0,
             "nilai_gross_margin_pct": gross_margin_pct if 'gross_margin_pct' in locals() else 0,
             "nilai_cv_konsistensi": cv if 'cv' in locals() else 1
         },

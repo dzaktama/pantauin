@@ -148,25 +148,25 @@
                 <div class="col-sm-3">
                     <div class="p-4 bg-light rounded-4 text-center border-bottom border-4 border-success shadow-sm">
                         <small class="text-muted d-block mb-1">Gross Margin</small>
-                        <h3 class="fw-bold mb-0 text-dark {% if data.rincian_skor.nilai_gross_margin_pct >= 30 %}text-success{% else %}text-danger{% endif %}">{{ "%.1f"|format(data.rincian_skor.nilai_gross_margin_pct) }}%</h3>
+                        <h3 class="fw-bold mb-0 {% if data.rincian_skor.nilai_gross_margin_pct >= 30 %}text-success{% else %}text-danger{% endif %}">{{ "%.1f"|format(data.rincian_skor.nilai_gross_margin_pct) }}%</h3>
                     </div>
                 </div>
                 <div class="col-sm-3">
                     <div class="p-4 bg-light rounded-4 text-center border-bottom border-4 border-warning shadow-sm">
                         <small class="text-muted d-block mb-1">Rasio Operasional</small>
-                        <h3 class="fw-bold mb-0 text-dark {% if data.rincian_skor.nilai_rasio_out <= 60 %}text-success{% else %}text-warning{% endif %}">{{ "%.1f"|format(data.rincian_skor.nilai_rasio_out) }}%</h3>
+                        <h3 class="fw-bold mb-0 {% if data.rincian_skor.nilai_rasio_out <= 60 %}text-success{% else %}text-warning{% endif %}">{{ "%.1f"|format(data.rincian_skor.nilai_rasio_out) }}%</h3>
                     </div>
                 </div>
                 <div class="col-sm-3">
                     <div class="p-4 bg-light rounded-4 text-center border-bottom border-4 border-primary shadow-sm">
                         <small class="text-muted d-block mb-1">Tren Penjualan</small>
-                        <h3 class="fw-bold mb-0 text-dark {% if data.rincian_skor.nilai_tren_growth >= 0 %}text-success{% else %}text-danger{% endif %}">{{ "%.1f"|format(data.rincian_skor.nilai_tren_growth) }}%</h3>
+                        <h3 class="fw-bold mb-0 {% if data.rincian_skor.nilai_tren_growth >= 0 %}text-success{% else %}text-danger{% endif %}">{{ "%.1f"|format(data.rincian_skor.nilai_tren_growth) }}%</h3>
                     </div>
                 </div>
                 <div class="col-sm-3">
                     <div class="p-4 bg-light rounded-4 text-center border-bottom border-4 border-info shadow-sm">
                         <small class="text-muted d-block mb-1">Margin Operasional</small>
-                        <h3 class="fw-bold mb-0 text-dark">{{ "%.1f"|format(data.rincian_skor.nilai_margin_ops) }}%</h3>
+                        <h3 class="fw-bold mb-0 {% if data.rincian_skor.nilai_margin_ops >= 15 %}text-success{% else %}text-info{% endif %}">{{ "%.1f"|format(data.rincian_skor.nilai_margin_ops) }}%</h3>
                     </div>
                 </div>
             </div>
