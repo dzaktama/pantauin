@@ -111,3 +111,14 @@ class AktivitasLog(db.Model):
     
     user = db.relationship('User', backref=db.backref('aktivitas_user', lazy=True), overlaps="log_aktivitas,user_rel")
     buku_kas = db.relationship('BukuKas', backref=db.backref('aktivitas_buku', lazy=True))
+
+def log_activity(user_id, buku_kas_id, aktivitas, entitas, tipe_aksi):
+    log = AktivitasLog(
+        user_id=user_id,
+        buku_kas_id=buku_kas_id,
+        aktivitas=aktivitas,
+        entitas=entitas,
+        tipe_aksi=tipe_aksi
+    )
+    db.session.add(log)
+    db.session.commit()

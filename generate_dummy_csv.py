@@ -2,7 +2,7 @@ import csv
 from datetime import date, timedelta
 import random
 
-header = ['tanggal', 'kategori', 'nama_produk', 'kuantitas', 'pemasukan', 'pengeluaran', 'jenis_pengeluaran', 'jumlah_pelanggan', 'catatan']
+header = ['tanggal', 'kategori', 'nama_produk', 'kuantitas', 'hpp', 'pemasukan', 'pengeluaran', 'jenis_pengeluaran', 'jumlah_pelanggan', 'catatan']
 kategori_produk = {
     'Makanan & Minuman': [
         ('Nasi Goreng Spesial', 20000, 10000), 
@@ -63,6 +63,7 @@ for i in range(200):
         kategori,
         produk,
         kuantitas,
+        harga_modal,
         pemasukan,
         pengeluaran,
         jenis_pengeluaran,

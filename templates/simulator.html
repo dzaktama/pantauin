@@ -131,7 +131,11 @@
                     <i class="bi bi-info-circle info-tip" data-bs-toggle="tooltip" title="Negatif = Omzet turun/sepi. Positif = Promosi meledak pesanan banyak."></i>
                 </label>
                 <div class="display-3 fw-bold mb-3" id="labelPersen" style="color: var(--primary-color);">0%</div>
-                <input type="range" class="form-range" id="sliderTurun" min="-100" max="250" step="5" value="0">
+                <input type="range" class="form-range mb-2" id="sliderTurun" min="-100" max="250" step="5" value="0">
+                <div class="input-group input-group-sm w-75 mx-auto">
+                    <span class="input-group-text bg-light text-muted border-end-0">Rp</span>
+                    <input type="number" class="form-control border-start-0 nominal-input" id="nominalTurun" placeholder="Nominal (opsional, misal -1000000)">
+                </div>
             </div>
 
             <!-- Slider HPP Naik -->
@@ -142,7 +146,11 @@
                     </span>
                     <span id="labelHPP" class="text-warning fw-bold fs-5">0%</span>
                 </label>
-                <input type="range" class="form-range" id="sliderHPP" min="-50" max="150" step="5" value="0">
+                <input type="range" class="form-range mb-2" id="sliderHPP" min="-50" max="150" step="5" value="0">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text bg-light text-muted border-end-0">Rp</span>
+                    <input type="number" class="form-control border-start-0 nominal-input" id="nominalHPP" placeholder="Nominal (opsional, misal +200000)">
+                </div>
             </div>
 
             <!-- Slider Opex Naik -->
@@ -153,7 +161,11 @@
                     </span>
                     <span id="labelOpex" class="text-danger fw-bold fs-5">0%</span>
                 </label>
-                <input type="range" class="form-range" id="sliderOpex" min="-50" max="150" step="5" value="0">
+                <input type="range" class="form-range mb-2" id="sliderOpex" min="-50" max="150" step="5" value="0">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text bg-light text-muted border-end-0">Rp</span>
+                    <input type="number" class="form-control border-start-0 nominal-input" id="nominalOpex" placeholder="Nominal (opsional, misal +2000000)">
+                </div>
             </div>
 
             <hr class="my-4 text-muted border-2">
@@ -202,13 +214,13 @@
 
     <!-- Kolom Kanan: Hasil Real-time -->
     <div class="col-md-7">
-        <div class="card summary-card p-4 shadow" style="background-color: var(--primary-color); color: white; border: 1px solid rgba(255,255,255,0.1);">
+        <div class="card summary-card p-4 shadow bg-light border-0">
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h5 class="fw-bold mb-0 text-white">
-                    <i class="bi bi-graph-up-arrow me-2 text-info"></i>Proyeksi Hasil Simulasi
+                <h5 class="fw-bold mb-0 text-dark">
+                    <i class="bi bi-graph-up-arrow me-2 text-primary"></i>Proyeksi Hasil Simulasi
                     <i class="bi bi-info-circle" style="font-size:0.7rem; opacity:0.6; cursor:help;" data-bs-toggle="tooltip" title="Angka-angka ini menunjukkan proyeksi keuangan usaha berdasarkan skenario stress yang Anda atur di panel kiri."></i>
                 </h5>
-                <span class="badge bg-light text-dark" id="badgePeriodResult" style="font-size:0.75rem;">30 Hari</span>
+                <span class="badge bg-primary" id="badgePeriodResult" style="font-size:0.75rem;">30 Hari</span>
             </div>
 
             <!-- Warning banner -->
@@ -219,82 +231,82 @@
             <!-- Header KPIs -->
             <div class="row text-center mb-3">
                 <div class="col-sm-4 mb-3 mb-sm-0">
-                    <p class="mb-1 text-light small fw-bold">Pemasukan Baru
+                    <p class="mb-1 text-secondary small fw-bold">Pemasukan Baru
                         <i class="bi bi-info-circle" style="font-size:0.6rem; opacity:0.5; cursor:help;" data-bs-toggle="tooltip" title="Total pemasukan setelah diterapkan penurunan penjualan global dan per-produk."></i>
                     </p>
-                    <h3 class="fw-bold text-white shadow-sm-text" id="simPemasukan">Rp 0</h3>
-                    <small class="text-white-50" id="lblPemasukanAsli" style="font-size:0.7rem;">Asli: -</small>
+                    <h3 class="fw-bold text-dark shadow-sm-text" id="simPemasukan">Rp 0</h3>
+                    <small class="text-muted" id="lblPemasukanAsli" style="font-size:0.7rem;">Asli: -</small>
                 </div>
                 <div class="col-sm-4 mb-3 mb-sm-0">
-                    <p class="mb-1 text-light small fw-bold">Pengeluaran Baru
+                    <p class="mb-1 text-secondary small fw-bold">Pengeluaran Baru
                         <i class="bi bi-info-circle" style="font-size:0.6rem; opacity:0.5; cursor:help;" data-bs-toggle="tooltip" title="Total pengeluaran setelah dikenaikan HPP dan beban operasional sesuai skenario."></i>
                     </p>
-                    <h3 class="fw-bold text-white shadow-sm-text" id="simPengeluaran">Rp 0</h3>
-                    <small class="text-white-50" id="lblPengeluaranAsli" style="font-size:0.7rem;">Asli: -</small>
+                    <h3 class="fw-bold text-dark shadow-sm-text" id="simPengeluaran">Rp 0</h3>
+                    <small class="text-muted" id="lblPengeluaranAsli" style="font-size:0.7rem;">Asli: -</small>
                 </div>
                 <div class="col-sm-4">
-                    <p class="mb-1 text-light small fw-bold border-bottom border-light pb-1">Saldo Bersih
+                    <p class="mb-1 text-secondary small fw-bold border-bottom border-dark pb-1">Saldo Bersih
                         <i class="bi bi-info-circle" style="font-size:0.6rem; opacity:0.5; cursor:help;" data-bs-toggle="tooltip" title="Pemasukan Baru dikurangi Pengeluaran Baru. Hijau = untung, Merah = rugi."></i>
                     </p>
                     <h3 class="fw-bold shadow-sm-text" id="simSaldo" style="color:#2ef080;">Rp 0</h3>
-                    <small class="text-white-50" id="lblSelisih" style="font-size:0.7rem;">Selisih: -</small>
+                    <small class="text-muted" id="lblSelisih" style="font-size:0.7rem;">Selisih: -</small>
                 </div>
             </div>
 
-            <hr class="border-light opacity-25">
+            <hr class="text-muted opacity-25">
             
-            <h6 class="fw-bold text-light mb-3 mt-2">
+            <h6 class="fw-bold text-dark mb-3 mt-2">
                 <i class="bi bi-shield-check me-2 text-warning"></i>Indikator Kelayakan
                 <i class="bi bi-info-circle" style="font-size:0.65rem; opacity:0.5; cursor:help;" data-bs-toggle="tooltip" title="Indikator-indikator kunci untuk menilai apakah usaha masih layak bertahan dalam skenario stress ini."></i>
             </h6>
             <div class="row text-center mb-3">
-                <div class="col border-end border-light border-opacity-25 kpi-mini">
-                    <p class="kpi-label text-light">Gross Margin
+                <div class="col border-end border-dark border-opacity-25 kpi-mini">
+                    <p class="kpi-label text-secondary">Gross Margin
                         <i class="bi bi-info-circle" style="font-size:0.55rem; opacity:0.4; cursor:help;" data-bs-toggle="tooltip" title="Persentase keuntungan kotor setelah dikurangi HPP. Di bawah 30% = margin tipis, berbahaya."></i>
                     </p>
-                    <div class="kpi-val text-white" id="simGrossMargin">0%</div>
-                    <small class="kpi-target text-white-50">Target > 30%</small>
+                    <div class="kpi-val text-dark" id="simGrossMargin">0%</div>
+                    <small class="kpi-target text-muted">Target > 30%</small>
                 </div>
-                <div class="col border-end border-light border-opacity-25 kpi-mini">
-                    <p class="kpi-label text-light">Rasio Opex
+                <div class="col border-end border-dark border-opacity-25 kpi-mini">
+                    <p class="kpi-label text-secondary">Rasio Opex
                         <i class="bi bi-info-circle" style="font-size:0.55rem; opacity:0.4; cursor:help;" data-bs-toggle="tooltip" title="Persentase pengeluaran operasional terhadap pemasukan. Di atas 60% = biaya terlalu besar, butuh efisiensi."></i>
                     </p>
-                    <div class="kpi-val text-white" id="simRasioOpex">0%</div>
-                    <small class="kpi-target text-white-50">Target < 60%</small>
+                    <div class="kpi-val text-dark" id="simRasioOpex">0%</div>
+                    <small class="kpi-target text-muted">Target < 60%</small>
                 </div>
-                <div class="col border-end border-light border-opacity-25 kpi-mini">
-                    <p class="kpi-label text-light">BEP
+                <div class="col border-end border-dark border-opacity-25 kpi-mini">
+                    <p class="kpi-label text-secondary">BEP
                         <i class="bi bi-info-circle" style="font-size:0.55rem; opacity:0.4; cursor:help;" data-bs-toggle="tooltip" title="Break-Even Point: berapa % kapasitas penjualan yang harus dicapai agar impas (tidak rugi). Di atas 100% = pasti rugi."></i>
                     </p>
-                    <div class="kpi-val text-white" id="simBEP">0%</div>
-                    <small class="kpi-target text-white-50">Target < 80%</small>
+                    <div class="kpi-val text-dark" id="simBEP">0%</div>
+                    <small class="kpi-target text-muted">Target < 80%</small>
                 </div>
-                <div class="col border-end border-light border-opacity-25 kpi-mini">
-                    <p class="kpi-label text-light">Bertahan
+                <div class="col border-end border-dark border-opacity-25 kpi-mini">
+                    <p class="kpi-label text-secondary">Bertahan
                         <i class="bi bi-info-circle" style="font-size:0.55rem; opacity:0.4; cursor:help;" data-bs-toggle="tooltip" title="Berapa hari usaha bisa bertahan hanya dengan dana cadangan jika pemasukan berhenti total (income = 0)."></i>
                     </p>
-                    <div class="kpi-val text-white" id="simHariBertahan">0</div>
-                    <small class="kpi-target text-white-50">Jika income = 0</small>
+                    <div class="kpi-val text-dark" id="simHariBertahan">0</div>
+                    <small class="kpi-target text-muted">Jika income = 0</small>
                 </div>
                 <div class="col kpi-mini">
-                    <p class="kpi-label text-light">Status</p>
+                    <p class="kpi-label text-secondary">Status</p>
                     <h5 class="fw-bold mt-1 py-1 px-3 rounded d-inline-block shadow-sm" id="simStatusBisnis" style="background-color: #27AE60; color: white; font-size: 0.9rem;">Aman</h5>
                 </div>
             </div>
 
             <!-- Info meta -->
-            <div class="d-flex justify-content-center gap-4 mb-3" style="font-size: 0.75rem; opacity: 0.6;">
+            <div class="d-flex justify-content-center gap-4 mb-3 text-secondary" style="font-size: 0.75rem; opacity: 0.8;">
                 <span><i class="bi bi-calendar3 me-1"></i><span id="metaHariAktif">0</span> hari aktif</span>
                 <span><i class="bi bi-receipt me-1"></i><span id="metaJumlahTrx">0</span> transaksi</span>
             </div>
 
             <!-- Saran Box -->
-            <div class="pt-3 border-top border-light border-opacity-25">
+            <div class="pt-3 border-top border-dark border-opacity-25">
                 <div class="d-flex align-items-center p-3 rounded" id="saranBox"
-                    style="background: rgba(255,255,255,0.1);">
+                    style="background: rgba(0,0,0,0.05);">
                     <span class="fs-2 me-3">💡</span>
-                    <p class="mb-0 text-white" id="simSaran" style="font-size: 1.05rem; font-weight: 500;">
-                        Pilih persentase krisis pada penggeser di sebelah kiri.
+                    <p class="mb-0 text-dark" id="simSaran" style="font-size: 1.05rem; font-weight: 500;">
+                        Pilih persentase krisis atau masukkan penambahan nominal di sebelah kiri.
                     </p>
                 </div>
             </div>
@@ -524,10 +536,21 @@
             const valHpp = parseInt(sliderHPP.value, 10);
             const valOpex = parseInt(sliderOpex.value, 10);
             
+            const nomTurun = document.getElementById("nominalTurun");
+            const nomHPP = document.getElementById("nominalHPP");
+            const nomOpex = document.getElementById("nominalOpex");
+            
+            const nominalPenjualan = parseInt(nomTurun.value || 0, 10);
+            const nominalHpp = parseInt(nomHPP.value || 0, 10);
+            const nominalOpexVal = parseInt(nomOpex.value || 0, 10);
+            
             let payload = { 
                 perubahan_penjualan: valUmum,
+                nominal_penjualan: nominalPenjualan,
                 perubahan_hpp: valHpp,
+                nominal_hpp: nominalHpp,
                 perubahan_opex: valOpex,
+                nominal_opex: nominalOpexVal,
                 periode: currentPeriode,
                 start_date: start_date_custom,
                 end_date: end_date_custom
@@ -616,6 +639,10 @@
             clearTimeout(debounceTimer);
             debounceTimer = setTimeout(hitungSimulasi, 300);
         };
+        
+        document.querySelectorAll('.nominal-input').forEach(inp => {
+            inp.addEventListener('input', debouncedHitung);
+        });
 
         // --- Period buttons ---
         const customDateContainer = document.getElementById('customDateContainer');
@@ -719,6 +746,9 @@
             slider.value = 0; slider.dispatchEvent(new Event('input'));
             sliderHPP.value = 0; sliderHPP.dispatchEvent(new Event('input'));
             sliderOpex.value = 0; sliderOpex.dispatchEvent(new Event('input'));
+            document.getElementById("nominalTurun").value = '';
+            document.getElementById("nominalHPP").value = '';
+            document.getElementById("nominalOpex").value = '';
             produkContainer.querySelectorAll('.prod-slider').forEach(sl => {
                 sl.value = 0;
                 const lbl = sl.closest('.added-prod-slider').querySelector('.prod-lbl');

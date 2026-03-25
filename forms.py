@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, DateField, FloatField, SelectField, IntegerField, RadioField, TextAreaField, SelectMultipleField, BooleanField, widgets
-from wtforms.validators import DataRequired, Length, EqualTo, Regexp
+from wtforms.validators import DataRequired, Length, EqualTo, Regexp, Optional
 from flask_wtf.file import FileField, FileRequired, FileAllowed
 from datetime import date
 
@@ -8,6 +8,7 @@ class MultiCheckboxField(SelectMultipleField):
     widget = widgets.ListWidget(prefix_label=False)
     option_widget = widgets.CheckboxInput()
 
+# MultiCheckboxField class is used for multi-select
 class LoginForm(FlaskForm):
     """Form Login Pengguna UMKM."""
     username = StringField('Nama Pengguna', validators=[
@@ -103,7 +104,7 @@ class ProfilPerusahaanForm(FlaskForm):
         ('SPTIK', 'SPTIK'), ('AKTE', 'AKTE'), ('PIRT', 'PIRT')
     ])
     ijin_usaha_nomor = StringField('Nomor Ijin Usaha', validators=[Length(max=100)])
-    ijin_usaha_tanggal = DateField('Tanggal Ijin Usaha (Opsional)', format='%Y-%m-%d', validators=[])
+    ijin_usaha_tanggal = DateField('Tanggal Ijin Usaha (Opsional)', format='%Y-%m-%d', validators=[Optional()])
     ijin_usaha = StringField('Ijin Usaha Gabungan (Hidden)', validators=[Length(max=255)])
     
     haki_jenis = MultiCheckboxField('Perlindungan HAKI & Sertifikasi HALAL', choices=[
@@ -113,15 +114,11 @@ class ProfilPerusahaanForm(FlaskForm):
     merk_dagang = StringField('Merk Dagang', validators=[Length(max=100)])
     
     # BAGIAN 1: Tenaga Kerja
-    tk_tetap = IntegerField('Jumlah Tenaga Kerja Tetap', default=0)
-    tk_tidak_tetap = IntegerField('Jumlah Tenaga Kerja Tidak Tetap', default=0)
+    tk_tetap = IntegerField('Jumlah Tenaga Kerja Tetap', default=0, validators=[Optional()])
+    tk_tidak_tetap = IntegerField('Jumlah Tenaga Kerja Tidak Tetap', default=0, validators=[Optional()])
     
     # BAGIAN 2: Data Produksi & Pemasaran (JSON-destined)
-    jenis_produk_1 = StringField('1. Jenis Produk')
-    jenis_produk_2 = StringField('2. Jenis Produk')
-    jenis_produk_3 = StringField('3. Jenis Produk')
-    jenis_produk_4 = StringField('4. Jenis Produk')
-    jenis_produk_5 = StringField('5. Jenis Produk')
+    # Jenis Produk sekarang ditangani dinamis dari template (array HTML: jenis_produk[])
     
     kapasitas_produksi_jumlah = StringField('Kapasitas Produksi per (unit/kg/ton/liter)')
     kapasitas_produksi_waktu = StringField('Waktu Produksi (hari/bulan/tahun)')
@@ -141,13 +138,13 @@ class ProfilPerusahaanForm(FlaskForm):
     kemasan_ketebalan = StringField('Ketebalan bahan (mm)')
     kemasan_desain = RadioField('Desain Kemasan', choices=[('Menarik', 'Menarik'), ('Tidak menarik', 'Tidak menarik')], default='')
     
-    segmen_atas = IntegerField('Segmen konsumen atas (%)', default=0)
-    segmen_menengah = IntegerField('Segmen konsumen menengah (%)', default=0)
-    segmen_bawah = IntegerField('Segmen konsumen bawah (%)', default=0)
+    segmen_atas = IntegerField('Segmen konsumen atas (%)', default=0, validators=[Optional()])
+    segmen_menengah = IntegerField('Segmen konsumen menengah (%)', default=0, validators=[Optional()])
+    segmen_bawah = IntegerField('Segmen konsumen bawah (%)', default=0, validators=[Optional()])
     
-    pemasaran_lokal = IntegerField('Lokal (%)', default=0)
-    pemasaran_regional = IntegerField('Regional (%)', default=0)
-    pemasaran_ekspor = IntegerField('Ekspor (%)', default=0)
+    pemasaran_lokal = IntegerField('Lokal (%)', default=0, validators=[Optional()])
+    pemasaran_regional = IntegerField('Regional (%)', default=0, validators=[Optional()])
+    pemasaran_ekspor = IntegerField('Ekspor (%)', default=0, validators=[Optional()])
     
     wilayah_pemasaran = TextAreaField('Sebutkan daerah pemasaran selama ini (1, 2, 3...)')
     

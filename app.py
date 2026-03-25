@@ -9,7 +9,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from dotenv import load_dotenv
 
 from config import Config
-from models import db, User, Transaksi, BukuKas, ProfilPerusahaan, AktivitasLog, AktivitasLog
+from models import db, User, Transaksi, BukuKas, ProfilPerusahaan, AktivitasLog, log_activity
 from forms import LoginForm, RegisterForm, TransaksiForm, BukuKasForm, UploadCSVForm, ProfilPerusahaanForm
 from flask_caching import Cache
 import json
@@ -309,6 +309,14 @@ def create_app(config_class=Config):
             try:
                 dt_extr = json.loads(profil.detil_industri)
                 
+                # Backward compatibility for jenis_produk
+                if 'jenis_produk' in dt_extr and isinstance(dt_extr['jenis_produk'], str):
+                    dt_extr['jenis_produk'] = [x.strip() for x in dt_extr['jenis_produk'].replace('\n', ',').split(',') if x.strip()]
+                elif 'jenis_produk' not in dt_extr:
+                    jp_temp = [dt_extr.get(f'jenis_produk_{i}') for i in range(1, 6) if dt_extr.get(f'jenis_produk_{i}')]
+                    if jp_temp:
+                        dt_extr['jenis_produk'] = jp_temp
+                
                 # Ijin Usaha & HAKI
                 form.ijin_usaha_jenis.data = dt_extr.get('ijin_usaha_jenis', [])
                 form.ijin_usaha_nomor.data = dt_extr.get('ijin_usaha_nomor', '')
@@ -318,12 +326,7 @@ def create_app(config_class=Config):
                     except: pass
                 form.haki_jenis.data = dt_extr.get('haki_jenis', [])
                 
-                # Jenis Produk 1-5
-                form.jenis_produk_1.data = dt_extr.get('jenis_produk_1', '')
-                form.jenis_produk_2.data = dt_extr.get('jenis_produk_2', '')
-                form.jenis_produk_3.data = dt_extr.get('jenis_produk_3', '')
-                form.jenis_produk_4.data = dt_extr.get('jenis_produk_4', '')
-                form.jenis_produk_5.data = dt_extr.get('jenis_produk_5', '')
+                # Jenis Produk dinamis (tidak pakai form WTForms)
                 
                 form.kapasitas_produksi_jumlah.data = dt_extr.get('kapasitas_produksi_jumlah', '')
                 form.kapasitas_produksi_waktu.data = dt_extr.get('kapasitas_produksi_waktu', '')
@@ -389,11 +392,8 @@ def create_app(config_class=Config):
                 'ijin_usaha_tanggal': ij_tgl,
                 'haki_jenis': form.haki_jenis.data,
                 
-                'jenis_produk_1': form.jenis_produk_1.data,
-                'jenis_produk_2': form.jenis_produk_2.data,
-                'jenis_produk_3': form.jenis_produk_3.data,
-                'jenis_produk_4': form.jenis_produk_4.data,
-                'jenis_produk_5': form.jenis_produk_5.data,
+                # jenis produk array dinamis diambil dari request
+                'jenis_produk': [jp for jp in request.form.getlist('jenis_produk[]') if jp.strip()],
                 
                 'kapasitas_produksi_jumlah': form.kapasitas_produksi_jumlah.data,
                 'kapasitas_produksi_waktu': form.kapasitas_produksi_waktu.data,
@@ -446,6 +446,13 @@ def create_app(config_class=Config):
             flash("Profil Perusahaan berhasil disimpan!", "success")
             return redirect(url_for('dashboard'))
             
+        if request.method == 'POST' and not form.validate():
+            # Jika ada error validasi di field tertentu
+            for field, errors in form.errors.items():
+                for error in errors:
+                    flash(f"Error pada {getattr(form, field).label.text}: {error}", "error")
+            flash("Mohon periksa kembali form Anda. Beberapa data wajib belum diisi dengan benar.", "warning")
+
         return render_template('profil_perusahaan.html', form=form, nama_buku=buku_aktif.nama_buku, profil=profil, dt_extr=dt_extr)
 
     @app.route('/input', methods=['GET', 'POST'])
@@ -468,7 +475,7 @@ def create_app(config_class=Config):
                 t.kategori = form.kategori.data
                 t.nama_produk = form.nama_produk.data if form.nama_produk.data else None
                 t.kuantitas = form.kuantitas.data or 0
-                t.harga_modal = form.harga_modal.data or 0.0
+                t.harga_modal = float(form.harga_modal.data) if form.harga_modal.data is not None and str(form.harga_modal.data).strip() != "" else None
                 t.jenis_pengeluaran = form.jenis_pengeluaran.data
                 t.pemasukan = form.pemasukan.data or 0.0
                 t.pengeluaran = form.pengeluaran.data or 0.0
@@ -655,7 +662,7 @@ def create_app(config_class=Config):
             
             start_idx = (page - 1) * per_page
             end_idx = start_idx + per_page
-            transaksi_list_tampil = transaksi_list_tampil_all[start_idx:end_idx]
+            transaksi_list_tampil = list(transaksi_list_tampil_all)[start_idx:end_idx]
             
             page_range = range(max(1, page - 2), min(total_pages + 1, page + 3))
 
@@ -719,6 +726,9 @@ def create_app(config_class=Config):
                         # Lewati baris kosong
                         if not row['tanggal']: continue
                         try:
+                            raw_hpp = row.get('hpp', '').strip() if 'hpp' in row else row.get('harga_modal', '').strip()
+                            parsed_hpp = float(raw_hpp) if raw_hpp != "" else None
+
                             t = Transaksi(
                                 user_id=session['user_id'],
                                 buku_kas_id=buku_kas_id,
@@ -726,7 +736,7 @@ def create_app(config_class=Config):
                                 kategori=row.get('kategori', 'Lainnya'),
                                 nama_produk=row.get('nama_produk') or None,
                                 kuantitas=int(row.get('kuantitas') or 0),
-                                harga_modal=float(row.get('harga_modal') or 0),
+                                harga_modal=parsed_hpp,
                                 jenis_pengeluaran=row.get('jenis_pengeluaran', 'operasional').lower() if row.get('jenis_pengeluaran') else 'operasional',
                                 pemasukan=float(row.get('pemasukan') or 0),
                                 pengeluaran=float(row.get('pengeluaran') or 0),
@@ -736,7 +746,7 @@ def create_app(config_class=Config):
                             if t.jenis_pengeluaran not in ['operasional', 'modal']:
                                 t.jenis_pengeluaran = 'operasional'
                             db.session.add(t)
-                            sukses += 1
+                            sukses = int(sukses) + 1
                         except (ValueError, KeyError, TypeError):
                             # tampung baris yang datanya gak valid
                             gagal.append(str(baris_ke))
@@ -763,11 +773,11 @@ def create_app(config_class=Config):
     @app.route('/download-template', methods=['GET'])
     @login_required
     def download_template():
-        content = "tanggal,kategori,nama_produk,kuantitas,pemasukan,pengeluaran,jenis_pengeluaran,jumlah_pelanggan,catatan\n" \
-                  "2026-03-01,Makanan & Minuman,Nasi Goreng Spesial,20,500000,200000,operasional,15,Hari hujan rintik\n" \
-                  "2026-03-02,Retail,Kaus Sablon,50,1500000,4500000,modal,5,Beli stok grosir baru\n" \
-                  "2026-03-03,Jasa,Reparasi AC,5,1000000,100000,operasional,4,Pelanggan baru membludak\n" \
-                  "2026-03-04,Makanan & Minuman,Es Teh Manis,30,150000,50000,operasional,30,Banyak anak sekolah beli\n"
+        content = "tanggal,kategori,nama_produk,kuantitas,hpp,pemasukan,pengeluaran,jenis_pengeluaran,jumlah_pelanggan,catatan\n" \
+                  "2026-03-01,Makanan & Minuman,Nasi Goreng Spesial,20,15000,500000,0,operasional,15,Hari hujan rintik\n" \
+                  "2026-03-02,Retail,Kaus Sablon,50,40000,1500000,0,operasional,5,Beli stok grosir\n" \
+                  "2026-03-03,Jasa,Reparasi AC,2,0,1000000,0,operasional,4,Pelanggan baru membludak\n" \
+                  "2026-03-04,Lainnya,,,0,0,50000,operasional,0,Bayar Listrik\n"
         return send_file(io.BytesIO(content.encode('utf-8')), mimetype='text/csv', as_attachment=True, download_name='Template_PANTAUIN.csv')
 
     @app.route('/simulator', methods=['GET'])
@@ -838,6 +848,10 @@ def create_app(config_class=Config):
             persen_hpp = min(max(_safe_float(req.get('perubahan_hpp', 0)), -100), 500) / 100
             persen_opex = min(max(_safe_float(req.get('perubahan_opex', 0)), -100), 500) / 100
             
+            nominal_penjualan = _safe_float(req.get('nominal_penjualan', 0))
+            nominal_hpp = _safe_float(req.get('nominal_hpp', 0))
+            nominal_opex = _safe_float(req.get('nominal_opex', 0))
+            
             periode_str = req.get('periode', '30')
             start_date_str = req.get('start_date', '')
             end_date_str = req.get('end_date', '')
@@ -900,22 +914,22 @@ def create_app(config_class=Config):
             avg_pengeluaran_harian = total_pengeluaran / hari_aktif if hari_aktif > 0 else 0
 
             # --- Kalkulasi Forecasting ---
-            in_baru = total_pemasukan * (1 + persen_umum)
+            in_baru = total_pemasukan * (1 + persen_umum) + nominal_penjualan
             
             # Forecasting per produk
             for k, v in req.items():
                 if k.startswith('persen_produk_'):
                     nama_produk = k.replace('persen_produk_', '').lower()
-                    perubahan_persen = float(v) / 100
+                    perubahan_persen = float(v) / 100.0
                     pemasukan_produk = sum(t.pemasukan for t in t_periode if t.nama_produk and t.nama_produk.lower() == nama_produk)
-                    in_baru += (pemasukan_produk * perubahan_persen)
+                    in_baru = float(in_baru) + float(pemasukan_produk * perubahan_persen)
             
-            in_baru = max(0, in_baru)
+            in_baru = max(0.0, float(in_baru))
             
-            modal_baru = max(0, total_modal * (1 + persen_hpp))
-            opex_baru = max(0, total_operasional * (1 + persen_opex))
+            modal_baru = max(0.0, float(total_modal * (1 + persen_hpp) + nominal_hpp))
+            opex_baru = max(0.0, float(total_operasional * (1 + persen_opex) + nominal_opex))
             
-            if total_pengeluaran == 0:
+            if total_pengeluaran == 0 and modal_baru == 0 and opex_baru == 0:
                 out_baru = 0
             else:
                 out_baru = modal_baru + opex_baru
@@ -944,19 +958,20 @@ def create_app(config_class=Config):
                 status_bisnis = "Waspada"
             
             # --- Saran Kontekstual ---
-            is_default = persen_umum == 0 and persen_hpp == 0 and persen_opex == 0 and all(
-                float(v) == 0 for k, v in req.items() if 'produk' in k
-            )
-            if is_default:
+            is_default = (persen_umum == 0 and persen_hpp == 0 and persen_opex == 0 and 
+                          nominal_penjualan == 0 and nominal_hpp == 0 and nominal_opex == 0 and 
+                          all(float(v) == 0 for k, v in req.items() if 'produk' in k))
+
+            if is_default and saldo_asli >= 0:
                 saran = f"Kondisi stabil berdasarkan {jumlah_trx} transaksi ({hari_aktif} hari aktif)."
-            elif persen_umum <= -1.0:
-                saran = "Anda mensimulasikan SHUTDOWN total penjualan. Tidak ada pemasukan sama sekali."
+            elif saldo_baru < 0:
+                saran = f"Status {status_bisnis}. RUGI Rp {int(abs(saldo_baru)):,}! Dana cadangan riil bertahan ±{hari_bertahan} hari.".replace(',', '.')
+            elif persen_umum <= -1.0 and nominal_penjualan <= 0:
+                saran = "Anda mensimulasikan penutupan total penjualan (omzet 0)."
             elif persen_umum > 0.5 or (saldo_baru > saldo_asli * 1.5):
-                saran = f"Proyeksi Pertumbuhan! Pastikan kapasitas produksi dan bahan baku siap untuk lonjakan pesanan."
-            elif saldo_baru >= 0:
-                saran = f"Status {status_bisnis}. Laba bersih Rp {int(saldo_baru):,}. BEP di {bep_persen:.0f}% kapasitas.".replace(',', '.')
+                saran = "Proyeksi Pertumbuhan! Pastikan kapasitas produksi dan bahan baku siap untuk lonjakan pesanan."
             else:
-                saran = f"RUGI Rp {int(abs(saldo_baru)):,}! Dana cadangan riil bertahan ±{hari_bertahan} hari.".replace(',', '.')
+                saran = f"Status {status_bisnis}. Laba bersih Rp {int(saldo_baru):,}. BEP di {bep_persen:.0f}% kapasitas.".replace(',', '.')
             
             result = {
                 "pemasukan_baru": round(in_baru),

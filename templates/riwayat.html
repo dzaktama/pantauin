@@ -161,16 +161,20 @@
                     </td>
                     <td class="fw-bold text-success js-rupiah" data-val="{{ row.pemasukan }}">0</td>
                     <td class="fw-bold text-danger js-rupiah" data-val="{{ row.pengeluaran }}">0</td>
-                    {% set hpp_total = (row.harga_modal or 0) * (row.kuantitas or 0) %}
-                    {% set laba_kotor = row.pemasukan - hpp_total %}
-                    <td class="fw-bold js-rupiah" data-val="{{ laba_kotor }}" style="color:#8b5cf6;">0</td>
-                    <td class="fw-bold" style="color:#f59e0b;">
-                        {% if row.pemasukan > 0 %}
-                            {{ "%.0f"|format(laba_kotor / row.pemasukan * 100) }}%
+                    {% if row.pemasukan > 0 %}
+                        {% if row.harga_modal is not none %}
+                            {% set hpp_total = row.harga_modal * (row.kuantitas or 0) %}
+                            {% set laba_kotor = row.pemasukan - hpp_total %}
+                            <td class="fw-bold js-rupiah" data-val="{{ laba_kotor }}" style="color:#8b5cf6;">0</td>
+                            <td class="fw-bold" style="color:#f59e0b;">{{ "%.0f"|format(laba_kotor / row.pemasukan * 100) }}%</td>
                         {% else %}
-                            -
+                            <td class="fw-bold text-muted text-center">-</td>
+                            <td class="fw-bold text-muted text-center" style="font-size:0.8rem;">HPP Kosong</td>
                         {% endif %}
-                    </td>
+                    {% else %}
+                        <td class="text-muted text-center">-</td>
+                        <td class="text-muted text-center">-</td>
+                    {% endif %}
                     <td class="text-muted">{{ row.jumlah_pelanggan if row.jumlah_pelanggan > 0 else '-' }}</td>
                     <td class="text-start text-muted small" style="min-width: 200px;">
                         {{ row.catatan if row.catatan else '-' }}

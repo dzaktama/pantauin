@@ -120,37 +120,42 @@ def hitung_health_score(transaksi_list, periode_grafik=30):
     # 4. Gross Margin Harian (0 - 100)
     data_harian = list(_agregasi_per_hari(transaksi_list).values())
     pemasukan_harian = [d['pemasukan'] for d in data_harian]
-    margin_harian = [max(0, d['pemasukan'] - d['pengeluaran_md']) for d in data_harian]
-    rata_margin = np.mean(margin_harian) if margin_harian else 0
     rata_pemasukan_harian = np.mean(pemasukan_harian) if pemasukan_harian else 0
-    
-    if rata_pemasukan_harian == 0:
-        skor_gross_margin = 0
-        gross_margin_pct = 0
-    else:
-        gross_margin_pct = (rata_margin / rata_pemasukan_harian) * 100
-        skor_gross_margin = min(100, max(0, gross_margin_pct / 0.3)) # asumsi margin idaman 30%
 
-    # 5. Konsistensi Pemasukan (Standard Deviasi) (0 - 100)
-    rata_harian = rata_pemasukan_harian
-    std_harian = np.std(pemasukan_harian) if len(pemasukan_harian) > 1 else 0
-    cv = (std_harian / rata_harian) if rata_harian > 0 else 1
-    skor_konsistensi = max(0, (1 - cv) * 100)
+    total_valid_in = 0.0
+    total_valid_hpp = 0.0
+    for t in transaksi_list:
+        if t.pemasukan > 0 and getattr(t, 'harga_modal', None) is not None:
+            total_valid_in += t.pemasukan
+            total_valid_hpp += t.harga_modal * (getattr(t, 'kuantitas', 0) or 0)
+    
+    if total_valid_in > 0:
+        gross_margin_pct = ((total_valid_in - total_valid_hpp) / total_valid_in) * 100
+    else:
+        gross_margin_pct = 0.0
+        
+    skor_gross_margin = min(100, max(0, gross_margin_pct / 0.3)) if gross_margin_pct > 0 else 0
+
+    rata_harian = float(rata_pemasukan_harian)
+    std_harian = float(np.std(pemasukan_harian)) if len(pemasukan_harian) > 1 else 0.0
+    cv = (std_harian / rata_harian) if rata_harian > 0 else 1.0
+    skor_konsistensi = max(0.0, (1 - cv) * 100.0)
 
     # TOTAL SCORE 0-100
     skor_total = (
-        (skor_stabilitas * BOBOT_STABILITAS) +
-        (skor_tren * BOBOT_TREN) +
-        (skor_pengeluaran * BOBOT_RASIO_OP) +
-        (skor_gross_margin * BOBOT_GROSS_MARGIN) +
-        (skor_konsistensi * BOBOT_KONSISTENSI)
+        (float(skor_stabilitas) * BOBOT_STABILITAS) +
+        (float(skor_tren) * BOBOT_TREN) +
+        (float(skor_pengeluaran) * BOBOT_RASIO_OP) +
+        (float(skor_gross_margin) * BOBOT_GROSS_MARGIN) +
+        (float(skor_konsistensi) * BOBOT_KONSISTENSI)
     )
+    skor_total = int(round(skor_total))
     skor_total = round(skor_total)
 
     # limit point ampe 45 aja kalau kas nya tekor
-    val_saldo_30_awal = (in_minggu_ini - out_minggu_ini) + (in_minggu_lalu - out_minggu_lalu) + (in_minggu_lalu_2 - out_minggu_lalu_2) + (in_minggu_lalu_3 - out_minggu_lalu_3)
-    if saldo_operasional_minggu_ini < 0 or val_saldo_30_awal < 0:
-        skor_total = min(skor_total, 45)
+    val_saldo_30_awal = (float(in_minggu_ini) - float(out_minggu_ini)) + (float(in_minggu_lalu) - float(out_minggu_lalu)) + (float(in_minggu_lalu_2) - float(out_minggu_lalu_2)) + (float(in_minggu_lalu_3) - float(out_minggu_lalu_3))
+    if float(saldo_operasional_minggu_ini) < 0 or val_saldo_30_awal < 0:
+        skor_total = int(min(skor_total, 45))
 
     # Labeling & Warning (Sesuai Sinkronisasi Proposal: Rule Peringatan Dini)
     peringatan = []
@@ -275,13 +280,17 @@ def hitung_health_score(transaksi_list, periode_grafik=30):
     kustom_out_md = sum(t.pengeluaran for t in t_kustom if getattr(t, 'jenis_pengeluaran', 'operasional') == 'modal')
     kustom_out_total = kustom_out_op + kustom_out_md
     
-    # cari modal total barang yang laku pakai hpp asli baris transaksi
-    kustom_hpp = sum((getattr(t, 'harga_modal', 0.0) or 0.0) * (getattr(t, 'kuantitas', 0) or 0) for t in t_kustom)
+    valid_kustom_in = 0.0
+    valid_kustom_hpp = 0.0
+    for t in t_kustom:
+        if t.pemasukan > 0 and getattr(t, 'harga_modal', None) is not None:
+            valid_kustom_in += t.pemasukan
+            valid_kustom_hpp += t.harga_modal * (getattr(t, 'kuantitas', 0) or 0)
     
-    if kustom_hpp > 0:
-        kustom_gm = ((kustom_in - kustom_hpp) / kustom_in * 100) if kustom_in > 0 else 0
+    if valid_kustom_in > 0:
+        kustom_gm = ((valid_kustom_in - valid_kustom_hpp) / valid_kustom_in) * 100
     else:
-        kustom_gm = ((kustom_in - kustom_out_md) / kustom_in * 100) if kustom_in > 0 else 0
+        kustom_gm = 0.0
         
     kustom_saldo = kustom_in - kustom_out_total
     hari_kustom = len({t.tanggal for t in t_kustom}) or 1
@@ -353,8 +362,8 @@ def hitung_health_score(transaksi_list, periode_grafik=30):
         "grafik_aktual": Y_trend, # Array 1D pemasukan harian
         "grafik_ma7": Y_ma7,
         "grafik_ma30": Y_ma30,
-        "grafik_op_aktual": [d['pengeluaran_op'] for d in data_harian][-periode_grafik:],
-        "grafik_md_aktual": [d['pengeluaran_md'] for d in data_harian][-periode_grafik:],
+        "grafik_op_aktual": [float(d['pengeluaran_op']) for d in data_harian][-int(periode_grafik):],
+        "grafik_md_aktual": [float(d['pengeluaran_md']) for d in data_harian][-int(periode_grafik):],
         "grafik_proyeksi": proyeksi_list, # Array 1D proyeksi harian ke depan
         "proyeksi_pengeluaran": proyeksi_pengeluaran_list, 
         "catatan_mingguan": catatan_mingguan,

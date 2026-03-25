@@ -78,7 +78,7 @@ def generate_csv(filename, scenario):
                     "kategori": random.choice(KATEGORI_IN),
                     "nama_produk": prod,
                     "kuantitas": qty,
-                    "harga_modal": harga_modal_satuan * qty,
+                    "hpp": harga_modal_satuan,
                     "pemasukan": total_in,
                     "pengeluaran": 0,
                     "jenis_pengeluaran": "",
@@ -107,7 +107,7 @@ def generate_csv(filename, scenario):
                 "kategori": kat_out,
                 "nama_produk": "",
                 "kuantitas": 0,
-                "harga_modal": 0,
+                "hpp": 0,
                 "pemasukan": 0,
                 "pengeluaran": random.randint(*biaya_range),
                 "jenis_pengeluaran": jns_out,
@@ -119,7 +119,7 @@ def generate_csv(filename, scenario):
     data.sort(key=lambda x: x['tanggal'])
     
     # Tulis ke CSV
-    headers = ["tanggal", "kategori", "nama_produk", "kuantitas", "harga_modal", "pemasukan", "pengeluaran", "jenis_pengeluaran", "jumlah_pelanggan", "catatan"]
+    headers = ["tanggal", "kategori", "nama_produk", "kuantitas", "hpp", "pemasukan", "pengeluaran", "jenis_pengeluaran", "jumlah_pelanggan", "catatan"]
     with open(filename, 'w', newline='', encoding='utf-8') as f:
         writer = csv.DictWriter(f, fieldnames=headers)
         writer.writeheader()

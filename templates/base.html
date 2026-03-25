@@ -5,6 +5,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Aplikasi UMKM{% endblock %} | PANTAUIN</title>
+    <!-- Script untuk set tema awal tanpa FOUC -->
+    <script>
+        const storedTheme = localStorage.getItem('theme');
+        const getPreferredTheme = () => {
+            if (storedTheme) { return storedTheme; }
+            return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        };
+        document.documentElement.setAttribute('data-bs-theme', getPreferredTheme());
+    </script>
     <!-- Preconnect untuk Performa Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -73,7 +82,7 @@
                     </a>
                 </li>
                 <li class="nav-item mb-1 mt-4 px-3">
-                    <span class="text-white-50 small fw-bold text-uppercase ms-3">Sistem</span>
+                    <span class="small fw-bold text-uppercase ms-3" style="color: var(--sidebar-link-color);">Sistem</span>
                 </li>
                 <li class="nav-item mb-1">
                     <a class="nav-link {% if request.endpoint == 'buku_kas_manager' %}active{% endif %}"
@@ -95,15 +104,15 @@
             </ul>
         </div>
 
-        <div class="sidebar-footer p-3 border-top" style="border-color: rgba(255,255,255,0.08) !important;">
-            <div class="d-flex align-items-center mb-3 text-white px-2">
+        <div class="sidebar-footer p-3 border-top" style="border-color: var(--sidebar-hover-bg) !important;">
+            <div class="d-flex align-items-center mb-3 px-2" style="color: var(--sidebar-text);">
                 <div class="bg-warning text-dark rounded-circle d-flex align-items-center justify-content-center fw-bold me-3 shadow-sm"
                     style="width: 40px; height: 40px; font-size: 1.1rem;">
                     {{ session.username[0]|upper }}
                 </div>
                 <div>
                     <div class="small fw-bold text-truncate" style="max-width: 140px;">{{ session.username }}</div>
-                    <div class="small text-white-50 text-truncate" style="font-size: 0.75rem; max-width: 140px;"
+                    <div class="small text-truncate" style="font-size: 0.75rem; max-width: 140px; color: var(--sidebar-link-color);"
                         title="{{ buku_kas_aktif.nama_buku if buku_kas_aktif else 'Belum Pilih Proyek' }}">
                         {{ buku_kas_aktif.nama_buku if buku_kas_aktif else 'Belum Pilih Proyek' }}
                     </div>
@@ -130,6 +139,9 @@
                     %}</h5>
             </div>
             <div class="d-flex align-items-center gap-3">
+                <button type="button" class="btn btn-light rounded-circle shadow-sm d-flex align-items-center justify-content-center" id="theme-toggle" aria-label="Toggle Theme" style="width: 40px; height: 40px; border-color: var(--border-color); background-color: var(--surface-color); color: var(--text-dark);">
+                    <i class="bi bi-moon-stars-fill" id="theme-icon"></i>
+                </button>
                 <span
                     class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3 py-2 fw-bold shadow-sm d-flex align-items-center">
                     <i class="bi bi-check-circle-fill me-2"></i> Koneksi Lancar
@@ -234,7 +246,45 @@
             // Pasang Font ChartJS Global (Jika Halaman Mengandung Grafik)
             if (window.Chart) {
                 Chart.defaults.font.family = "'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif";
-                Chart.defaults.color = '#64748B'; // Muted slate text
+                Chart.defaults.color = document.documentElement.getAttribute('data-bs-theme') === 'dark' ? '#9aa0a6' : '#64748B';
+            }
+
+            // Theme Toggle Logic
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            const themeIcon = document.getElementById('theme-icon');
+            
+            const setTheme = function (theme) {
+                if (theme === 'dark') {
+                    document.documentElement.setAttribute('data-bs-theme', 'dark');
+                    if (themeIcon) {
+                        themeIcon.classList.remove('bi-moon-stars-fill');
+                        themeIcon.classList.add('bi-sun-fill');
+                    }
+                } else {
+                    document.documentElement.setAttribute('data-bs-theme', 'light');
+                    if (themeIcon) {
+                        themeIcon.classList.remove('bi-sun-fill');
+                        themeIcon.classList.add('bi-moon-stars-fill');
+                    }
+                }
+                if (window.Chart) {
+                    Chart.defaults.color = theme === 'dark' ? '#9AA0A6' : '#64748B';
+                    for (let id in Chart.instances) {
+                        if(Chart.instances[id].update) Chart.instances[id].update();
+                    }
+                }
+            };
+            
+            // Set initial icon
+            setTheme(document.documentElement.getAttribute('data-bs-theme'));
+
+            if (themeToggleBtn) {
+                themeToggleBtn.addEventListener('click', () => {
+                    const currentTheme = document.documentElement.getAttribute('data-bs-theme');
+                    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                    localStorage.setItem('theme', newTheme);
+                    setTheme(newTheme);
+                });
             }
 
             // Auto-hide success alerts smoothly

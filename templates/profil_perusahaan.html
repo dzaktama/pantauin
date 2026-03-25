@@ -179,13 +179,25 @@
             </div>
             <div class="card-body p-4 p-md-5">
 
-                <h6 class="fw-bold text-secondary small mb-3">Jenis-jenis produk yang dihasilkan</h6>
-                <div class="row g-2 mb-4">
-                    <div class="col-12">{{ form.jenis_produk_1(class="form-control rounded-3", placeholder="1. ...") }}</div>
-                    <div class="col-12">{{ form.jenis_produk_2(class="form-control rounded-3", placeholder="2. ...") }}</div>
-                    <div class="col-12">{{ form.jenis_produk_3(class="form-control rounded-3", placeholder="3. ...") }}</div>
-                    <div class="col-12">{{ form.jenis_produk_4(class="form-control rounded-3", placeholder="4. ...") }}</div>
-                    <div class="col-12">{{ form.jenis_produk_5(class="form-control rounded-3", placeholder="5. ...") }}</div>
+                <div class="mb-4">
+                    <h6 class="fw-bold text-secondary small mb-2">Jenis-jenis produk yang dihasilkan</h6>
+                    <div id="produk-container" class="d-flex flex-column gap-2 mb-2">
+                        {% set jp_list = dt_extr.get('jenis_produk', ['']) %}
+                        {% if not jp_list %}{% set jp_list = [''] %}{% endif %}
+                        {% for jp in jp_list %}
+                        <div class="input-group">
+                            <input type="text" name="jenis_produk[]" class="form-control rounded-start" value="{{ jp }}" placeholder="Nama Produk">
+                            {% if loop.index0 > 0 %}
+                            <button type="button" class="btn btn-outline-danger" onclick="this.parentElement.remove()"><i class="bi bi-trash"></i></button>
+                            {% else %}
+                            <button type="button" class="btn btn-outline-secondary disabled" tabindex="-1"><i class="bi bi-trash"></i></button>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <button type="button" class="btn btn-sm btn-outline-primary" onclick="tambahProduk()">
+                        <i class="bi bi-plus-lg me-1"></i> Tambah Produk Lain
+                    </button>
                 </div>
 
                 <div class="row g-4 mb-4">
@@ -478,33 +490,68 @@
                         <div class="small fw-bold text-uppercase text-primary-emphasis mb-1 px-1 mt-3" style="font-size:0.7rem; letter-spacing:0.08em;"><i class="bi bi-box-seam me-1"></i> PRODUKSI & TEKNOLOGI</div>
                         <div class="bg-white rounded-3 shadow-sm px-3 py-2 mb-2">
                             {% if dt_extr.get('jenis_produk') %}
-                            <div class="small mb-1"><span class="text-muted">Produk:</span> <span class="text-dark">{{ dt_extr.get('jenis_produk') }}</span></div>
+                            <div class="small mb-1"><span class="text-muted">Produk:</span> 
+                                <ul class="text-dark mb-1 ps-3">
+                                {% for jp in dt_extr.get('jenis_produk') %}
+                                    {% if jp.strip() %}<li>{{ jp }}</li>{% endif %}
+                                {% endfor %}
+                                </ul>
+                            </div>
                             {% endif %}
-                            <div class="d-flex justify-content-between small mb-1"><span class="text-muted">Kapasitas</span><span class="fw-medium text-dark">{{ dt_extr.get('kapasitas_produksi') or '-' }}</span></div>
-                            <div class="d-flex justify-content-between small mb-1"><span class="text-muted">Omzet</span><span class="fw-medium text-dark">{{ dt_extr.get('omzet_usaha') or '-' }}</span></div>
+                            <div class="d-flex justify-content-between small mb-1"><span class="text-muted">Kapasitas</span><span class="fw-medium text-dark text-end" style="max-width:60%">
+                                {% if dt_extr.get('kapasitas_produksi_jumlah') and dt_extr.get('kapasitas_produksi_waktu') %}
+                                    {{ dt_extr.get('kapasitas_produksi_jumlah') }} / {{ dt_extr.get('kapasitas_produksi_waktu') }}
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </span></div>
+                            <div class="d-flex justify-content-between small mb-1"><span class="text-muted">Omzet</span><span class="fw-medium text-dark text-end" style="max-width:60%">{{ dt_extr.get('omzet_usaha') or '-' }}</span></div>
                             <div class="d-flex justify-content-between small mb-1"><span class="text-muted">Teknologi</span><span class="fw-medium text-dark text-end" style="max-width:55%">{{ dt_extr.get('teknologi_produksi') or '-' }}</span></div>
                             <div class="d-flex justify-content-between small mb-1"><span class="text-muted">Kemasan</span><span class="fw-medium text-dark text-end" style="max-width:55%">{{ dt_extr.get('teknologi_pengemasan') or '-' }}</span></div>
-                            <div class="d-flex justify-content-between small mb-1"><span class="text-muted">Bahan Baku</span><span class="fw-medium text-dark text-end" style="max-width:55%">{{ dt_extr.get('bahan_baku_asal') or '-' }} ({{ dt_extr.get('bahan_baku_ketersediaan') or '-' }})</span></div>
-                            <div class="d-flex justify-content-between small mb-1"><span class="text-muted">Bahan Kemasan</span><span class="fw-medium text-dark text-end" style="max-width:55%">{{ dt_extr.get('kemasan_bahan') or '-' }}</span></div>
+                            <div class="d-flex justify-content-between small mb-1"><span class="text-muted">Bahan Baku</span><span class="fw-medium text-dark text-end" style="max-width:55%">{{ dt_extr.get('bahan_baku_asal') or '-' }}{% if dt_extr.get('bahan_baku_asal') == 'Lain daerah' and dt_extr.get('bahan_baku_asal_lain') %} ({{ dt_extr.get('bahan_baku_asal_lain') }}){% endif %} - {{ dt_extr.get('bahan_baku_ketersediaan') or '-' }}</span></div>
+                            <div class="d-flex justify-content-between small mb-1"><span class="text-muted">Bahan Kemasan</span><span class="fw-medium text-dark text-end" style="max-width:55%">
+                                {% if dt_extr.get('kemasan_bahan') %} [ {{ dt_extr.get('kemasan_bahan')|join(', ') }} ] {% else %} - {% endif %} 
+                                {% if dt_extr.get('kemasan_bahan_lain') %} ({{ dt_extr.get('kemasan_bahan_lain') }}) {% endif %}
+                                {% if dt_extr.get('kemasan_ketebalan') %} - {{ dt_extr.get('kemasan_ketebalan') }}mm {% endif %}
+                            </span></div>
                             <div class="d-flex justify-content-between small"><span class="text-muted">Desain Produk</span><span class="fw-medium text-dark text-end" style="max-width:55%">{{ dt_extr.get('desain_produk') or '-' }} / {{ dt_extr.get('kemasan_desain') or '-' }}</span></div>
                         </div>
 
                         <!-- PEMASARAN -->
                         <div class="small fw-bold text-uppercase text-primary-emphasis mb-1 px-1 mt-3" style="font-size:0.7rem; letter-spacing:0.08em;"><i class="bi bi-megaphone me-1"></i> PEMASARAN</div>
                         <div class="bg-white rounded-3 shadow-sm px-3 py-2 mb-2">
-                            <div class="d-flex justify-content-between small mb-1"><span class="text-muted">Segmen</span><span class="fw-medium text-dark text-end" style="max-width:60%">{{ dt_extr.get('segmen_pasar') or '-' }}</span></div>
-                            <div class="d-flex justify-content-between small mb-1"><span class="text-muted">Distribusi</span><span class="fw-medium text-dark text-end" style="max-width:60%">{{ dt_extr.get('daerah_pemasaran') or '-' }}</span></div>
+                            <div class="d-flex justify-content-between small mb-1"><span class="text-muted">Segmen</span><span class="fw-medium text-dark text-end" style="max-width:60%">
+                                A: {{ dt_extr.get('segmen_atas') or 0 }}%, M: {{ dt_extr.get('segmen_menengah') or 0 }}%, B: {{ dt_extr.get('segmen_bawah') or 0 }}%
+                            </span></div>
+                            <div class="d-flex justify-content-between small mb-1"><span class="text-muted">Distribusi</span><span class="fw-medium text-dark text-end" style="max-width:60%">
+                                LKL: {{ dt_extr.get('pemasaran_lokal') or 0 }}%, RGN: {{ dt_extr.get('pemasaran_regional') or 0 }}%, EKS: {{ dt_extr.get('pemasaran_ekspor') or 0 }}%
+                            </span></div>
                             <div class="d-flex justify-content-between small mb-1"><span class="text-muted">Wilayah</span><span class="fw-medium text-dark text-end" style="max-width:60%">{{ dt_extr.get('wilayah_pemasaran') or '-' }}</span></div>
-                            <div class="d-flex justify-content-between small"><span class="text-muted">Sistem Jual</span><span class="fw-medium text-dark text-end" style="max-width:60%">{{ dt_extr.get('sistem_penjualan') or '-' }}</span></div>
+                            <div class="d-flex justify-content-between small"><span class="text-muted">Sistem Jual</span><span class="fw-medium text-dark text-end" style="max-width:60%">
+                                {% set sistem = [] %}
+                                {% if dt_extr.get('sistem_retail') %}{% set _ = sistem.append('Retail') %}{% endif %}
+                                {% if dt_extr.get('sistem_distributor') %}{% set _ = sistem.append('Distributor') %}{% endif %}
+                                {% if dt_extr.get('sistem_lainnya') %}{% set _ = sistem.append(dt_extr.get('sistem_lainnya')) %}{% endif %}
+                                {{ sistem|join(', ') if sistem else '-' }}
+                            </span></div>
                         </div>
 
-                        {% if dt_extr.get('komitmen') %}
                         <!-- KOMITMEN -->
                         <div class="small fw-bold text-uppercase text-primary-emphasis mb-1 px-1 mt-3" style="font-size:0.7rem; letter-spacing:0.08em;"><i class="bi bi-patch-check me-1"></i> KOMITMEN KEMITRAAN</div>
                         <div class="bg-white rounded-3 shadow-sm px-3 py-2 mb-2">
-                            <div class="small text-dark">{{ dt_extr.get('komitmen') }}</div>
+                            <div class="small text-dark">
+                                <ul class="mb-0 ps-3">
+                                {% if dt_extr.get('komitmen_1') %}<li>Mengirim profil perusahaan</li>{% endif %}
+                                {% if dt_extr.get('komitmen_2') %}<li>Mengirim daftar jenis produk</li>{% endif %}
+                                {% if dt_extr.get('komitmen_3') %}<li>Mengirim E-Digital Produk</li>{% endif %}
+                                {% if dt_extr.get('komitmen_4') %}<li>Mengirimkan Sample Produk</li>{% endif %}
+                                {% if dt_extr.get('komitmen_5') %}<li>Mengikuti pameran yang difasilitasi ITPC</li>{% endif %}
+                                {% if not (dt_extr.get('komitmen_1') or dt_extr.get('komitmen_2') or dt_extr.get('komitmen_3') or dt_extr.get('komitmen_4') or dt_extr.get('komitmen_5')) %}
+                                <li>Belum ada komitmen yang dipilih.</li>
+                                {% endif %}
+                                </ul>
+                            </div>
                         </div>
-                        {% endif %}
                         {% endif %}
                     </div>
                 </div>
@@ -521,4 +568,19 @@
         </div><!-- End Kolom Kanan -->
     </div><!-- End Row -->
 </div>
+
+{% block scripts %}
+<script>
+function tambahProduk() {
+    const container = document.getElementById('produk-container');
+    const inputGroup = document.createElement('div');
+    inputGroup.className = 'input-group';
+    inputGroup.innerHTML = `
+        <input type="text" name="jenis_produk[]" class="form-control rounded-start" placeholder="Nama Produk">
+        <button type="button" class="btn btn-outline-danger" onclick="this.parentElement.remove()"><i class="bi bi-trash"></i></button>
+    `;
+    container.appendChild(inputGroup);
+}
+</script>
+{% endblock %}
 {% endblock %}
