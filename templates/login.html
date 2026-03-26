@@ -1,47 +1,302 @@
 {% extends 'base.html' %}
 {% block title %}Halaman Masuk{% endblock %}
 
+{% block extra_css %}
+<style>
+    .login-wrapper {
+        min-height: 80vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem 1rem;
+    }
+
+    .login-card {
+        width: 100%;
+        max-width: 960px;
+        border-radius: 24px;
+        overflow: hidden;
+        display: flex;
+        background: var(--surface-color);
+        border: 1px solid var(--border-color);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08), 0 8px 20px rgba(0, 0, 0, 0.04);
+        transition: box-shadow 0.3s ease;
+    }
+
+    [data-bs-theme="dark"] .login-card {
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    /* --- Left Panel (Branding) --- */
+    .login-brand-panel {
+        width: 42%;
+        background: linear-gradient(160deg, #1B2B5B 0%, #0F1A3A 60%, #162044 100%);
+        padding: 3rem 2.5rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .login-brand-panel::before {
+        content: '';
+        position: absolute;
+        top: -50%; left: -50%;
+        width: 200%; height: 200%;
+        background: radial-gradient(circle at 30% 40%, rgba(74, 123, 247, 0.12) 0%, transparent 50%),
+                    radial-gradient(circle at 70% 60%, rgba(74, 123, 247, 0.06) 0%, transparent 50%);
+        animation: brandGlow 12s ease-in-out infinite alternate;
+    }
+
+    @keyframes brandGlow {
+        0% { transform: translate(0, 0) scale(1); }
+        100% { transform: translate(-5%, -5%) scale(1.1); }
+    }
+
+    .login-brand-panel .brand-icon {
+        position: relative; z-index: 1;
+        width: 72px; height: 72px;
+        border-radius: 18px;
+        background: rgba(74, 123, 247, 0.15);
+        border: 1px solid rgba(74, 123, 247, 0.3);
+        display: flex; align-items: center; justify-content: center;
+        margin-bottom: 1.75rem;
+    }
+
+    .login-brand-panel .brand-icon i {
+        font-size: 1.8rem;
+        color: #7BA4F7;
+    }
+
+    .login-brand-panel h2 {
+        position: relative; z-index: 1;
+        color: #ffffff;
+        font-size: 1.5rem; font-weight: 800;
+        margin-bottom: 0.75rem;
+        letter-spacing: -0.03em;
+    }
+
+    .login-brand-panel p {
+        position: relative; z-index: 1;
+        color: rgba(255, 255, 255, 0.55);
+        font-size: 0.92rem;
+        line-height: 1.7;
+        max-width: 280px;
+    }
+
+    .login-brand-features {
+        position: relative; z-index: 1;
+        margin-top: 2rem;
+        text-align: left;
+        width: 100%; max-width: 260px;
+    }
+
+    .login-brand-features .feature-item {
+        display: flex; align-items: center; gap: 0.75rem;
+        padding: 0.55rem 0;
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 0.85rem; font-weight: 500;
+    }
+
+    .login-brand-features .feature-item i {
+        color: #7BA4F7;
+        font-size: 0.9rem;
+        flex-shrink: 0;
+    }
+
+    /* --- Right Panel (Form) --- */
+    .login-form-panel {
+        width: 58%;
+        padding: 3.5rem 3rem;
+        display: flex; flex-direction: column; justify-content: center;
+    }
+
+    .login-form-panel .login-heading {
+        font-size: 1.65rem; font-weight: 800;
+        color: var(--text-dark);
+        margin-bottom: 0.5rem;
+        letter-spacing: -0.03em;
+    }
+
+    .login-form-panel .login-subheading {
+        color: var(--text-muted);
+        font-size: 0.92rem;
+        margin-bottom: 2rem;
+        line-height: 1.6;
+    }
+
+    .login-form-panel .form-control {
+        padding: 0.85rem 1.15rem;
+        border-radius: 12px;
+        font-size: 0.95rem;
+        border: 1.5px solid var(--border-color);
+        background: var(--bg-color);
+        color: var(--text-dark);
+        transition: all 0.25s ease;
+    }
+
+    .login-form-panel .form-control:focus {
+        border-color: var(--accent-color);
+        box-shadow: 0 0 0 4px rgba(74, 123, 247, 0.12);
+        background: var(--surface-color);
+    }
+
+    .login-form-panel .input-icon-wrapper {
+        position: relative;
+    }
+
+    .login-form-panel .input-icon-wrapper i {
+        position: absolute; left: 1rem; top: 50%; transform: translateY(-50%);
+        color: var(--text-muted); font-size: 1.05rem; z-index: 2; pointer-events: none;
+    }
+
+    .login-form-panel .input-icon-wrapper .form-control {
+        padding-left: 2.75rem;
+    }
+
+    .login-btn {
+        width: 100%;
+        padding: 0.9rem 1.5rem;
+        border: none;
+        border-radius: 12px;
+        font-weight: 700; font-size: 1rem;
+        background: linear-gradient(135deg, #4A7BF7 0%, #1B2B5B 100%);
+        color: #ffffff;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative; overflow: hidden;
+    }
+
+    .login-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(74, 123, 247, 0.35);
+        background: linear-gradient(135deg, #5B8DF7 0%, #1B2B5B 100%);
+        color: #ffffff;
+    }
+
+    .login-btn:active { transform: translateY(0); }
+
+    .login-register-link {
+        text-align: center;
+        margin-top: 1.75rem;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+    }
+
+    .login-register-link a {
+        color: var(--accent-color);
+        font-weight: 700;
+        text-decoration: none;
+    }
+
+    .login-register-link a:hover {
+        text-decoration: underline;
+    }
+
+    .login-divider {
+        display: flex; align-items: center; gap: 1rem;
+        margin: 1.5rem 0;
+        color: var(--text-muted);
+        font-size: 0.8rem; font-weight: 500;
+    }
+
+    .login-divider::before, .login-divider::after {
+        content: ''; flex: 1; height: 1px;
+        background: var(--border-color);
+    }
+
+    @media (max-width: 767.98px) {
+        .login-card { flex-direction: column; max-width: 480px; }
+        .login-brand-panel { width: 100%; padding: 2rem 1.5rem; }
+        .login-brand-features { display: none; }
+        .login-form-panel { width: 100%; padding: 2rem 1.5rem; }
+    }
+
+    @media (min-width: 768px) and (max-width: 991.98px) {
+        .login-card { max-width: 780px; }
+        .login-brand-panel { width: 38%; padding: 2.5rem 2rem; }
+        .login-form-panel { width: 62%; padding: 2.5rem 2rem; }
+    }
+</style>
+{% endblock %}
+
 {% block public_content %}
-<div class="row justify-content-center align-items-center" style="min-height: 70vh;">
-    <div class="col-md-5">
-        <div class="card summary-card p-4">
-            <div class="text-center mb-4">
-                <h1 class="h3 fw-bold text-dark">Selamat Datang Kembali</h1>
-                <p class="text-muted">Masuk untuk memantau usaha UMKM kesayangan Anda hari ini.</p>
+<div class="login-wrapper">
+    <div class="login-card">
+        <!-- Left Branding Panel -->
+        <div class="login-brand-panel">
+            <div class="brand-icon">
+                <i class="bi bi-graph-up-arrow"></i>
             </div>
+            <h2>PANTAUIN</h2>
+            <p>Platform analitik keuangan UMKM yang membantu Anda mengambil keputusan bisnis lebih cerdas.</p>
+
+            <div class="login-brand-features">
+                <div class="feature-item">
+                    <i class="bi bi-check-circle-fill"></i>
+                    <span>Dashboard real-time</span>
+                </div>
+                <div class="feature-item">
+                    <i class="bi bi-check-circle-fill"></i>
+                    <span>Analisis kesehatan keuangan</span>
+                </div>
+                <div class="feature-item">
+                    <i class="bi bi-check-circle-fill"></i>
+                    <span>Simulator risiko bisnis</span>
+                </div>
+                <div class="feature-item">
+                    <i class="bi bi-check-circle-fill"></i>
+                    <span>Saran AI untuk UMKM</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Form Panel -->
+        <div class="login-form-panel">
+            <h1 class="login-heading">Selamat Datang 👋</h1>
+            <p class="login-subheading">Masuk ke akun Anda untuk melanjutkan memantau performa usaha.</p>
 
             <form action="{{ url_for('login') }}" method="POST" novalidate>
                 {{ form.hidden_tag() }}
 
                 <div class="mb-3">
                     {{ form.username.label(class="form-label") }}
-                    {{ form.username(class="form-control form-control-lg", placeholder="Masukkan nama pengguna",
-                    aria_label="Nama pengguna") }}
+                    <div class="input-icon-wrapper">
+                        <i class="bi bi-person-fill"></i>
+                        {{ form.username(class="form-control", placeholder="Masukkan nama pengguna", aria_label="Nama pengguna") }}
+                    </div>
                     {% if form.username.errors %}
                     {% for error in form.username.errors %}
-                    <div class="text-danger small mt-1">{{ error }}</div>
+                    <div class="text-danger small mt-1"><i class="bi bi-exclamation-circle me-1"></i>{{ error }}</div>
                     {% endfor %}
                     {% endif %}
                 </div>
 
                 <div class="mb-4">
                     {{ form.password.label(class="form-label") }}
-                    {{ form.password(class="form-control form-control-lg", placeholder="Masukkan kata sandi rahasia",
-                    aria_label="Kata sandi") }}
+                    <div class="input-icon-wrapper">
+                        <i class="bi bi-lock-fill"></i>
+                        {{ form.password(class="form-control", placeholder="Masukkan kata sandi", aria_label="Kata sandi") }}
+                    </div>
                     {% if form.password.errors %}
                     {% for error in form.password.errors %}
-                    <div class="text-danger small mt-1">{{ error }}</div>
+                    <div class="text-danger small mt-1"><i class="bi bi-exclamation-circle me-1"></i>{{ error }}</div>
                     {% endfor %}
                     {% endif %}
                 </div>
 
-                {{ form.submit(class="btn btn-primary-custom btn-lg w-100", aria_label="Tombol Masuk") }}
+                <button type="submit" class="login-btn" aria-label="Tombol Masuk">
+                    <i class="bi bi-box-arrow-in-right me-2"></i>Masuk ke Akun Saya
+                </button>
             </form>
 
-            <div class="text-center mt-4">
-                <p class="mb-0 text-muted">Belum merintis di PANTAUIN? <a href="{{ url_for('register') }}"
-                        class="text-decoration-none fw-bold" style="color: var(--primary-color);">Daftar sekarang</a>
-                </p>
+            <div class="login-divider">atau</div>
+
+            <div class="login-register-link">
+                Belum punya akun? <a href="{{ url_for('register') }}">Daftar gratis sekarang</a>
             </div>
         </div>
     </div>

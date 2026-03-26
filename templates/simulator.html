@@ -7,51 +7,64 @@
     .preset-btn { font-size: 0.78rem; font-weight: 700; border-radius: 10px; padding: 8px 14px; transition: all 0.2s; border: 2px solid transparent; }
     .preset-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
     .preset-btn.active { box-shadow: 0 0 0 3px rgba(99,102,241,0.4); }
-    .period-btn { font-size: 0.8rem; font-weight: 600; border-radius: 50rem; padding: 6px 16px; border: 1.5px solid #dee2e6; background: white; color: #495057; transition: all 0.2s; }
+    .period-btn { font-size: 0.8rem; font-weight: 600; border-radius: 50rem; padding: 6px 16px; border: 1.5px solid var(--border-color); background: var(--surface-color); color: var(--text-dark); transition: all 0.2s; }
     .period-btn:hover { border-color: var(--primary-color); color: var(--primary-color); }
-    .period-btn.active { background: var(--primary-color); color: white; border-color: var(--primary-color); }
+    .period-btn.active { background: var(--primary-color); color: var(--bg-color); border-color: var(--primary-color); }
     .kpi-mini { text-align: center; padding: 12px 8px; }
     .kpi-mini .kpi-val { font-size: 1.5rem; font-weight: 800; line-height: 1.1; }
     .kpi-mini .kpi-label { font-size: 0.7rem; opacity: 0.7; margin-bottom: 2px; }
     .kpi-mini .kpi-target { font-size: 0.65rem; opacity: 0.5; }
     .sim-warning { background: rgba(245,158,11,0.15); border: 1px solid rgba(245,158,11,0.4); border-radius: 10px; padding: 10px 16px; font-size: 0.85rem; color: #f59e0b; }
-    .info-tip { color: #adb5bd; cursor: help; font-size: 0.75rem; margin-left: 4px; transition: color 0.2s; }
+    .info-tip { color: var(--text-muted); cursor: help; font-size: 0.75rem; margin-left: 4px; transition: color 0.2s; }
     .info-tip:hover { color: var(--primary-color); }
     
     /* Product Search Autosuggest */
     .product-search-wrap { position: relative; }
-    .product-search-wrap input { border-radius: 50rem; padding: 10px 16px 10px 38px; font-size: 0.9rem; border: 2px solid #dee2e6; transition: border 0.2s; }
+    .product-search-wrap input { border-radius: 50rem; padding: 10px 16px 10px 38px; font-size: 0.9rem; border: 2px solid var(--border-color); background: var(--surface-color); color: var(--text-dark); transition: border 0.2s; }
     .product-search-wrap input:focus { border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(99,102,241,0.15); }
-    .product-search-wrap .search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #adb5bd; font-size: 0.9rem; pointer-events: none; }
-    .suggest-dropdown { position: absolute; top: 100%; left: 0; right: 0; background: white; border: 1px solid #dee2e6; border-radius: 12px; max-height: 200px; overflow-y: auto; z-index: 10; display: none; box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
+    .product-search-wrap .search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 0.9rem; pointer-events: none; }
+    .suggest-dropdown { position: absolute; top: 100%; left: 0; right: 0; background: var(--surface-color); border: 1px solid var(--border-color); border-radius: 12px; max-height: 200px; overflow-y: auto; z-index: 10; display: none; box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
     .suggest-dropdown.show { display: block; }
-    .suggest-item { padding: 10px 16px; cursor: pointer; font-size: 0.88rem; transition: background 0.15s; border-bottom: 1px solid #f0f0f0; }
+    .suggest-item { padding: 10px 16px; cursor: pointer; font-size: 0.88rem; color: var(--text-dark); transition: background 0.15s; border-bottom: 1px solid var(--border-color); }
     .suggest-item:last-child { border-bottom: none; }
-    .suggest-item:hover, .suggest-item.active { background: #f0f4ff; color: var(--primary-color); }
+    .suggest-item:hover, .suggest-item.active { background: rgba(99,102,241,0.1); color: var(--primary-color); }
     .suggest-item .highlight { font-weight: 700; color: var(--primary-color); }
-    .added-prod-slider { animation: slideIn 0.3s ease; }
+    .added-prod-slider { animation: slideIn 0.3s ease; background: var(--bg-color) !important; border-color: var(--border-color) !important; }
     @keyframes slideIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
     .remove-prod-btn { cursor: pointer; opacity: 0.5; transition: opacity 0.2s; }
     .remove-prod-btn:hover { opacity: 1; }
     
-    /* AI Analysis */
-    .ai-box { background: linear-gradient(135deg, rgba(99,102,241,0.12), rgba(168,85,247,0.08)); border: 1px solid rgba(99,102,241,0.25); border-radius: 12px; padding: 20px; }
-    .ai-box h6 { color: #c4b5fd; margin-top: 12px; margin-bottom: 8px; font-size: 0.95rem; }
+    /* AI Analysis - Theme Aware */
+    .ai-box { background: linear-gradient(135deg, rgba(99,102,241,0.08), rgba(168,85,247,0.05)); border: 1px solid rgba(99,102,241,0.2); border-radius: 12px; padding: 20px; }
+    .ai-box h6 { color: #6366f1; margin-top: 12px; margin-bottom: 8px; font-size: 0.95rem; }
     .ai-box h6:first-child { margin-top: 0; }
-    .ai-box p, .ai-box li { font-size: 0.88rem; line-height: 1.65; color: rgba(255,255,255,0.9); }
+    .ai-box p, .ai-box li { font-size: 0.88rem; line-height: 1.65; color: var(--text-dark); }
     .ai-box ol, .ai-box ul { padding-left: 18px; margin-bottom: 8px; }
     .ai-box li { margin-bottom: 4px; }
-    .ai-box table { border-color: rgba(255,255,255,0.15) !important; }
-    .ai-box table th { background: rgba(99,102,241,0.25) !important; color: #c4b5fd !important; font-size: 0.8rem; font-weight: 700; padding: 6px 10px !important; }
-    .ai-box table td { background: rgba(255,255,255,0.04) !important; color: rgba(255,255,255,0.85) !important; font-size: 0.82rem; padding: 5px 10px !important; }
-    .ai-loading { display: inline-block; width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 0.6s linear infinite; }
+    .ai-box table { border-color: var(--border-color) !important; }
+    .ai-box table th { background: rgba(99,102,241,0.15) !important; color: #6366f1 !important; font-size: 0.8rem; font-weight: 700; padding: 6px 10px !important; }
+    .ai-box table td { background: var(--surface-color) !important; color: var(--text-dark) !important; font-size: 0.82rem; padding: 5px 10px !important; }
+    .ai-loading { display: inline-block; width: 18px; height: 18px; border: 2px solid rgba(99,102,241,0.3); border-top-color: #6366f1; border-radius: 50%; animation: spin 0.6s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
     
-    /* chat tabel markdown override biar cakep */
-    .ai-box-table-override table { border-color: rgba(255,255,255,0.15) !important; width: 100%; border-collapse: collapse; margin-top: 5px; }
-    .ai-box-table-override table th { background: rgba(99,102,241,0.25) !important; color: #c4b5fd !important; font-size: 0.8rem; font-weight: 700; padding: 6px 10px !important; border: 1px solid rgba(255,255,255,0.15); }
-    .ai-box-table-override table td { background: rgba(255,255,255,0.04) !important; color: rgba(255,255,255,0.85) !important; font-size: 0.82rem; padding: 5px 10px !important; border: 1px solid rgba(255,255,255,0.15); }
-    .ai-box-table-override p { color: rgba(255,255,255,0.8); }
+    /* AI box table override - theme aware */
+    .ai-box-table-override table { border-color: var(--border-color) !important; width: 100%; border-collapse: collapse; margin-top: 5px; }
+    .ai-box-table-override table th { background: rgba(99,102,241,0.15) !important; color: #6366f1 !important; font-size: 0.8rem; font-weight: 700; padding: 6px 10px !important; border: 1px solid var(--border-color); }
+    .ai-box-table-override table td { background: var(--surface-color) !important; color: var(--text-dark) !important; font-size: 0.82rem; padding: 5px 10px !important; border: 1px solid var(--border-color); }
+    .ai-box-table-override p { color: var(--text-dark); }
+
+    /* Dark mode specific overrides */
+    [data-bs-theme="dark"] .ai-box { background: linear-gradient(135deg, rgba(99,102,241,0.15), rgba(168,85,247,0.1)); border-color: rgba(99,102,241,0.3); }
+    [data-bs-theme="dark"] .ai-box h6 { color: #c4b5fd; }
+    [data-bs-theme="dark"] .ai-box p, [data-bs-theme="dark"] .ai-box li { color: rgba(255,255,255,0.9); }
+    [data-bs-theme="dark"] .ai-box table th { background: rgba(99,102,241,0.25) !important; color: #c4b5fd !important; }
+    [data-bs-theme="dark"] .ai-box table td { background: rgba(255,255,255,0.04) !important; color: rgba(255,255,255,0.85) !important; }
+    [data-bs-theme="dark"] .ai-box-table-override table th { background: rgba(99,102,241,0.25) !important; color: #c4b5fd !important; border-color: rgba(255,255,255,0.15); }
+    [data-bs-theme="dark"] .ai-box-table-override table td { background: rgba(255,255,255,0.04) !important; color: rgba(255,255,255,0.85) !important; border-color: rgba(255,255,255,0.15); }
+    [data-bs-theme="dark"] .ai-box-table-override p { color: rgba(255,255,255,0.8); }
+    [data-bs-theme="dark"] .ai-loading { border-color: rgba(255,255,255,0.3); border-top-color: white; }
+    [data-bs-theme="dark"] .suggest-dropdown { box-shadow: 0 8px 24px rgba(0,0,0,0.35); }
+    [data-bs-theme="dark"] .added-prod-slider { background: var(--surface-color) !important; }
 </style>
 {% endblock %}
 
@@ -311,35 +324,33 @@
                 </div>
             </div>
 
-            <!-- AI Analysis Box -->
             <div class="mt-3">
                 <button class="btn btn-sm w-100 fw-bold" id="btnAiAnalysis" 
-                    style="background: linear-gradient(135deg, #6366f1, #a855f7); color: white; border: none; border-radius: 10px; padding: 10px;">
+                    style="background: linear-gradient(135deg, var(--accent-color), var(--primary-color)); color: white; border: none; border-radius: 10px; padding: 10px;">
                     <i class="bi bi-robot me-2"></i>Minta Analisis AI
                     <i class="bi bi-info-circle ms-1" style="font-size:0.7rem; opacity:0.7;" data-bs-toggle="tooltip" title="AI akan menganalisis skenario stress test Anda dan memberikan saran singkat."></i>
                 </button>
                 <div class="ai-box mt-2 d-none" id="aiBox">
                     <div class="d-flex align-items-center mb-2">
-                        <i class="bi bi-robot fs-5 me-2" style="color: #a855f7;"></i>
-                        <strong style="color: #c4b5fd; font-size: 0.9rem;">Analisis AI</strong>
+                        <i class="bi bi-robot fs-5 me-2" style="color: var(--accent-color);"></i>
+                        <strong style="color: var(--accent-color); font-size: 0.9rem;">Analisis AI</strong>
                     </div>
                     <!-- div biasa dipake biar render html nya marked js ngga nimpa tag p -->
-                    <div id="aiContent" class="ai-box-table-override" style="font-size:0.9rem; line-height:1.65; color:rgba(255,255,255,0.9);"></div>
+                    <div id="aiContent" class="ai-box-table-override" style="font-size:0.9rem; line-height:1.65; color: var(--text-dark);"></div>
                 </div>
             </div>
 
-            <!-- obrolan lanjutan simulasi -->
             <div class="mt-2 d-none" id="chatContainer">
-                <div class="card shadow-sm border-0" style="background: linear-gradient(135deg, #1e1e2f, #2a2a4a); border-radius: 12px; overflow: hidden; border: 1px solid rgba(99,102,241,0.25) !important;">
-                    <div class="card-header border-bottom-0 py-2 d-flex align-items-center" style="background: rgba(0,0,0,0.2);">
-                        <i class="bi bi-chat-text-fill me-2" style="color: #a855f7;"></i>
-                        <strong class="text-white-50 small">Tanya AI Soal Hasil Simulasi Ini</strong>
+                <div class="card shadow-sm" style="border-radius: 12px; overflow: hidden; border: 1px solid var(--border-color) !important; background: var(--surface-color);">
+                    <div class="card-header border-bottom py-2 d-flex align-items-center" style="background: var(--bg-color); border-color: var(--border-color) !important;">
+                        <i class="bi bi-chat-text-fill me-2" style="color: var(--accent-color);"></i>
+                        <strong class="small" style="color: var(--text-muted);">Tanya AI Soal Hasil Simulasi Ini</strong>
                     </div>
                     <div class="card-body p-3">
                         <div id="chatHistory" class="mb-3" style="max-height: 250px; overflow-y: auto; font-size: 0.85rem; padding-right: 5px;"></div>
                         <div class="input-group">
-                            <input type="text" id="chatInput" class="form-control form-control-sm border-0 shadow-none" placeholder="Misal: 'kalau promosi mending apa ya'..." style="background: rgba(255,255,255,0.1); color: white;" autocomplete="off">
-                            <button class="btn btn-sm px-3" id="btnSendChat" style="background: rgba(99,102,241,0.25); border: 1px solid rgba(99,102,241,0.4); color: #c4b5fd; border-radius: 0 4px 4px 0;">
+                            <input type="text" id="chatInput" class="form-control form-control-sm" placeholder="Misal: 'kalau promosi mending apa ya'..." style="background: var(--bg-color); color: var(--text-dark); border-color: var(--border-color);" autocomplete="off">
+                            <button class="btn btn-sm px-3" id="btnSendChat" style="background: var(--accent-color); border: none; color: #fff; border-radius: 0 4px 4px 0;">
                                 <i class="bi bi-send-fill"></i>
                             </button>
                         </div>

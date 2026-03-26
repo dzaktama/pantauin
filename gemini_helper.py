@@ -232,18 +232,18 @@ def ekstrak_struk_vision(image_bytes):
         return None
     try:
         prompt_vision = '''
-Baca struk belanja ini dan temukan barang yang terjual.
-Kalau ada banyak barang, pilih satu produk utama yang paling merepresentasikan transaksi ini
-atau gabungkan namanya secara padat (maks 100 karakter).
-Keluarkan data persis dengan format JSON murni ini saja, jangan ada teks pembuka atau penutup:
+Ekstrak informasi dari struk atau nota ini untuk form pencatatan penjualan UMKM.
+Kalau ada banyak barang, gabungkan nama-namanya secara singkat (maks 100 karakter), atau pilih satu yang paling mewakili.
+Keluarkan data HANYA dalam format JSON murni persis dengan struktur ini, tanpa markdown ```json atau teks lainnya:
 {
+    "tanggal": "tanggal di struk jika ada dalam format YYYY-MM-DD",
     "nama_produk": "nama barang",
-    "kuantitas": jumlah angka total barang (integer),
-    "pemasukan": total harga akhir rupiah di struk (float),
-    "kategori": "Makanan & Minuman"
+    "kuantitas": jumlah total item kuantitas barang (integer),
+    "pemasukan": total harga akhir rupiah (float, contoh 48000),
+    "kategori": "Pilih salah satu: Makanan & Minuman, Retail, Jasa, atau Lainnya",
+    "catatan": "keterangan tambahan seperti nama toko, nama kasir, atau pelanggan (maksimal 150 karakter)"
 }
-Pilihan kategori: Makanan & Minuman, Retail, Jasa, atau Lainnya.
-        '''
+'''
         vision_part = {"mime_type": "image/jpeg", "data": image_bytes}
         response = gemini_vision.generate_content([prompt_vision, vision_part])
         

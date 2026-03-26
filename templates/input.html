@@ -290,6 +290,10 @@
             
             let result = await response.json();
             if (response.ok && result) {
+                if(result.tanggal) {
+                    let tglElem = document.getElementById('tanggal');
+                    if(tglElem) tglElem.value = result.tanggal;
+                }
                 if(result.nama_produk) document.getElementById('nama_produk_input').value = result.nama_produk;
                 if(result.kuantitas) document.getElementById('kuantitas_input').value = result.kuantitas;
                 
@@ -306,6 +310,14 @@
                     radios.forEach(r => {
                         if (r.value.toLowerCase() === result.kategori.toLowerCase()) r.checked = true;
                     });
+                }
+
+                if(result.catatan) {
+                    let catElem = document.getElementById('catatanInput');
+                    if(catElem) {
+                        catElem.value = result.catatan;
+                        if(typeof window.updateCounter === "function") window.updateCounter();
+                    }
                 }
                 alert("ai berhasil mengurai struk transaksi ini");
             } else {

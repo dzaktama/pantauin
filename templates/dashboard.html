@@ -33,16 +33,15 @@
             Risiko Bisnis</h4>
         <span class="mb-0">{{ data.peringatan[0] }}</span>
     </div>
-    <a href="{{ url_for('simulator') }}" class="btn btn-sm btn-outline-danger shadow-sm border-2 fw-bold"
-        style="background:#fff;">Coba Simulator Risiko</a>
+    <a href="{{ url_for('simulator') }}" class="btn btn-sm btn-outline-danger shadow-sm border-2 fw-bold">Coba Simulator Risiko</a>
 </div>
 {% endif %}
 
 <!-- GEMINI AI Suggestion -->
-<div class="gemini-suggestion mb-4 shadow-sm border-0 bg-white">
+<div class="gemini-suggestion mb-4 shadow-sm border-0">
     <div class="d-flex align-items-center mb-2">
-        <i class="bi bi-lightbulb-fill text-warning h4 mb-0 me-2"></i>
-        <h5 class="fw-bold mb-0 text-dark">Saran AI Hari Ini</h5>
+        <i class="bi bi-stars h4 mb-0 me-2" style="color: var(--accent-color);"></i>
+        <h5 class="fw-bold mb-0">Saran AI Hari Ini</h5>
     </div>
     <p class="mb-0 text-muted" style="font-size: 1.05rem;" id="saranText">{{ saran_gemini }}</p>
 </div>
@@ -142,8 +141,8 @@
 <!-- Indikator Vital Bisnis -->
 <div class="row g-4 mb-4">
     <div class="col-lg-12">
-        <div class="card summary-card p-4 h-100 bg-white">
-            <h5 class="fw-bold text-dark mb-3"><i class="bi bi-heart-pulse-fill text-danger me-2"></i>Indikator Vital Bisnis</h5>
+        <div class="card summary-card p-4 h-100">
+            <h5 class="fw-bold mb-3"><i class="bi bi-activity me-2" style="color: var(--accent-color);"></i>Indikator Vital Bisnis</h5>
             <div class="row g-3">
                 <div class="col-sm-3">
                     <div class="p-4 bg-light rounded-4 text-center border-bottom border-4 border-success shadow-sm">
@@ -179,9 +178,9 @@
 {% set rk = data.ringkasan_kustom %}
 <div class="row g-4 mb-4">
     <div class="col-lg-12">
-        <div class="card summary-card p-4 h-100 border-start border-4 border-warning shadow-sm">
+        <div class="card summary-card p-4 h-100 border-start border-4 shadow-sm" style="border-color: var(--accent-color) !important;">
             <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
-                <h5 class="fw-bold text-dark mb-0"><i class="bi bi-journal-text text-warning me-2"></i>Ringkasan Eksekutif ({% if periode == 0 %}Semua Data{% else %}{{ rk.periode_hari }} Hari Terakhir{% endif %})</h5>
+                <h5 class="fw-bold mb-0"><i class="bi bi-journal-text me-2" style="color: var(--accent-color);"></i>Ringkasan Eksekutif ({% if periode == 0 %}Semua Data{% else %}{{ rk.periode_hari }} Hari Terakhir{% endif %})</h5>
                 <div class="btn-group" role="group" aria-label="Pilih Periode Ringkasan">
                     <a href="{{ url_for('dashboard', periode=30) }}"
                         class="btn btn-sm btn-outline-warning shadow-sm {% if periode == 30 %}active{% endif %}">30 Hari</a>
@@ -272,7 +271,7 @@
     <!-- Rincian Dimensi Risiko -->
     <div class="col-lg-8">
         <div class="card summary-card p-4 h-100">
-            <h5 class="fw-bold text-dark mb-3"><i class="bi bi-shield-check text-success me-2"></i>Rincian Dimensi Risiko</h5>
+            <h5 class="fw-bold mb-3"><i class="bi bi-shield-check me-2" style="color: var(--accent-color);"></i>Rincian Dimensi Risiko</h5>
             <div class="table-responsive">
                 <table class="table table-sm table-borderless align-middle mb-0" style="font-size: 0.9rem;">
                     <tbody>
@@ -300,7 +299,7 @@
     <!-- Statistik 4 Minggu Terakhir -->
     <div class="col-lg-6">
         <div class="card summary-card p-4 h-100">
-            <h5 class="fw-bold text-dark mb-3"><i class="bi bi-clock-history text-secondary me-2"></i>Statistik 4 Minggu Terakhir</h5>
+            <h5 class="fw-bold mb-3"><i class="bi bi-clock-history me-2" style="color: var(--accent-color);"></i>Statistik 4 Minggu Terakhir</h5>
             <div class="table-responsive">
                 <table class="table table-sm table-hover align-middle mb-0" style="font-size: 0.85rem;">
                     <thead class="table-light text-muted">
@@ -329,7 +328,7 @@
     <!-- Proyeksi 4 Minggu Ke Depan -->
     <div class="col-lg-6">
         <div class="card summary-card p-4 h-100">
-            <h5 class="fw-bold text-dark mb-3"><i class="bi bi-binoculars text-info me-2"></i>Proyeksi Kas 4 Minggu Ke Depan</h5>
+            <h5 class="fw-bold mb-3"><i class="bi bi-binoculars me-2" style="color: var(--accent-color);"></i>Proyeksi Kas 4 Minggu Ke Depan</h5>
             <div class="table-responsive">
                 <table class="table table-sm table-hover align-middle mb-0" style="font-size: 0.85rem;">
                     <thead class="table-light text-muted">
@@ -361,8 +360,8 @@
 </div>
 
 <!-- Rekomendasi Tindakan -->
-<div class="card summary-card p-4 mb-4 border-start border-4 border-primary">
-    <h5 class="fw-bold text-dark mb-3"><i class="bi bi-list-check text-primary me-2"></i>Rekomendasi Tindakan Terprioritas</h5>
+<div class="card summary-card p-4 mb-4 border-start border-4" style="border-color: var(--accent-color) !important;">
+    <h5 class="fw-bold mb-3"><i class="bi bi-list-check me-2" style="color: var(--accent-color);"></i>Rekomendasi Tindakan Terprioritas</h5>
     <div class="row g-3">
         {% for rek in data.rekomendasi %}
         <div class="col-md-6 col-lg-4">
@@ -377,8 +376,8 @@
 
 {% if data.peringatan %}
 <!-- kotak peringatan ditarik ke atas div grafik biar gampang dinotice -->
-<div class="alert alert-danger shadow-sm mb-4 rounded-4" style="background: linear-gradient(135deg, #fff5f5, #ffebe9); border: none; border-left: 5px solid #dc3545;">
-    <h5 class="fw-bold text-danger mb-3"><i class="bi bi-exclamation-octagon-fill me-2 fs-4 align-middle"></i>Peringatan Kritis Bisnis</h5>
+<div class="alert shadow-sm mb-4 rounded-4" style="background: rgba(239,68,68,0.06); border: none; border-left: 5px solid var(--danger-color); color: var(--text-dark);">
+    <h5 class="fw-bold mb-3" style="color: var(--danger-color);"><i class="bi bi-exclamation-octagon-fill me-2 fs-4 align-middle"></i>Peringatan Kritis Bisnis</h5>
     <ul class="mb-0 list-unstyled">
         {% for p in data.peringatan %}
         <li class="mb-2"><i class="bi bi-x-circle-fill text-danger me-2 opacity-75"></i> <span class="fw-medium text-dark" style="font-size:1.05rem;">{{ p }}</span></li>
@@ -429,12 +428,12 @@
 </div>
 
 <!-- seksi sorotan jualan produk dilempar ke sini biar lega di bawah chart -->
-<div class="card summary-card p-4 mb-5 border-start border-4 border-success shadow-sm">
-    <h5 class="fw-bold text-dark mb-4"><i class="bi bi-box-seam-fill text-success me-2"></i>Performa Produk 30 Hari Terakhir</h5>
+<div class="card summary-card p-4 mb-5 border-start border-4 shadow-sm" style="border-color: var(--accent-color) !important;">
+    <h5 class="fw-bold mb-4"><i class="bi bi-box-seam-fill me-2" style="color: var(--accent-color);"></i>Performa Produk 30 Hari Terakhir</h5>
     {% if data.data_produk %}
     <div class="row g-4">
         <div class="col-md-6 border-end-md">
-            <h6 class="text-success fw-bold border-bottom pb-2 mb-3"><i class="bi bi-arrow-up-circle-fill me-1"></i>Top 3 Terlaris</h6>
+            <h6 class="fw-bold border-bottom pb-2 mb-3" style="color: var(--accent-color);"><i class="bi bi-arrow-up-circle-fill me-1"></i>Top 3 Terlaris</h6>
             {% if data.data_produk.top_3_terlaris %}
             <ul class="list-group list-group-flush">
                 {% for p in data.data_produk.top_3_terlaris %}
@@ -449,7 +448,7 @@
             {% endif %}
         </div>
         <div class="col-md-6">
-            <h6 class="text-danger fw-bold border-bottom pb-2 mb-3"><i class="bi bi-arrow-down-circle-fill me-1"></i>Kurang Laris / Dead Stock</h6>
+            <h6 class="fw-bold border-bottom pb-2 mb-3" style="color: var(--text-muted);"><i class="bi bi-arrow-down-circle-fill me-1"></i>Kurang Laris / Dead Stock</h6>
             {% if data.data_produk.bottom_3_menurun %}
             <ul class="list-group list-group-flush">
                 {% for p in data.data_produk.bottom_3_menurun %}
@@ -465,7 +464,7 @@
         </div>
         {% if data.data_produk.semua_produk %}
         <div class="col-12 mt-4">
-            <h6 class="text-primary fw-bold border-bottom pb-2 mb-3"><i class="bi bi-list-ul me-1"></i>Peringkat Semua Produk</h6>
+            <h6 class="fw-bold border-bottom pb-2 mb-3" style="color: var(--accent-color);"><i class="bi bi-list-ul me-1"></i>Peringkat Semua Produk</h6>
             <div class="table-responsive border rounded" style="max-height: 250px; overflow-y: auto;">
                 <table class="table table-sm table-hover align-middle mb-0" style="font-size: 0.95rem;">
                     <thead class="table-light" style="position: sticky; top: 0; z-index: 1;">
@@ -501,8 +500,8 @@
 <div class="row g-4 mb-5">
     <!-- Cash Cow -->
     <div class="col-lg-6">
-        <div class="card summary-card p-4 h-100 border-start border-4 border-info shadow-sm">
-            <h5 class="fw-bold text-dark mb-3"><i class="bi bi-star-fill text-warning me-2"></i>Produk Paling Untung (Cash Cow)</h5>
+        <div class="card summary-card p-4 h-100 border-start border-4 shadow-sm" style="border-color: var(--accent-color) !important;">
+            <h5 class="fw-bold mb-3"><i class="bi bi-star-fill me-2" style="color: var(--accent-color);"></i>Produk Paling Untung (Cash Cow)</h5>
             {% if data.advanced_analytics and data.advanced_analytics.cash_cow %}
             <div class="d-flex align-items-center mb-2">
                 <div class="flex-grow-1">
@@ -525,8 +524,8 @@
     
     <!-- Restock Prediction -->
     <div class="col-lg-6">
-        <div class="card summary-card p-4 h-100 border-start border-4 border-danger shadow-sm">
-            <h5 class="fw-bold text-dark mb-3"><i class="bi bi-cart-x-fill text-danger me-2"></i>Peringatan Restok (3 Hari Kedepan)</h5>
+        <div class="card summary-card p-4 h-100 border-start border-4 shadow-sm" style="border-color: var(--accent-color) !important;">
+            <h5 class="fw-bold mb-3"><i class="bi bi-cart-x-fill me-2" style="color: var(--accent-color);"></i>Peringatan Restok (3 Hari Kedepan)</h5>
             {% if data.advanced_analytics and data.advanced_analytics.prediksi_restok %}
             <ul class="list-group list-group-flush">
                 {% for p in data.advanced_analytics.prediksi_restok %}
@@ -557,11 +556,11 @@
         <button type="button" class="btn-close btn-close-white" id="btnCloseChat"></button>
     </div>
     <div class="chatbot-body flex-grow-1" id="chatThread">
-        <div class="p-2 mb-2 bg-light rounded text-dark small" style="width: 85%;">
+        <div class="p-2 mb-2 rounded small" style="width: 85%; background: var(--bg-color); color: var(--text-dark);">
             Halo! Saya asisten pintar darimu. Kamu bisa bertanya soal strategi menghindari rugi bulan ini.
         </div>
     </div>
-    <div class="chat-input-area border-top p-2" style="background:#fff;">
+    <div class="chat-input-area border-top p-2">
         <input type="text" id="chatInput" placeholder="Tanyakan saran..."
             class="form-control form-control-sm me-2 border-primary">
         <button id="btnSendChat" class="btn btn-sm btn-primary-custom px-3">Kirim</button>

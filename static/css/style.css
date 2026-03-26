@@ -1,56 +1,92 @@
 /* 
    static/css/style.css
-   Modern, Clean UI/UX overhaul using Plus Jakarta Sans
+   PANTAUIN - Blue Theme (Dark Blue / Light Blue / Gray)
+   Inspired by Gemini's clean aesthetic
 */
 
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
+/* ========================================
+   LIGHT MODE (Default)
+   3-Tone: Dark Blue, Light Blue, Neutral
+   ======================================== */
 :root {
-    --primary-color: #1f1f1f;
-    --primary-dark: #000000;
+    --primary-color: #1B2B5B;
+    --primary-light: #4A7BF7;
+    --primary-lighter: #E8EEFB;
+    --primary-dark: #0F1A3A;
+
+    --accent-color: #4A7BF7;
+    --accent-light: rgba(74, 123, 247, 0.12);
+
     --success-color: #10B981;
     --warning-color: #F59E0B;
     --danger-color: #EF4444;
-    --bs-primary: #1f1f1f;
-    --bs-primary-rgb: 31, 31, 31;
-    --bs-info: #5f6368;
-    --bs-info-rgb: 95, 99, 104;
-    --bg-color: #f7f9fc;
+
+    --bs-primary: #1B2B5B;
+    --bs-primary-rgb: 27, 43, 91;
+    --bs-info: #4A7BF7;
+    --bs-info-rgb: 74, 123, 247;
+
+    --bg-color: #F4F6FA;
     --surface-color: #ffffff;
-    --text-dark: #121212;
-    --text-muted: #5f6368;
-    --border-color: #e3e3e3;
-    --sidebar-bg: #f8fafc;
-    --sidebar-text: #171717;
-    --sidebar-hover-bg: rgba(0, 0, 0, 0.05);
-    --sidebar-link-color: #475569;
+    --text-dark: #1A1D26;
+    --text-muted: #6B7280;
+    --border-color: #E2E6EF;
+
+    --sidebar-bg: #1B2B5B;
+    --sidebar-text: #ffffff;
+    --sidebar-hover-bg: rgba(255, 255, 255, 0.1);
+    --sidebar-link-color: rgba(255, 255, 255, 0.65);
     --sidebar-width: 260px;
 }
 
+/* ========================================
+   DARK MODE
+   ======================================== */
 [data-bs-theme="dark"] {
-    --primary-color: #e3e3e3;
-    --primary-dark: #ffffff;
-    --bg-color: #0f1115;
-    --surface-color: #1e2024;
-    --bs-primary: #e3e3e3;
-    --bs-primary-rgb: 227, 227, 227;
-    --bs-info: #9aa0a6;
-    --bs-info-rgb: 154, 160, 166;
-    --text-dark: #f1f3f4;
-    --text-muted: #9aa0a6;
-    --border-color: #3c4043;
-    --sidebar-bg: #1e2024;
-    --sidebar-text: #f1f3f4;
-    --sidebar-hover-bg: rgba(255, 255, 255, 0.08);
-    --sidebar-link-color: #9aa0a6;
+    --primary-color: #7BA4F7;
+    --primary-light: #5B8DF7;
+    --primary-lighter: rgba(74, 123, 247, 0.12);
+    --primary-dark: #A3C0FF;
+
+    --accent-color: #7BA4F7;
+    --accent-light: rgba(74, 123, 247, 0.1);
+
+    --bg-color: #0D1117;
+    --surface-color: #161B22;
+    --bs-primary: #7BA4F7;
+    --bs-primary-rgb: 123, 164, 247;
+    --bs-info: #7BA4F7;
+    --bs-info-rgb: 123, 164, 247;
+    --text-dark: #E6EDF3;
+    --text-muted: #8B949E;
+    --border-color: #30363D;
+
+    --sidebar-bg: #0D1117;
+    --sidebar-text: #E6EDF3;
+    --sidebar-hover-bg: rgba(255, 255, 255, 0.06);
+    --sidebar-link-color: rgba(255, 255, 255, 0.5);
 }
 
+/* Dark mode overrides for Bootstrap classes */
 [data-bs-theme="dark"] .bg-white { background-color: var(--surface-color) !important; color: var(--text-dark) !important; }
 [data-bs-theme="dark"] .text-dark { color: var(--text-dark) !important; }
-[data-bs-theme="dark"] .bg-light { background-color: #2a2c30 !important; color: var(--text-dark) !important; }
+[data-bs-theme="dark"] .bg-light { background-color: #1C2128 !important; color: var(--text-dark) !important; }
 [data-bs-theme="dark"] .text-muted { color: var(--text-muted) !important; }
 [data-bs-theme="dark"] .border, [data-bs-theme="dark"] .border-top, [data-bs-theme="dark"] .border-bottom, [data-bs-theme="dark"] .border-end, [data-bs-theme="dark"] .border-start { border-color: var(--border-color) !important; }
+[data-bs-theme="dark"] .table-light { background-color: #1C2128 !important; color: var(--text-dark) !important; }
+[data-bs-theme="dark"] .table-light th { background-color: #1C2128 !important; color: var(--text-muted) !important; }
+[data-bs-theme="dark"] .table-dark { background-color: #1C2128 !important; }
+[data-bs-theme="dark"] .table-dark th { background-color: #1C2128 !important; color: var(--text-muted) !important; }
+[data-bs-theme="dark"] .list-group-item { background-color: transparent !important; color: var(--text-dark) !important; }
+[data-bs-theme="dark"] .table-hover > tbody > tr:hover { --bs-table-hover-bg: rgba(74, 123, 247, 0.05); }
+[data-bs-theme="dark"] .table-striped > tbody > tr:nth-of-type(odd) { --bs-table-striped-bg: rgba(255, 255, 255, 0.02); }
+[data-bs-theme="dark"] .card { background-color: var(--surface-color) !important; border-color: var(--border-color) !important; }
 
+/* ========================================
+   BASE ELEMENTS
+   ======================================== */
 body {
     background-color: var(--bg-color);
     color: var(--text-dark);
@@ -67,13 +103,8 @@ body {
     color: var(--primary-color) !important;
 }
 
-/* Tipografi Kontras Tinggi */
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
     color: var(--text-dark);
     font-weight: 700;
     letter-spacing: -0.02em;
@@ -85,6 +116,9 @@ label.form-label {
     font-size: 0.95rem;
 }
 
+/* ========================================
+   FORMS
+   ======================================== */
 .form-control,
 .form-select,
 .form-range {
@@ -99,13 +133,15 @@ label.form-label {
 
 .form-control:focus,
 .form-select:focus {
-    box-shadow: 0 0 0 4px rgba(130, 130, 130, 0.1);
-    border-color: var(--primary-color);
+    box-shadow: 0 0 0 4px var(--accent-light);
+    border-color: var(--accent-color);
     background-color: var(--surface-color);
     color: var(--text-dark);
 }
 
-/* Tombol Aksi Utama */
+/* ========================================
+   BUTTONS
+   ======================================== */
 .btn {
     border-radius: 10px;
     font-weight: 600;
@@ -114,20 +150,69 @@ label.form-label {
 }
 
 .btn-primary-custom {
-    background-color: var(--primary-color);
-    border-color: var(--primary-color);
-    color: var(--bg-color); /* Matches background to flip colors nicely */
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+    color: #ffffff;
 }
 
 .btn-primary-custom:hover {
-    background-color: var(--primary-dark);
-    border-color: var(--primary-dark);
-    color: var(--bg-color);
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: #ffffff;
     transform: translateY(-2px);
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 6px 15px rgba(74, 123, 247, 0.25);
 }
 
-/* Sidebar Styles */
+[data-bs-theme="dark"] .btn-primary-custom {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+    color: #0D1117;
+}
+
+[data-bs-theme="dark"] .btn-primary-custom:hover {
+    background-color: #5B8DF7;
+    border-color: #5B8DF7;
+    color: #0D1117;
+}
+
+/* Override Bootstrap primary button to match blue theme */
+.btn-outline-primary {
+    border-color: var(--border-color);
+    color: var(--text-dark);
+    background: var(--surface-color);
+    font-weight: 600;
+    padding: 0.6rem 1.25rem;
+    border-radius: 10px;
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--accent-light);
+    border-color: var(--accent-color);
+    color: var(--accent-color);
+}
+
+.btn-check:checked+.btn-outline-primary {
+    background-color: var(--accent-color);
+    color: #ffffff;
+    border-color: var(--accent-color);
+    box-shadow: 0 2px 6px rgba(74, 123, 247, 0.25);
+}
+
+/* Override warning button to use blue accent */
+.btn-outline-warning {
+    border-color: var(--border-color);
+    color: var(--text-dark);
+}
+
+.btn-outline-warning:hover, .btn-outline-warning.active {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+    color: #ffffff;
+}
+
+/* ========================================
+   SIDEBAR (Blue Dark Theme)
+   ======================================== */
 .sidebar {
     width: var(--sidebar-width);
     background-color: var(--sidebar-bg);
@@ -139,7 +224,8 @@ label.form-label {
     display: flex;
     flex-direction: column;
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 4px 0 15px rgba(0, 0, 0, 0.05);
+    box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .sidebar .brand {
@@ -148,7 +234,8 @@ label.form-label {
     text-decoration: none;
     display: flex;
     align-items: center;
-    border-bottom: 1px solid var(--sidebar-hover-bg);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    font-weight: 700;
 }
 
 .sidebar .nav-link {
@@ -167,9 +254,13 @@ label.form-label {
 }
 
 .sidebar .nav-link.active {
-    color: var(--sidebar-text);
-    background-color: var(--sidebar-hover-bg);
-    border-right: 4px solid var(--warning-color); /* Ke kanan agar lebih elegan jika sidebar terang */
+    color: #ffffff;
+    background-color: rgba(74, 123, 247, 0.2);
+    border-left: 4px solid var(--accent-color);
+}
+
+[data-bs-theme="dark"] .sidebar {
+    border-right: 1px solid var(--border-color);
 }
 
 .main-wrapper {
@@ -180,6 +271,9 @@ label.form-label {
     transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* ========================================
+   TOPBAR
+   ======================================== */
 .topbar {
     background: var(--surface-color);
     padding: 1rem 1.5rem;
@@ -190,86 +284,86 @@ label.form-label {
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 }
 
+/* ========================================
+   RESPONSIVE SIDEBAR
+   ======================================== */
 @media (max-width: 991.98px) {
     .sidebar {
         transform: translateX(-100%);
     }
-
     .sidebar.show {
         transform: translateX(0);
     }
-
     .main-wrapper {
         margin-left: 0;
     }
-
-    /* Kurangi padding utama di mobile agar mepet nyaman */
     .content-area {
         padding: 1rem !important;
     }
-
     .sidebar-overlay {
         position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        background: rgba(15, 23, 42, 0.5);
-        backdrop-filter: blur(2px);
+        top: 0; left: 0;
+        width: 100vw; height: 100vh;
+        background: rgba(13, 17, 23, 0.6);
+        backdrop-filter: blur(3px);
         z-index: 1035;
         opacity: 0;
         pointer-events: none;
         transition: opacity 0.3s;
     }
-
     .sidebar-overlay.show {
         opacity: 1;
         pointer-events: all;
     }
 }
 
-/* Kartu & Container */
+/* ========================================
+   CARDS & CONTAINERS
+   ======================================== */
 .summary-card {
     border-radius: 16px;
     border: 1px solid var(--border-color);
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.03), 0 2px 4px -2px rgba(0, 0, 0, 0.03);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
     background: var(--surface-color);
     transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .summary-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.06), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
 }
 
 .summary-icon {
-    font-size: 2.5rem;
+    font-size: 2rem;
     margin-bottom: 0.75rem;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 65px;
-    height: 65px;
-    background: #F1F5F9;
-    border-radius: 16px;
+    width: 56px;
+    height: 56px;
+    background: var(--accent-light);
+    color: var(--accent-color) !important;
+    border-radius: 14px;
 }
 
-/* Bantuan Tabel Responsif Mobile Mulus */
+/* ========================================
+   TABLE
+   ======================================== */
 .table-responsive {
     -webkit-overflow-scrolling: touch;
 }
-
 .table-responsive table {
     white-space: nowrap;
-    /* Teks tabel tidak jatuh/stack ke bawah */
 }
 
-/* Peringatan Dini Banners */
+/* ========================================
+   WARNING BANNERS
+   ======================================== */
 .warning-banner {
-    background-color: #FEF2F2;
-    border: 1px solid #FECACA;
+    background-color: rgba(239, 68, 68, 0.06);
+    border: 1px solid rgba(239, 68, 68, 0.15);
     border-left: 5px solid var(--danger-color);
-    color: #991B1B;
+    color: var(--text-dark);
     padding: 1.25rem 1.5rem;
     border-radius: 12px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
@@ -278,9 +372,17 @@ label.form-label {
     justify-content: space-between;
     flex-wrap: wrap;
     gap: 15px;
+    margin-bottom: 1rem;
 }
 
-/* Skor Kesehatan */
+[data-bs-theme="dark"] .warning-banner {
+    background-color: rgba(239, 68, 68, 0.08);
+    border-color: rgba(239, 68, 68, 0.2);
+}
+
+/* ========================================
+   HEALTH SCORE CIRCLE
+   ======================================== */
 .score-circle {
     width: 140px;
     height: 140px;
@@ -292,74 +394,65 @@ label.form-label {
     margin: 0 auto;
     color: white;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(0, 0, 0, 0.05));
 }
 
 .score-hijau {
-    background-color: var(--success-color);
+    background: linear-gradient(135deg, #10B981, #059669);
 }
-
 .score-kuning {
-    background-color: var(--warning-color);
+    background: linear-gradient(135deg, #F59E0B, #D97706);
     color: #0F172A;
-    text-shadow: none;
-    box-shadow: 0 4px 15px rgba(245, 158, 11, 0.2);
 }
-
 .score-merah {
-    background-color: var(--danger-color);
-    box-shadow: 0 4px 15px rgba(239, 68, 68, 0.2);
+    background: linear-gradient(135deg, #EF4444, #DC2626);
 }
 
-/* Saran Gemini */
+/* ========================================
+   AI SUGGESTION BOX
+   ======================================== */
 .gemini-suggestion {
-    background: linear-gradient(to right, var(--bg-color), var(--surface-color));
+    background: var(--surface-color);
     border-radius: 16px;
     padding: 1.5rem;
     border: 1px solid var(--border-color);
-    border-left: 4px solid var(--primary-color);
+    border-left: 4px solid var(--accent-color);
 }
 
-/* Empty State */
+/* ========================================
+   EMPTY STATE
+   ======================================== */
 .empty-state {
     text-align: center;
     color: var(--text-muted);
     padding: 4rem 2rem;
 }
-
 .empty-icon {
     font-size: 4.5rem;
     margin-bottom: 1.5rem;
     opacity: 0.9;
 }
 
-/* Styling Chatbot Widget */
+/* ========================================
+   CHATBOT WIDGET
+   ======================================== */
 .chatbot-widget {
     position: fixed;
-    bottom: 100px;
-    right: 25px;
+    bottom: 100px; right: 25px;
     width: 360px;
     border-radius: 16px;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
     z-index: 1050;
     overflow: hidden;
-    background: #ffffff;
+    background: var(--surface-color);
     display: none;
-    border: 1px solid #E2E8F0;
+    border: 1px solid var(--border-color);
     font-family: 'Plus Jakarta Sans', sans-serif;
     animation: slideUp 0.3s ease-out;
 }
 
 @keyframes slideUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 .chatbot-header {
@@ -373,36 +466,39 @@ label.form-label {
     font-weight: 700;
 }
 
+[data-bs-theme="dark"] .chatbot-header {
+    background-color: #1C2128;
+    border-bottom: 1px solid var(--border-color);
+}
+
 .chatbot-body {
     height: 320px;
     overflow-y: auto;
     padding: 20px;
-    background: #F8FAFC;
+    background: var(--bg-color);
     scroll-behavior: smooth;
 }
 
 .chat-input-area {
     padding: 15px;
-    background: #fff;
-    border-top: 1px solid #E2E8F0;
+    background: var(--surface-color);
+    border-top: 1px solid var(--border-color);
     display: flex;
     gap: 8px;
 }
 
 .chatbot-bubble {
     position: fixed;
-    bottom: 25px;
-    right: 25px;
-    width: 65px;
-    height: 65px;
+    bottom: 25px; right: 25px;
+    width: 60px; height: 60px;
     border-radius: 50%;
-    background-color: var(--primary-color);
+    background: linear-gradient(135deg, var(--accent-color), var(--primary-color));
     color: white;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.6rem;
-    box-shadow: 0 4px 15px rgba(27, 42, 107, 0.3);
+    font-size: 1.4rem;
+    box-shadow: 0 4px 20px rgba(74, 123, 247, 0.35);
     cursor: pointer;
     z-index: 1040;
     transition: transform 0.2s;
@@ -412,53 +508,71 @@ label.form-label {
     transform: scale(1.08);
 }
 
-/* Input Group Text Custom */
+/* ========================================
+   INPUT GROUP
+   ======================================== */
 .input-group-text.rupiah-prefix {
-    background-color: #F1F5F9;
+    background-color: var(--bg-color);
     font-weight: 700;
     color: var(--text-muted);
-    border: 1px solid #CBD5E1;
+    border: 1px solid var(--border-color);
     border-right: none;
 }
 
 .js-format-rupiah {
     border-left: none;
 }
-
 .js-format-rupiah:focus {
-    border-left: 1px solid var(--primary-color);
-    /* Overridden by box-shadow smoothly */
+    border-left: 1px solid var(--accent-color);
 }
 
-/* Radio button categories - Modern UI */
-.btn-check:checked+.btn-outline-primary {
-    background-color: var(--primary-color);
-    color: var(--bg-color);
-    border-color: var(--primary-color);
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-}
-
-.btn-outline-primary {
-    border-color: var(--border-color);
-    color: var(--text-dark);
-    background: var(--surface-color);
-    font-weight: 600;
-    padding: 0.6rem 1.25rem;
-    border-radius: 10px;
-}
-
-.btn-outline-primary:hover {
-    background-color: var(--bg-color);
-    border-color: var(--border-color);
-    color: var(--text-dark);
-}
-
-/* Link customization */
+/* ========================================
+   LINKS
+   ======================================== */
 a {
-    color: var(--primary-color);
+    color: var(--accent-color);
     transition: color 0.2s;
 }
-
 a:hover {
+    color: var(--primary-color);
+}
+
+[data-bs-theme="dark"] a:hover {
     color: var(--primary-dark);
+}
+
+/* ========================================
+   BOOTSTRAP OVERRIDES for Blue Theme
+   ======================================== */
+
+/* Make text-primary use our blue */
+.text-primary { color: var(--accent-color) !important; }
+.text-info { color: var(--accent-color) !important; }
+.text-secondary { color: var(--text-muted) !important; }
+.bg-primary { background-color: var(--accent-color) !important; }
+
+/* Badge overrides to stay clean */
+.badge.bg-primary { background-color: var(--accent-color) !important; }
+.badge.bg-info { background-color: var(--accent-color) !important; color: #fff !important; }
+.badge.bg-secondary { background-color: rgba(107, 114, 128, 0.15) !important; color: var(--text-muted) !important; }
+
+/* Border accent overrides - use blue instead of colorful */
+.border-primary { border-color: var(--accent-color) !important; }
+.border-info { border-color: var(--accent-color) !important; }
+.border-warning { border-color: var(--accent-color) !important; }
+.border-success { border-color: var(--accent-color) !important; }
+
+/* Maintain semantic colors only for actual status indicators */
+.text-success { color: var(--success-color) !important; }
+.text-danger { color: var(--danger-color) !important; }
+.text-warning { color: var(--warning-color) !important; }
+
+/* Footer */
+footer.border-top {
+    background-color: var(--surface-color) !important;
+    border-color: var(--border-color) !important;
+    color: var(--text-muted) !important;
+}
+footer .text-dark {
+    color: var(--text-dark) !important;
 }

@@ -106,8 +106,8 @@
 
         <div class="sidebar-footer p-3 border-top" style="border-color: var(--sidebar-hover-bg) !important;">
             <div class="d-flex align-items-center mb-3 px-2" style="color: var(--sidebar-text);">
-                <div class="bg-warning text-dark rounded-circle d-flex align-items-center justify-content-center fw-bold me-3 shadow-sm"
-                    style="width: 40px; height: 40px; font-size: 1.1rem;">
+                <div class="rounded-circle d-flex align-items-center justify-content-center fw-bold me-3 shadow-sm"
+                    style="width: 40px; height: 40px; font-size: 1.1rem; background: var(--accent-color); color: #fff;">
                     {{ session.username[0]|upper }}
                 </div>
                 <div>
@@ -168,8 +168,8 @@
             {% block content %}{% endblock %}
         </main>
 
-        <footer class="text-center py-4 mt-auto text-muted small bg-white border-top">
-            <span class="fw-bold text-dark">© 2026 PANTAUIN</span> - Merancang analitik UMKM Indonesia kelas dunia.
+        <footer class="text-center py-4 mt-auto small border-top" style="background-color: var(--surface-color); color: var(--text-muted);">
+            <span class="fw-bold" style="color: var(--text-dark);">© 2026 PANTAUIN</span> - Merancang analitik UMKM Indonesia kelas dunia.
         </footer>
     </div>
 
@@ -177,10 +177,13 @@
     <!-- ============================================== -->
     <!-- LAYOUT PUBLIK (LOGIN / REGISTRASI)             -->
     <!-- ============================================== -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary-custom py-3 shadow-sm">
+    <nav class="navbar navbar-expand-lg navbar-dark py-3 shadow-sm" style="background: linear-gradient(135deg, #1B2B5B 0%, #0F1A3A 100%);">
         <div class="container">
             <a class="navbar-brand fw-bold fs-4" href="#"><i class="bi bi-graph-up-arrow me-2"></i> PANTAUIN</a>
-            <div class="d-flex gap-2">
+            <div class="d-flex gap-2 align-items-center">
+                <button type="button" class="btn btn-outline-light rounded-circle d-flex align-items-center justify-content-center" id="theme-toggle" aria-label="Toggle Theme" style="width: 38px; height: 38px; border-color: rgba(255,255,255,0.3);">
+                    <i class="bi bi-moon-stars-fill" id="theme-icon"></i>
+                </button>
                 <a class="btn btn-outline-light fw-bold px-4 rounded-pill {% if request.endpoint == 'login' %}active{% endif %}"
                     href="{{ url_for('login') }}">Masuk</a>
                 <a class="btn btn-warning fw-bold px-4 rounded-pill text-dark shadow-sm {% if request.endpoint == 'register' %}active{% endif %}"
