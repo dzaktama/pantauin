@@ -93,7 +93,15 @@ def hitung_health_score(transaksi_list, periode_grafik=30):
     saldo_operasional_minggu_ini = in_minggu_ini - out_op_minggu_ini
 
     # 1. Stabilitas Cashflow (0 - 100) Menggunakan Margin Operasional
-    margin = 0 if in_minggu_ini == 0 else (saldo_operasional_minggu_ini / in_minggu_ini)
+    # Hitung HPP minggu ini untuk Laba Kotor yang akurat
+    hpp_minggu_ini = sum(
+        (getattr(t, 'harga_modal', 0) or 0) * (getattr(t, 'kuantitas', 0) or 0)
+        for t in minggu_ini if t.pemasukan > 0 and getattr(t, 'harga_modal', None) is not None
+    )
+    gross_profit_minggu_ini = in_minggu_ini - hpp_minggu_ini
+    operating_profit_minggu_ini = gross_profit_minggu_ini - out_op_minggu_ini
+    # Margin Operasional = (Laba Kotor - Beban Operasional) / Total Pemasukan
+    margin = 0 if in_minggu_ini == 0 else (operating_profit_minggu_ini / in_minggu_ini)
     skor_stabilitas = 100 if margin >= 0.2 else (max(0, margin) / 0.2 * 100)
 
     # 2. Tren Penjualan (0 - 100)
@@ -575,6 +583,13 @@ def _hitung_risiko(score, breakdown, val_in_30, val_op_30, val_saldo_30,
 
     bobot = {"likuiditas":0.30,"profitabilitas":0.25,"arus_kas":0.25, "proyeksi":0.15,"kepatuhan":0.05}
     composite = sum(risiko[k]["skor"] * bobot[k] for k in bobot)
+
+    # Sinkronisasi: health score rendah harus menaikkan composite (risiko lebih tinggi)
+    # Konversi health score (0-100) ke skala risiko (1-5): skor rendah = risiko tinggi
+    health_risk = 5.0 - (score / 25.0)  # 100→1.0, 75→2.0, 50→3.0, 25→4.0, 0→5.0
+    # Blend: composite minimal setinggi health_risk (ambil yang lebih buruk)
+    composite = max(composite, health_risk * 0.7 + composite * 0.3)
+
     if   composite <= 1.5: label, warna = "SANGAT RENDAH", "AAA"
     elif composite <= 2.2: label, warna = "RENDAH",        "AA"
     elif composite <= 3.0: label, warna = "MODERAT",       "BBB"

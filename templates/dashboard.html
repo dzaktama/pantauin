@@ -122,7 +122,7 @@
             <div class="col-md-3">
                 <div class="card summary-card p-3 h-100 text-center bg-light border-0">
                     <div class="summary-icon text-primary" style="font-size: 1.5rem;"><i class="bi bi-percent"></i></div>
-                    <h6 class="text-muted mb-2" style="font-size: 0.8rem;">Gross Margin Total</h6>
+                    <h6 class="text-muted mb-2" style="font-size: 0.8rem;">Gross Margin <span class="opacity-75">({% if periode == 0 %}Semua{% else %}{{ rk.periode_hari }} Hari{% endif %})</span></h6>
                     <h4 class="fw-bold mb-0 {% if rk.gross_margin >= 30 %}text-success{% else %}text-danger{% endif %}">{{ rk.gross_margin | round(1) }}%</h4>
                 </div>
             </div>
@@ -146,7 +146,7 @@
             <div class="row g-3">
                 <div class="col-sm-3">
                     <div class="p-4 bg-light rounded-4 text-center border-bottom border-4 border-success shadow-sm">
-                        <small class="text-muted d-block mb-1">Gross Margin</small>
+                        <small class="text-muted d-block mb-1">Gross Margin <span class="opacity-75">(Semua Data)</span></small>
                         <h3 class="fw-bold mb-0 {% if data.rincian_skor.nilai_gross_margin_pct >= 30 %}text-success{% else %}text-danger{% endif %}">{{ "%.1f"|format(data.rincian_skor.nilai_gross_margin_pct) }}%</h3>
                     </div>
                 </div>
