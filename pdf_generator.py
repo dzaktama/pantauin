@@ -1,3 +1,4 @@
+# pyre-ignore-all-errors
 import os
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import A4

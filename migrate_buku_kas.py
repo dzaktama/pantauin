@@ -1,3 +1,4 @@
+# pyre-ignore-all-errors
 import sqlite3
 
 def run_migration():

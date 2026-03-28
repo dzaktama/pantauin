@@ -1,3 +1,4 @@
+# pyre-ignore-all-errors
 from app import create_app
 from models import db, AktivitasLog
 

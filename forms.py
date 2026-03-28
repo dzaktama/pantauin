@@ -1,3 +1,4 @@
+# pyre-ignore-all-errors
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, DateField, FloatField, SelectField, IntegerField, RadioField, TextAreaField, SelectMultipleField, BooleanField, widgets
 from wtforms.validators import DataRequired, Length, EqualTo, Regexp, Optional

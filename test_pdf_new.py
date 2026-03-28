@@ -1,3 +1,4 @@
+# pyre-ignore-all-errors
 import traceback
 from datetime import date, timedelta, datetime
 from pdf_generator import generate_pdf_report

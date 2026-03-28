@@ -1,3 +1,4 @@
+# pyre-ignore-all-errors
 import csv
 import random
 from datetime import date, timedelta

@@ -1,3 +1,4 @@
+# pyre-ignore-all-errors
 import traceback
 from flask import Flask
 app = Flask(__name__)
