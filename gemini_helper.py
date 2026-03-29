@@ -291,3 +291,49 @@ PENTING: Jika pengguna meminta saran atau strategi operasional lanjutan, sajikan
         return _chat(prompt, max_tokens=600)
     except Exception as e:
         return "aduh server lagi pusing ngeproses pertanyaannya, sabar sebentar ya"
+
+def generate_dummy_transaction_ai(riwayat_nama_harga=None):
+    if not groq_client:
+        return None
+    try:
+        context = ""
+        if riwayat_nama_harga:
+            items_str = ", ".join([f"{item[0]} (Harga/Modal skt Rp{item[1]})" for item in riwayat_nama_harga if item[0]])
+            context = f"Referensi menu warung/toko ini: {items_str}."
+        
+        prompt = f"""
+Buat 1 baris simulasi rekayasa transaksi dummy untuk keperluan testing. {context}
+Jika referensi kosong, karang jualan F&B retail acak.
+Keluarkan HANYA format JSON valid tanpa penjelasan tambahan atau markdown ```json:
+{{
+    "kategori": "Penjualan Produk" atau "Lain-lain",
+    "nama_produk": "Nama menu/barang logis",
+    "kuantitas": integer 1-5,
+    "harga_modal": integer (wajar sesuai menu, contoh 15000),
+    "pemasukan": integer (harga modal dikali kuantitas ditambah profit margin sekitar 20-40%),
+    "pengeluaran": 0,
+    "jumlah_pelanggan": integer 1-4,
+    "catatan": "Keterangan transaksi simulasi lucu-lucuan (maksimal 40 huruf)"
+}}
+"""
+        response_text = _chat(prompt, max_tokens=300)
+        import re
+        match = re.search(r"\{.*\}", response_text, re.DOTALL)
+        if match:
+            obj = json.loads(match.group())
+            # Bypass math hallucination dari model AI ringan (Groq/Llama)
+            if obj.get('kuantitas') and obj.get('harga_modal'):
+                k = obj.get('kuantitas', 1)
+                hm = obj.get('harga_modal', 0)
+                hpp_total = k * hm
+                # Jika pemasukan di bawah HPP, AI pasti salah hitung di prompt. Modifikasi manual.
+                if obj.get('pemasukan', 0) < hpp_total:
+                    # Buatkan margin keuntungan acak 20-50%
+                    import random
+                    margin = random.uniform(1.2, 1.5)
+                    obj['pemasukan'] = int(hpp_total * margin)
+            return obj
+        return None
+    except Exception as e:
+        print(f"Gagal generate dummy transaksi AI: {e}")
+        return None

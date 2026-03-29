@@ -501,6 +501,11 @@ def create_app(config_class=Config):
                 if t_id: # jika edit, kembalikan ke riwayat
                     return redirect(url_for('riwayat'))
                 return redirect(url_for('input_transaksi'))
+            elif request.method == 'POST':
+                # tangkap error the form
+                for field, errs in form.errors.items():
+                    for err in errs:
+                        flash(f"Mohon lengkapi {getattr(form, field).label.text}: {err}", "error")
             
             # GET mode
             if request.method == 'GET' and t_id:
@@ -515,13 +520,59 @@ def create_app(config_class=Config):
                 form.jumlah_pelanggan.data = t.jumlah_pelanggan
                 form.catatan.data = t.catatan
             
-            # Ambil Riwayat 15 Transaksi Terakhir untuk Tabel Transparansi
-            riwayat_trx = Transaksi.query.filter_by(buku_kas_id=buku_kas_id).order_by(Transaksi.tanggal.desc()).limit(15).all()
-            return render_template('input.html', form=form, riwayat=riwayat_trx, edit_mode=bool(t_id), t_id=t_id)
+            # Ambil seluruh transaksi untuk kalkulasi saldo berjalan
+            semua_trx = Transaksi.query.filter_by(buku_kas_id=buku_kas_id).order_by(Transaksi.tanggal.asc(), Transaksi.id.asc()).all()
+            
+            saldo = 0
+            hari_ini_in = 0
+            hari_ini_out = 0
+            sekarang = date.today()
+            
+            for tx in semua_trx:
+                saldo += tx.pemasukan
+                saldo -= tx.pengeluaran
+                tx.saldo_berjalan = saldo  # type: ignore
+                
+                if tx.tanggal == sekarang:
+                    hari_ini_in += tx.pemasukan
+                    hari_ini_out += tx.pengeluaran
+                
+            # Ambil Riwayat 15 Transaksi Terakhir untuk Tabel Transparansi (urutan descending)
+            riwayat_trx = list(reversed(semua_trx))[:15]
+            
+            delta_wib = timedelta(hours=7) # +7 utc ke wib manual
+            
+            return render_template('input.html', form=form, riwayat=riwayat_trx, edit_mode=bool(t_id), t_id=t_id, hari_ini_in=hari_ini_in, hari_ini_out=hari_ini_out, delta_wib=delta_wib)
         except Exception as e:
             db.session.rollback()
             print(f"Error input: {e}")
             return render_template('error.html', pesan="Gagal menyimpan/memuat transaksi manual."), 500
+
+    @app.route('/api-fill-dummy', methods=['GET'])
+    @login_required
+    def api_generate_dummy_trx():
+        buku_kas_id = session.get('buku_kas_id')
+        if not buku_kas_id: return jsonify({'error': 'no_book'}), 400
+        
+        # Ambil variasi produk terbaru untuk insight SI AI
+        riwayat_qs = Transaksi.query.filter_by(buku_kas_id=buku_kas_id).filter(Transaksi.nama_produk != None).order_by(Transaksi.id.desc()).limit(30).all()
+        
+        riwayat_unik = {}
+        for t in riwayat_qs:
+            name = str(t.nama_produk).strip()
+            if t.harga_modal and name and name not in riwayat_unik:
+                riwayat_unik[name] = t.harga_modal
+                if len(riwayat_unik) >= 5:
+                    break
+        
+        riwayat_list = [(k, v) for k, v in riwayat_unik.items()]
+        
+        from gemini_helper import generate_dummy_transaction_ai
+        hasil = generate_dummy_transaction_ai(riwayat_list)
+        
+        if hasil:
+            return jsonify(hasil)
+        return jsonify({'error': 'AI gagal membuat dummy'}), 500
 
     @app.route('/transaksi/delete/<int:t_id>', methods=['POST'])
     @login_required
@@ -674,9 +725,11 @@ def create_app(config_class=Config):
                 data = hitung_health_score(transaksi_list_all, periode_grafik=30)
                 cache.set(cache_key, data)
             
+            delta_wib = timedelta(hours=7)
+            
             return render_template('riwayat.html', transaksi_list=transaksi_list_tampil, data=data,
                                    start_date=start_date, end_date=end_date, jenis=jenis, q=q,
-                                   page=page, per_page=per_page, total_pages=total_pages, total_items=total_items, page_range=page_range)
+                                   page=page, per_page=per_page, total_pages=total_pages, total_items=total_items, page_range=page_range, delta_wib=delta_wib)
         except Exception as e:
             import traceback
             traceback.print_exc()

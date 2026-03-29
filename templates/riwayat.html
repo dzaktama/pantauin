@@ -135,7 +135,7 @@
                     <td class="fw-bold text-muted" style="white-space: nowrap;">
                         {{ row.tanggal.strftime('%d %b %Y') }}
                         {% if row.created_at %}
-                        <br><small class="text-black-50" style="font-size: 0.75rem;"><i class="bi bi-clock me-1"></i>{{ row.created_at.strftime('%H:%M:%S') }}</small>
+                        <br><small class="text-muted opacity-75" style="font-size: 0.75rem;"><i class="bi bi-clock me-1"></i>{{ (row.created_at + delta_wib).strftime('%H:%M:%S') if delta_wib else row.created_at.strftime('%H:%M:%S') }}</small>
                         {% endif %}
                     </td>
                     <td class="text-start">

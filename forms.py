@@ -1,7 +1,7 @@
 # pyre-ignore-all-errors
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, DateField, FloatField, SelectField, IntegerField, RadioField, TextAreaField, SelectMultipleField, BooleanField, widgets
-from wtforms.validators import DataRequired, Length, EqualTo, Regexp, Optional
+from wtforms.validators import DataRequired, Length, EqualTo, Regexp, Optional, InputRequired
 from flask_wtf.file import FileField, FileRequired, FileAllowed
 from datetime import date
 
@@ -50,8 +50,8 @@ class TransaksiForm(FlaskForm):
     kuantitas = IntegerField('Kuantitas (Opsional)', default=0)
     harga_modal = FloatField('Harga Modal/HPP (Per Unit)', default=0.0)
     # Menggunakan FloatField yang akan dimanipulasi di JS untuk mask rupiah
-    pemasukan = FloatField('Total Pemasukan (Rp)', default=0, validators=[DataRequired("Harus mengisi pemasukan. Isi 0 jika nihil.")])
-    pengeluaran = FloatField('Total Pengeluaran (Rp)', default=0, validators=[DataRequired("Harus mengisi pengeluaran. Isi 0 jika nihil.")])
+    pemasukan = FloatField('Total Pemasukan (Rp)', default=0, validators=[InputRequired("Harus mengisi pemasukan. Isi 0 jika nihil.")])
+    pengeluaran = FloatField('Total Pengeluaran (Rp)', default=0, validators=[InputRequired("Harus mengisi pengeluaran. Isi 0 jika nihil.")])
     jenis_pengeluaran = RadioField('Jenis Pengeluaran', choices=[('operasional', 'Operasional'), ('modal', 'Modal')], default='operasional')
     jumlah_pelanggan = IntegerField('Jumlah Pelanggan', default=0)
     catatan = TextAreaField('Catatan Hari Ini (Opsional)', validators=[Length(max=200, message="Maksimal 200 karakter.")])
